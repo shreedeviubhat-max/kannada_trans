@@ -1,0 +1,131 @@
+@charset "UTF-8";
+
+:root {
+  --primary-red: #b91c1c;
+  --primary-red-hover: #991b1b;
+  --accent-gold: #f59e0b;
+  --accent-gold-dark: #d97706;
+  --bg-gradient-start: #fffdf5;
+  --bg-gradient-end: #fef3c7;
+  --surface-card: #ffffff;
+  --surface-card-subtle: #fbfaf8;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: #f3e8d2;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(185, 28, 28, 0.08);
+  --shadow-lg: 0 10px 25px rgba(185, 28, 28, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Kannada', sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(135deg, #fffcf0 0%, #fff7ed 50%, #fef3c7 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.kannada-text {
+  font-family: 'Noto Sans Kannada', sans-serif;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #fcd34d;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Pulse animation for voice recording */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+.mic-recording {
+  animation: pulse-ring 1.5s infinite;
+  background-color: #dc2626 !important;
+  color: white !important;
+}
+
+/* Markdown styling inside chat messages */
+.prose-kannada {
+  line-height: 1.65;
+  font-size: 0.965rem;
+}
+
+.prose-kannada p {
+  margin-bottom: 0.65rem;
+}
+
+.prose-kannada p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-kannada ul,
+.prose-kannada ol {
+  margin-left: 1.3rem;
+  margin-bottom: 0.65rem;
+}
+
+.prose-kannada li {
+  margin-bottom: 0.25rem;
+}
+
+.prose-kannada strong {
+  color: #991b1b;
+  font-weight: 700;
+}
+
+.prose-kannada em {
+  color: #b45309;
+  font-style: italic;
+}
+
+.prose-kannada blockquote {
+  border-left: 4px solid var(--accent-gold);
+  background: #fffbeb;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 0.5rem 0;
+}
+
+.prose-kannada code {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: monospace;
+}
