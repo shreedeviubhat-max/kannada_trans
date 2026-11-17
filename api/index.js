@@ -77,17 +77,17 @@ app.post("/api/chat", async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+    const candidateModels = [
+      process.env.GEMINI_MODEL,
+      "gemini-3.8-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-2.5-pro",
+      "gemini-1.5-pro"
+    ].filter(Boolean);
 
-    // Initialize model with system instruction and temperature
-    const model = genAI.getGenerativeModel({
-      model: modelName,
-      systemInstruction: SYSTEM_INSTRUCTION,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2048
-      }
-    });
+    // Remove duplicates while keeping order
+    const uniqueModels = [...new Set(candidateModels)];
 
     // Build the formatted history for Gemini API
     const formattedHistory = [];
@@ -130,27 +130,66 @@ app.post("/api/chat", async (req, res) => {
     currentParts.push({ text: textPrompt });
 
     let replyText = "";
+    let successfulModel = "";
+    let lastError = null;
 
-    // If multimodal (image or audio is present) or single turn without history
-    if (image || audio || formattedHistory.length === 0) {
-      // Use generateContent with history as context if multimodal
-      const contents = [...formattedHistory, { role: "user", parts: currentParts }];
-      const result = await model.generateContent({ contents });
-      const response = await result.response;
-      replyText = response.text();
-    } else {
-      // Use multi-turn chat session
-      const chat = model.startChat({
-        history: formattedHistory
-      });
-      const result = await chat.sendMessage(currentParts);
-      const response = await result.response;
-      replyText = response.text();
+    // Helper for generating with a single model attempt
+    const executeWithRetry = async (modelInstance) => {
+      let delay = 1000;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          if (image || audio || formattedHistory.length === 0) {
+            const contents = [...formattedHistory, { role: "user", parts: currentParts }];
+            const result = await modelInstance.generateContent({ contents });
+            const response = await result.response;
+            return response.text();
+          } else {
+            const chat = modelInstance.startChat({ history: formattedHistory });
+            const result = await chat.sendMessage(currentParts);
+            const response = await result.response;
+            return response.text();
+          }
+        } catch (err) {
+          const is503or429 = err?.status === 503 || err?.message?.includes("503") || err?.status === 429 || err?.message?.includes("429");
+          if (is503or429 && attempt < 2) {
+            console.warn(`[kali-kannada] Temporary error (attempt ${attempt + 1}), retrying after ${delay}ms...`);
+            await new Promise((r) => setTimeout(r, delay));
+            delay *= 2;
+          } else {
+            throw err;
+          }
+        }
+      }
+    };
+
+    // Try candidate models in order if overloaded (503 / 429)
+    for (const mName of uniqueModels) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: mName,
+          systemInstruction: SYSTEM_INSTRUCTION,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048
+          }
+        });
+
+        replyText = await executeWithRetry(model);
+        successfulModel = mName;
+        break;
+      } catch (err) {
+        lastError = err;
+        console.warn(`[kali-kannada] Model ${mName} failed: ${err.message}. Trying next candidate model if available...`);
+      }
+    }
+
+    if (!replyText) {
+      throw lastError || new Error("All candidate Gemini models failed to respond.");
     }
 
     return res.json({
       reply: replyText,
-      model: modelName,
+      model: successfulModel,
       timestamp: new Date().toISOString()
     });
 
