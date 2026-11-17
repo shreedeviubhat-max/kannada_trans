@@ -45,7 +45,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     app: "ಕಲಿ ಕನ್ನಡ, ನಲಿ ಕನ್ನಡದಿ (Kali Kannada)",
-    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    model: process.env.GEMINI_MODEL || "gemini-3.8-flash",
     hasApiKey: hasKey,
     time: new Date().toISOString()
   });
@@ -77,7 +77,7 @@ app.post("/api/chat", async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    const modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
     // Initialize model with system instruction and temperature
     const model = genAI.getGenerativeModel({
