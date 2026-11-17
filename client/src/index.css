@@ -1,23 +1,10 @@
 @charset "UTF-8";
 
 :root {
-  --primary-red: #b91c1c;
-  --primary-red-hover: #991b1b;
-  --accent-gold: #f59e0b;
-  --accent-gold-dark: #d97706;
-  --bg-gradient-start: #fffdf5;
-  --bg-gradient-end: #fef3c7;
-  --surface-card: #ffffff;
-  --surface-card-subtle: #fbfaf8;
-  --text-main: #1f2937;
-  --text-muted: #6b7280;
-  --border-color: #f3e8d2;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(185, 28, 28, 0.08);
-  --shadow-lg: 0 10px 25px rgba(185, 28, 28, 0.12);
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  --karnataka-red: #d32f2f;
+  --karnataka-red-dark: #b71c1c;
+  --karnataka-yellow: #fbc02d;
+  --karnataka-yellow-dark: #f57f17;
 }
 
 * {
@@ -28,11 +15,8 @@
 
 body {
   font-family: 'Plus Jakarta Sans', 'Noto Sans Kannada', sans-serif;
-  color: var(--text-main);
-  background: linear-gradient(135deg, #fffcf0 0%, #fff7ed 50%, #fef3c7 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background-color: #000000;
+  color: #ffffff;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -41,89 +25,100 @@ body {
   font-family: 'Noto Sans Kannada', sans-serif;
 }
 
-/* Scrollbar styles */
+/* Custom scrollbar for dark mode */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #111111;
 }
 ::-webkit-scrollbar-thumb {
-  background: #fcd34d;
+  background: #333333;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #f59e0b;
+  background: #555555;
 }
 
 /* Pulse animation for voice recording */
 @keyframes pulse-ring {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
   }
   70% {
     transform: scale(1.05);
-    box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
 }
 
 .mic-recording {
   animation: pulse-ring 1.5s infinite;
-  background-color: #dc2626 !important;
+  background-color: #ef4444 !important;
   color: white !important;
 }
 
-/* Markdown styling inside chat messages */
-.prose-kannada {
+/* Markdown styling in Chatbox */
+.prose-dark {
   line-height: 1.65;
-  font-size: 0.965rem;
+  font-size: 0.96rem;
+  color: #f3f4f6;
 }
 
-.prose-kannada p {
+.prose-dark p {
   margin-bottom: 0.65rem;
 }
 
-.prose-kannada p:last-child {
+.prose-dark p:last-child {
   margin-bottom: 0;
 }
 
-.prose-kannada ul,
-.prose-kannada ol {
-  margin-left: 1.3rem;
+.prose-dark ul,
+.prose-dark ol {
+  margin-left: 1.4rem;
   margin-bottom: 0.65rem;
 }
 
-.prose-kannada li {
+.prose-dark li {
   margin-bottom: 0.25rem;
 }
 
-.prose-kannada strong {
-  color: #991b1b;
+.prose-dark strong {
+  color: #fde047; /* Warm yellow highlight */
   font-weight: 700;
 }
 
-.prose-kannada em {
-  color: #b45309;
-  font-style: italic;
+.prose-dark em {
+  color: #f87171; /* Soft red / coral italic highlight */
 }
 
-.prose-kannada blockquote {
-  border-left: 4px solid var(--accent-gold);
-  background: #fffbeb;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  margin: 0.5rem 0;
+.prose-dark h1,
+.prose-dark h2,
+.prose-dark h3,
+.prose-dark h4 {
+  color: #ffffff;
+  margin-top: 0.75rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
 }
 
-.prose-kannada code {
-  background: #fef3c7;
-  color: #92400e;
+.prose-dark blockquote {
+  border-left: 3px solid #facc15;
+  background: #18181b;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0 8px 8px 0;
+  margin: 0.6rem 0;
+  color: #d1d5db;
+}
+
+.prose-dark code {
+  background: #27272a;
+  color: #fef08a;
   padding: 0.15rem 0.35rem;
   border-radius: 4px;
   font-size: 0.875em;

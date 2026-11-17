@@ -1,12 +1,24 @@
-import React from "react";
-import ChatInterface from "./components/ChatInterface";
+import React, { useState } from "react";
+import LandingScreen from "./components/LandingScreen";
+import ChatboxMode from "./components/ChatboxMode";
+import GamesMode from "./components/GamesMode";
 
-function App() {
+export default function App() {
+  const [currentMode, setCurrentMode] = useState("landing"); // 'landing' | 'chatbox' | 'games'
+
   return (
-    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <ChatInterface />
-    </main>
+    <div style={{ backgroundColor: "#000000", minHeight: "100vh" }}>
+      {currentMode === "landing" && (
+        <LandingScreen onSelectMode={(mode) => setCurrentMode(mode)} />
+      )}
+
+      {currentMode === "chatbox" && (
+        <ChatboxMode onBackToHome={() => setCurrentMode("landing")} />
+      )}
+
+      {currentMode === "games" && (
+        <GamesMode onBackToHome={() => setCurrentMode("landing")} />
+      )}
+    </div>
   );
 }
-
-export default App;
