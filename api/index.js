@@ -45,7 +45,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     app: "ಕಲಿ ಕನ್ನಡ, ನಲಿ ಕನ್ನಡದಿ (Kali Kannada)",
-    model: process.env.GEMINI_MODEL || "gemini-3.8-flash",
+    model: process.env.GEMINI_MODEL || "gemini-3.1-flash-lite",
     hasApiKey: hasKey,
     time: new Date().toISOString()
   });
@@ -79,11 +79,10 @@ app.post("/api/chat", async (req, res) => {
     const genAI = new GoogleGenerativeAI(apiKey);
     const candidateModels = [
       process.env.GEMINI_MODEL,
+      "gemini-3.1-flash-lite",
+      "gemini-3.5-flash",
       "gemini-3.8-flash",
-      "gemini-2.0-flash",
-      "gemini-1.5-flash",
-      "gemini-2.5-pro",
-      "gemini-1.5-pro"
+      "gemini-flash-latest"
     ].filter(Boolean);
 
     // Remove duplicates while keeping order
