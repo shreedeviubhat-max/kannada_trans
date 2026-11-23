@@ -81,7 +81,8 @@ I am your friendly AI companion for learning, exploring, and translating Kannada
 
   // Check backend health on mount
   useEffect(() => {
-    fetch("/api/health")
+    const apiBase = import.meta.env.VITE_API_URL || "";
+    fetch(`${apiBase}/api/health`)
       .then((res) => res.json())
       .then((data) => {
         if (!data.hasApiKey) {
@@ -212,7 +213,8 @@ I am your friendly AI companion for learning, exploring, and translating Kannada
           text: m.text,
         }));
 
-      const res = await fetch("/api/chat", {
+      const apiBase = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${apiBase}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

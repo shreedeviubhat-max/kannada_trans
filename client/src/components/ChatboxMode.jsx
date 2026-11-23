@@ -149,7 +149,8 @@ Under the spirit of **"ಸಿರಿಗನ್ನಡಂ ಗೆಲ್ಗೆ, ಸಿ
         .filter((_, idx) => idx > 0)
         .map((m) => ({ role: m.role, text: m.text }));
 
-      const res = await fetch("/api/chat", {
+      const apiBase = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${apiBase}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
