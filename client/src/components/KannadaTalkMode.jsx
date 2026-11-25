@@ -12,46 +12,57 @@ import {
   User,
   Headphones,
   Radio,
-  Volume2
+  Globe
 } from "lucide-react";
 
 const STARTER_TOPICS = [
   {
-    label: "ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳಿ",
-    en: "Self Intro",
+    label: "ಕನ್ನಡದಲ್ಲಿ ಪರಿಚಯ",
+    en: "Kannada Intro",
     prompt: "ನಮಸ್ಕಾರ! ನನ್ನ ಹೆಸರು ನೀವು. ನಾನು ನಿಮ್ಮೊಂದಿಗೆ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಲು ಬಯಸುತ್ತೇನೆ.",
   },
   {
-    label: "ಆಟೋ ಅಥವಾ ಮಾರುಕಟ್ಟೆ",
-    en: "Auto / Market",
-    prompt: "ಆಟೋ ಚಾಲಕರೊಂದಿಗೆ ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು, ಬಾಡಿಗೆ ಎಷ್ಟು ಎಂದು ಹೇಗೆ ಕೇಳಬೇಕು? ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
+    label: "English Chat",
+    en: "Speak English",
+    prompt: "Hello! Let's have a conversation in English about travel and learning languages.",
   },
   {
-    label: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಊಟ",
-    en: "Food Order",
-    prompt: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಮಸಾಲೆ ದೋಸೆ ಮತ್ತು ಫಿಲ್ಟರ್ ಕಾಫಿ ಆರ್ಡರ್ ಮಾಡಲು ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
+    label: "हिंदी में बात करें",
+    en: "Hindi Chat",
+    prompt: "नमस्ते! आप कैसे हैं? चलिए आज थोड़ी हिंदी में बातचीत करते हैं।",
   },
   {
-    label: "ಹವಾಮಾನ & ದಿನಚರಿ",
-    en: "Routine & Weather",
-    prompt: "ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ನಿಮ್ಮ ದಿನಚರಿ ಬಗ್ಗೆ ಕನ್ನಡದಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಮಾತನಾಡಿ.",
+    label: "Mixed / Kanglish",
+    en: "Code-Switching",
+    prompt: "Namaskara! How was your day? Nimage yavudu favorite place in Karnataka?",
   },
 ];
+
+// Helper to determine language family from text
+const detectLanguageFromText = (text) => {
+  if (!text) return "kn-IN";
+  // Kannada Unicode range: 0C80 - 0CFF
+  const hasKannada = /[\u0C80-\u0CFF]/.test(text);
+  // Devanagari (Hindi) Unicode range: 0900 - 097F
+  const hasDevanagari = /[\u0900-\u097F]/.test(text);
+
+  if (hasKannada) return "kn-IN";
+  if (hasDevanagari) return "hi-IN";
+  return "en-IN";
+};
 
 export default function KannadaTalkMode({ onBackToHome }) {
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: `**ನಮಸ್ಕಾರ!** 🙏 (*Namaskāra!*)
+      text: `**ನಮಸ್ಕಾರ! Welcome! नमस्ते!** 🙏
 
-ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ ಮಾತುಕತೆ ಸ್ನೇಹಿತ (Voice Partner)**. 
+ನಾನು ನಿಮ್ಮ **Multilingual Voice Partner**. 
 
-ಇಲ್ಲಿ ನೀವು ನೈಸರ್ಗಿಕವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮುಕ್ತವಾಗಿ ಮಾತನಾಡಬಹುದು:
-1. ಮೇಲಿನ **"ಧ್ವನಿ ಆರಂಭಿಸಿ"** ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ.
-2. ನೀವು ಮಾತನಾಡಿದಾಗ ಸಿಸ್ಟಮ್ ತಾನಾಗಿಯೇ ಗ್ರಹಿಸಿ, ನೀವು ಮಾತು ನಿಲ್ಲಿಸಿದಾಗ ಉತ್ತರ ನೀಡುತ್ತದೆ.
-3. AI ಮಾತನಾಡುತ್ತಿರುವಾಗ ನೀವು ಮಧ್ಯದಲ್ಲೇ ಮಾತನಾಡಿದರೆ AI ಧ್ವನಿ ತಾನಾಗಿಯೇ ನಿಲ್ಲುತ್ತದೆ.
-
-ಹಾಗಾದರೆ, ಸಂಭಾಷಣೆ ಆರಂಭಿಸೋಣವೇ?`,
+Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
+- 🎙️ Click **"Start Hands-Free Session"** to talk without pressing any buttons.
+- 🌐 The AI will automatically detect your language and reply in the same language!
+- 🎧 Audio speech synthesis plays automatically in the matched accent.`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -61,12 +72,15 @@ export default function KannadaTalkMode({ onBackToHome }) {
   const [isLiveSessionActive, setIsLiveSessionActive] = useState(false);
   const [sessionStatus, setSessionStatus] = useState("idle"); // 'idle' | 'listening' | 'user_speaking' | 'ai_thinking' | 'ai_speaking'
   const [liveTranscript, setLiveTranscript] = useState("");
+  const [activeSpeechLang, setActiveSpeechLang] = useState("kn-IN"); // 'kn-IN' | 'en-IN' | 'hi-IN'
 
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const silenceTimerRef = useRef(null);
   const isAiSpeakingRef = useRef(false);
   const isSessionActiveRef = useRef(false);
+  const activeSpeechLangRef = useRef(activeSpeechLang);
+  activeSpeechLangRef.current = activeSpeechLang;
   const messagesRef = useRef(messages);
   messagesRef.current = messages;
 
@@ -79,7 +93,6 @@ export default function KannadaTalkMode({ onBackToHome }) {
     return text
       .replace(/[*#_`~>]/g, "")
       .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-      .replace(/\([^)]*\)/g, "") // remove parenthetical transliteration for audio so it speaks authentic Kannada
       .trim();
   };
 
@@ -91,17 +104,25 @@ export default function KannadaTalkMode({ onBackToHome }) {
     isAiSpeakingRef.current = false;
   };
 
-  // Play audio response and resume listening immediately after finishing
+  // Dynamic voice synthesizer that matches the detected language
   const speakAiResponse = (text) => {
     if (!window.speechSynthesis) return;
 
     interruptAiSpeech();
-    const cleanKannada = cleanMarkdownForAudio(text);
-    if (!cleanKannada) return;
+    const cleanText = cleanMarkdownForAudio(text);
+    if (!cleanText) return;
 
-    const utterance = new SpeechSynthesisUtterance(cleanKannada);
-    utterance.lang = "kn-IN";
-    utterance.rate = 0.95;
+    const detectedLang = detectLanguageFromText(cleanText);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = detectedLang;
+    utterance.rate = detectedLang === "kn-IN" ? 0.95 : 1.0;
+
+    // Pick best available matching voice if present
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find((v) => v.lang.startsWith(detectedLang.slice(0, 2)));
+    if (matchingVoice) {
+      utterance.voice = matchingVoice;
+    }
 
     utterance.onstart = () => {
       isAiSpeakingRef.current = true;
@@ -141,7 +162,8 @@ export default function KannadaTalkMode({ onBackToHome }) {
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = "kn-IN";
+    // Set to user's selected primary listening language (defaults to kn-IN, can toggle to en-IN or hi-IN)
+    recognition.lang = activeSpeechLang;
 
     recognition.onstart = () => {
       if (isSessionActiveRef.current && !isAiSpeakingRef.current) {
@@ -207,7 +229,26 @@ export default function KannadaTalkMode({ onBackToHome }) {
         recognition.stop();
       } catch (_) {}
     };
-  }, []);
+  }, [activeSpeechLang]);
+
+  // Update recognition language when user switches preference
+  const handleLanguageSwitch = (langCode) => {
+    setActiveSpeechLang(langCode);
+    if (recognitionRef.current) {
+      const wasActive = isSessionActiveRef.current;
+      try {
+        recognitionRef.current.stop();
+      } catch (_) {}
+      recognitionRef.current.lang = langCode;
+      if (wasActive) {
+        setTimeout(() => {
+          try {
+            recognitionRef.current.start();
+          } catch (_) {}
+        }, 150);
+      }
+    }
+  };
 
   // Hands-Free Auto-Send Turn when silence is detected
   const handleAutoSendTurn = async (spokenText) => {
@@ -236,7 +277,19 @@ export default function KannadaTalkMode({ onBackToHome }) {
         .filter((_, idx) => idx > 0)
         .map((m) => ({ role: m.role, text: m.text }));
 
-      const conversationPrompt = `[Kannada Talk Hands-Free Mode]: The user is speaking live in Kannada. Reply in natural, friendly conversational Kannada (Kannada script first, followed by Romanized transliteration and short English meaning). Keep it punchy (2-3 sentences max) so it sounds like real spoken dialogue. User said: "${spokenText}"`;
+      // Prompt enforcing automatic language detection without forced Kannada translation
+      const conversationPrompt = `[Talk with AI Voice Session - Automatic Language Detection]:
+The user said: "${spokenText}"
+
+CRITICAL INSTRUCTIONS:
+1. Automatically detect the language the user is speaking in (Kannada, English, Hindi, or mixed Kanglish).
+2. If the user speaks Kannada, reply naturally in Kannada.
+3. If the user speaks English, reply naturally in English.
+4. If the user speaks Hindi, reply naturally in Hindi.
+5. If the user uses code-switching or mixed language (e.g., Kannada + English), match their natural conversational flow.
+6. DO NOT translate the user's message into Kannada before answering.
+7. DO NOT unnecessarily translate your response into another language unless requested.
+8. Understand the user's meaning and respond directly, naturally, and conversationally in 2-3 concise sentences.`;
 
       const apiBase = import.meta.env.VITE_API_URL || "";
       const res = await fetch(`${apiBase}/api/chat`, {
@@ -267,7 +320,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
         ...prev,
         {
           role: "model",
-          text: `⚠️ **ದೋಷ (Error):** ${err.message}`,
+          text: `⚠️ **Error / ದೋಷ:** ${err.message}`,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -372,7 +425,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <h1 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#1e1b4b", margin: 0 }}>
-                ಕನ್ನಡ ಮಾತುಕತೆ
+                Talk with AI (ಕನ್ನಡ • English • हिंदी)
               </h1>
               <span
                 style={{
@@ -384,17 +437,54 @@ export default function KannadaTalkMode({ onBackToHome }) {
                   fontWeight: 600,
                 }}
               >
-                Hands-Free Voice
+                Auto Language Detection
               </span>
             </div>
             <p style={{ fontSize: "0.76rem", color: "#64748b", margin: 0 }}>
-              Continuous Voice Recognition & Interactive Kannada Conversation
+              Hands-free voice with continuous language detection and natural spoken reply
             </p>
           </div>
         </div>
 
-        {/* Action Controls */}
+        {/* Action Controls & Language Selector */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {/* Speech Mic Listening Priority Selector */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "#f5f3ff",
+              border: "1px solid #ede9fe",
+              borderRadius: "8px",
+              padding: "2px",
+              fontSize: "0.78rem",
+            }}
+          >
+            {[
+              { code: "kn-IN", label: "ಕನ್ನಡ" },
+              { code: "en-IN", label: "English" },
+              { code: "hi-IN", label: "हिंदी" },
+            ].map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageSwitch(lang.code)}
+                style={{
+                  background: activeSpeechLang === lang.code ? "#7c3aed" : "transparent",
+                  color: activeSpeechLang === lang.code ? "#ffffff" : "#6b21a8",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "6px 10px",
+                  fontSize: "0.78rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+
           <button
             onClick={toggleHandsFreeSession}
             style={{
@@ -479,10 +569,10 @@ export default function KannadaTalkMode({ onBackToHome }) {
               }}
             />
             <span style={{ fontWeight: 600 }}>
-              {sessionStatus === "listening" && "Listening for your voice in Kannada..."}
-              {sessionStatus === "user_speaking" && "Detecting speech..."}
-              {sessionStatus === "ai_thinking" && "AI formulating response..."}
-              {sessionStatus === "ai_speaking" && "AI speaking (you can speak to interrupt anytime)..."}
+              {sessionStatus === "listening" && `Listening actively (${activeSpeechLang})... Speak in Kannada, English, or Hindi!`}
+              {sessionStatus === "user_speaking" && "Detecting speech & auto-detecting language..."}
+              {sessionStatus === "ai_thinking" && "AI processing direct response in your language..."}
+              {sessionStatus === "ai_speaking" && "AI speaking (you can interrupt anytime)..."}
             </span>
           </div>
 
@@ -631,7 +721,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
                       {!isUser && (
                         <button
                           onClick={() => speakAiResponse(msg.text)}
-                          title="Listen in Kannada"
+                          title="Listen Voice Output"
                           style={{
                             background: "transparent",
                             border: "none",
@@ -645,7 +735,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
                           }}
                         >
                           <Headphones size={13} />
-                          <span>ಧ್ವನಿ</span>
+                          <span>Play</span>
                         </button>
                       )}
                     </div>
@@ -684,7 +774,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
                   gap: "6px",
                 }}
               >
-                <span>ಕನ್ನಡದಲ್ಲಿ ಯೋಚಿಸುತ್ತಿದೆ...</span>
+                <span>Understanding & formulating response...</span>
                 <Sparkles size={14} color="#7c3aed" />
               </div>
             </div>
@@ -738,8 +828,8 @@ export default function KannadaTalkMode({ onBackToHome }) {
             }}
             placeholder={
               isLiveSessionActive
-                ? "ಧ್ವನಿ ಸಕ್ರಿಯವಾಗಿದೆ — ನೇರವಾಗಿ ಮಾತನಾಡಿ..."
-                : "ಕನ್ನಡದಲ್ಲಿ ಸಂದೇಶ ಬರೆಯಿರಿ ಅಥವಾ ಮೇಲಿನ ಧ್ವನಿ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ..."
+                ? "🎙️ Voice active — speak freely in Kannada, English, or Hindi..."
+                : "Type message in any language or click Start Hands-Free above..."
             }
             style={{
               flex: 1,
