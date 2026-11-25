@@ -4,8 +4,6 @@ import {
   Send,
   Mic,
   MicOff,
-  Volume2,
-  VolumeX,
   RotateCcw,
   Sparkles,
   ArrowLeft,
@@ -14,24 +12,28 @@ import {
   User,
   Headphones,
   Radio,
-  Power
+  Volume2
 } from "lucide-react";
 
 const STARTER_TOPICS = [
   {
-    label: "ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳಿ (Introduce Yourself)",
+    label: "ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳಿ",
+    en: "Self Intro",
     prompt: "ನಮಸ್ಕಾರ! ನನ್ನ ಹೆಸರು ನೀವು. ನಾನು ನಿಮ್ಮೊಂದಿಗೆ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಲು ಬಯಸುತ್ತೇನೆ.",
   },
   {
-    label: "ಆಟೋ ಅಥವಾ ಮಾರುಕಟ್ಟೆ (Auto / Market)",
+    label: "ಆಟೋ ಅಥವಾ ಮಾರುಕಟ್ಟೆ",
+    en: "Auto / Market",
     prompt: "ಆಟೋ ಚಾಲಕರೊಂದಿಗೆ ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು, ಬಾಡಿಗೆ ಎಷ್ಟು ಎಂದು ಹೇಗೆ ಕೇಳಬೇಕು? ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
   },
   {
-    label: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಊಟ (Ordering Food)",
+    label: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಊಟ",
+    en: "Food Order",
     prompt: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಮಸಾಲೆ ದೋಸೆ ಮತ್ತು ಫಿಲ್ಟರ್ ಕಾಫಿ ಆರ್ಡರ್ ಮಾಡಲು ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
   },
   {
-    label: "ಹವಾಮಾನ & ದಿನಚರಿ (Weather & Routine)",
+    label: "ಹವಾಮಾನ & ದಿನಚರಿ",
+    en: "Routine & Weather",
     prompt: "ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ನಿಮ್ಮ ದಿನಚರಿ ಬಗ್ಗೆ ಕನ್ನಡದಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಮಾತನಾಡಿ.",
   },
 ];
@@ -40,16 +42,16 @@ export default function KannadaTalkMode({ onBackToHome }) {
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: `**ನಮಸ್ಕಾರ ಗೆಳೆಯರೇ!** 🙏 (*Namaskāra geḷeyarē!* - "Hello my friend!")
+      text: `**ನಮಸ್ಕಾರ!** 🙏 (*Namaskāra!*)
 
-ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ ಮಾತುಕತೆ ಸ್ನೇಹಿತ (Hands-Free AI Voice Partner)**. 
+ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ ಮಾತುಕತೆ ಸ್ನೇಹಿತ (Voice Partner)**. 
 
-ಇಲ್ಲಿ ಯಾವುದೇ ಬಟನ್ ಒತ್ತದೇ, ನೈಸರ್ಗಿಕವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಬಹುದು:
-1. ಕೆಳಗಿರುವ **"ಧ್ವನಿ ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ (Start Hands-Free Session)"** ಕ್ಲಿಕ್ ಮಾಡಿ.
-2. ನೀವು ಮಾತನಾಡಿದ ತಕ್ಷಣ ಸಿಸ್ಟಮ್ ತಾನಾಗಿಯೇ ಗುರುತಿಸಿ, ನೀವು ಮಾತು ನಿಲ್ಲಿಸಿದಾಗ (Silence Detection) AI ಕನ್ನಡದಲ್ಲೇ ಮಾತನಾಡುತ್ತದೆ!
-3. AI ಮಾತನಾಡುತ್ತಿರುವಾಗ ನೀವು ಮಧ್ಯದಲ್ಲೇ ಮಾತನಾಡಿದರೆ (Barge-in / Interrupt) AI ಧ್ವನಿ ತಾನಾಗಿಯೇ ನಿಲ್ಲುತ್ತದೆ.
+ಇಲ್ಲಿ ನೀವು ನೈಸರ್ಗಿಕವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮುಕ್ತವಾಗಿ ಮಾತನಾಡಬಹುದು:
+1. ಮೇಲಿನ **"ಧ್ವನಿ ಆರಂಭಿಸಿ"** ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ.
+2. ನೀವು ಮಾತನಾಡಿದಾಗ ಸಿಸ್ಟಮ್ ತಾನಾಗಿಯೇ ಗ್ರಹಿಸಿ, ನೀವು ಮಾತು ನಿಲ್ಲಿಸಿದಾಗ ಉತ್ತರ ನೀಡುತ್ತದೆ.
+3. AI ಮಾತನಾಡುತ್ತಿರುವಾಗ ನೀವು ಮಧ್ಯದಲ್ಲೇ ಮಾತನಾಡಿದರೆ AI ಧ್ವನಿ ತಾನಾಗಿಯೇ ನಿಲ್ಲುತ್ತದೆ.
 
-**ಹಾಗಾದರೆ, ಸಂಭಾಷಣೆ ಆರಂಭಿಸೋಣವೇ?**`,
+ಹಾಗಾದರೆ, ಸಂಭಾಷಣೆ ಆರಂಭಿಸೋಣವೇ?`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -99,7 +101,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
 
     const utterance = new SpeechSynthesisUtterance(cleanKannada);
     utterance.lang = "kn-IN";
-    utterance.rate = 0.92;
+    utterance.rate = 0.95;
 
     utterance.onstart = () => {
       isAiSpeakingRef.current = true;
@@ -108,7 +110,6 @@ export default function KannadaTalkMode({ onBackToHome }) {
 
     utterance.onend = () => {
       isAiSpeakingRef.current = false;
-      // Resume listening if session is still active
       if (isSessionActiveRef.current) {
         setSessionStatus("listening");
         try {
@@ -190,7 +191,6 @@ export default function KannadaTalkMode({ onBackToHome }) {
     };
 
     recognition.onend = () => {
-      // Automatically keep recognition running unless AI is speaking or session paused
       if (isSessionActiveRef.current && !isAiSpeakingRef.current) {
         try {
           recognition.start();
@@ -213,11 +213,9 @@ export default function KannadaTalkMode({ onBackToHome }) {
   const handleAutoSendTurn = async (spokenText) => {
     if (!spokenText.trim()) return;
 
-    // Clear interim transcript
     setLiveTranscript("");
     if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
 
-    // Pause recognition while AI processes
     try {
       recognitionRef.current?.stop();
     } catch (_) {}
@@ -263,9 +261,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
         },
       ]);
 
-      // Automatically speak the response in Kannada audio
       speakAiResponse(aiReply);
-
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -323,30 +319,29 @@ export default function KannadaTalkMode({ onBackToHome }) {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #090d16 0%, #151136 50%, #200d45 100%)",
-        color: "#ffffff",
+        background: "#faf7fd",
+        color: "#1e1b4b",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      {/* Top Header */}
+      {/* Top Navigation */}
       <header
         style={{
-          background: "rgba(15, 23, 42, 0.85)",
-          backdropFilter: "blur(14px)",
-          borderBottom: "1px solid rgba(168, 85, 247, 0.25)",
-          padding: "16px 24px",
+          background: "#ffffff",
+          borderBottom: "1px solid #ede9fe",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           position: "sticky",
           top: 0,
-          zIndex: 10,
+          zIndex: 20,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <button
             onClick={() => {
               isSessionActiveRef.current = false;
@@ -357,69 +352,78 @@ export default function KannadaTalkMode({ onBackToHome }) {
               onBackToHome();
             }}
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-              color: "#e9d5ff",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              color: "#64748b",
               padding: "8px 14px",
-              borderRadius: "12px",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "0.88rem",
-              fontWeight: "600",
+              fontSize: "0.85rem",
+              fontWeight: 500,
             }}
           >
             <ArrowLeft size={16} />
-            <span>ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)</span>
+            <span>Dashboard</span>
           </button>
 
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Bot size={22} color="#c084fc" />
-              <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#f3e8ff", margin: 0 }}>
-                ಕನ್ನಡ ಟಾಕ್ (Hands-Free AI Voice Partner)
+              <h1 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#1e1b4b", margin: 0 }}>
+                ಕನ್ನಡ ಮಾತುಕತೆ
               </h1>
+              <span
+                style={{
+                  fontSize: "0.72rem",
+                  color: "#6b21a8",
+                  background: "#f3e8ff",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontWeight: 600,
+                }}
+              >
+                Hands-Free Voice
+              </span>
             </div>
-            <p style={{ fontSize: "0.78rem", color: "#c084fc", margin: "2px 0 0" }}>
-              Automatic VAD • End-of-Turn Silence Detection • Interrupt (Barge-in) Support
+            <p style={{ fontSize: "0.76rem", color: "#64748b", margin: 0 }}>
+              Continuous Voice Recognition & Interactive Kannada Conversation
             </p>
           </div>
         </div>
 
-        {/* Start / Stop Hands-Free Voice Session Button */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* Action Controls */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <button
             onClick={toggleHandsFreeSession}
             style={{
-              background: isLiveSessionActive
-                ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
-                : "linear-gradient(135deg, #9333ea 0%, #7c3aed 100%)",
+              background: isLiveSessionActive ? "#ef4444" : "#7c3aed",
               color: "#ffffff",
               border: "none",
-              borderRadius: "9999px",
-              padding: "10px 20px",
-              fontSize: "0.92rem",
-              fontWeight: "800",
+              borderRadius: "8px",
+              padding: "9px 18px",
+              fontSize: "0.85rem",
+              fontWeight: 600,
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: "8px",
               boxShadow: isLiveSessionActive
-                ? "0 0 20px rgba(239, 68, 68, 0.5)"
-                : "0 0 20px rgba(147, 51, 234, 0.4)",
-              transition: "all 0.25s",
+                ? "0 4px 12px rgba(239, 68, 68, 0.25)"
+                : "0 4px 12px rgba(124, 58, 237, 0.2)",
+              transition: "all 0.15s ease",
             }}
           >
             {isLiveSessionActive ? (
               <>
-                <Radio size={18} className="float-element" />
-                <span>ಸೆಷನ್ ನಿಲ್ಲಿಸಿ (Stop Session)</span>
+                <Radio size={16} />
+                <span>Stop Voice Session</span>
               </>
             ) : (
               <>
-                <Mic size={18} />
-                <span>ಧ್ವನಿ ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ (Start Hands-Free)</span>
+                <Mic size={16} />
+                <span>Start Hands-Free Session</span>
               </>
             )}
           </button>
@@ -429,81 +433,88 @@ export default function KannadaTalkMode({ onBackToHome }) {
               interruptAiSpeech();
               setMessages([messages[0]]);
             }}
-            title="Restart Conversation"
+            title="Clear & Restart"
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-              color: "#e9d5ff",
-              padding: "8px",
-              borderRadius: "50%",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              color: "#64748b",
+              padding: "9px 12px",
+              borderRadius: "8px",
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <RotateCcw size={17} />
+            <RotateCcw size={16} />
           </button>
         </div>
       </header>
 
-      {/* Real-Time Live Status Bar */}
+      {/* Live Voice Status Strip */}
       {isLiveSessionActive && (
         <div
           style={{
-            background: "rgba(147, 51, 234, 0.15)",
-            borderBottom: "1px solid rgba(192, 132, 252, 0.3)",
-            padding: "8px 20px",
+            background: "#f5f3ff",
+            borderBottom: "1px solid #ddd6fe",
+            padding: "9px 28px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontSize: "0.86rem",
-            color: "#e9d5ff",
+            fontSize: "0.82rem",
+            color: "#5b21b6",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span
               style={{
-                width: "10px",
-                height: "10px",
+                width: "8px",
+                height: "8px",
                 borderRadius: "50%",
-                background: sessionStatus === "user_speaking" ? "#22c55e" : sessionStatus === "ai_speaking" ? "#38bdf8" : "#f59e0b",
-                boxShadow: "0 0 10px currentColor",
+                background:
+                  sessionStatus === "user_speaking"
+                    ? "#16a34a"
+                    : sessionStatus === "ai_speaking"
+                    ? "#7c3aed"
+                    : "#d97706",
               }}
             />
-            <span style={{ fontWeight: 700 }}>
-              {sessionStatus === "listening" && "🎧 ನಿರೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ (Listening for your Kannada voice)..."}
-              {sessionStatus === "user_speaking" && "🎙️ ನೀವು ಮಾತನಾಡುತ್ತಿದ್ದೀರಿ (Detecting Speech)..."}
-              {sessionStatus === "ai_thinking" && "✨ AI ಯೋಚಿಸುತ್ತಿದೆ (AI Processing Response)..."}
-              {sessionStatus === "ai_speaking" && "🔊 AI ಮಾತನಾಡುತ್ತಿದೆ (Speaking... You can interrupt anytime!)"}
+            <span style={{ fontWeight: 600 }}>
+              {sessionStatus === "listening" && "Listening for your voice in Kannada..."}
+              {sessionStatus === "user_speaking" && "Detecting speech..."}
+              {sessionStatus === "ai_thinking" && "AI formulating response..."}
+              {sessionStatus === "ai_speaking" && "AI speaking (you can speak to interrupt anytime)..."}
             </span>
           </div>
 
           {liveTranscript && (
-            <div style={{ fontStyle: "italic", color: "#fef08a" }}>
+            <div style={{ fontStyle: "italic", color: "#6b21a8" }}>
               "{liveTranscript}"
             </div>
           )}
         </div>
       )}
 
-      {/* Main Chat Workspace */}
+      {/* Conversation Area */}
       <div
         style={{
           flex: 1,
-          maxWidth: "960px",
+          maxWidth: "860px",
           width: "100%",
           margin: "0 auto",
-          padding: "20px 16px",
+          padding: "24px 20px",
           display: "flex",
           flexDirection: "column",
+          boxSizing: "border-box",
         }}
       >
-        {/* Starter Topics */}
+        {/* Topic Suggestion Chips */}
         <div
           style={{
             display: "flex",
-            gap: "10px",
+            gap: "8px",
             overflowX: "auto",
-            paddingBottom: "10px",
-            marginBottom: "12px",
+            paddingBottom: "12px",
+            marginBottom: "16px",
           }}
         >
           {STARTER_TOPICS.map((topic, i) => (
@@ -512,35 +523,36 @@ export default function KannadaTalkMode({ onBackToHome }) {
               onClick={() => handleAutoSendTurn(topic.prompt)}
               disabled={loading}
               style={{
-                background: "rgba(147, 51, 234, 0.15)",
-                border: "1px solid rgba(192, 132, 252, 0.35)",
-                borderRadius: "9999px",
-                padding: "8px 16px",
-                fontSize: "0.84rem",
-                color: "#e9d5ff",
+                background: "#ffffff",
+                border: "1px solid #ede9fe",
+                borderRadius: "8px",
+                padding: "7px 14px",
+                fontSize: "0.82rem",
+                color: "#5b21b6",
                 whiteSpace: "nowrap",
                 cursor: "pointer",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "8px",
-                transition: "all 0.18s",
+                gap: "6px",
+                transition: "all 0.15s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(147, 51, 234, 0.3)";
-                e.currentTarget.style.borderColor = "#c084fc";
+                e.currentTarget.style.borderColor = "#c4b5fd";
+                e.currentTarget.style.background = "#f5f3ff";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(147, 51, 234, 0.15)";
-                e.currentTarget.style.borderColor = "rgba(192, 132, 252, 0.35)";
+                e.currentTarget.style.borderColor = "#ede9fe";
+                e.currentTarget.style.background = "#ffffff";
               }}
             >
-              <MessageCircle size={15} color="#c084fc" />
+              <MessageCircle size={14} color="#7c3aed" />
               <span>{topic.label}</span>
+              <span style={{ fontSize: "0.72rem", color: "#8b5cf6" }}>({topic.en})</span>
             </button>
           ))}
         </div>
 
-        {/* Message Stream */}
+        {/* Messages Stream */}
         <div
           style={{
             flex: 1,
@@ -568,42 +580,38 @@ export default function KannadaTalkMode({ onBackToHome }) {
                     display: "flex",
                     flexDirection: isUser ? "row-reverse" : "row",
                     alignItems: "flex-start",
-                    gap: "12px",
-                    maxWidth: isUser ? "85%" : "92%",
+                    gap: "10px",
+                    maxWidth: isUser ? "85%" : "88%",
                   }}
                 >
                   <div
                     style={{
-                      width: "36px",
-                      height: "36px",
-                      borderRadius: "12px",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "8px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "13px",
-                      fontWeight: "700",
                       flexShrink: 0,
                       marginTop: "2px",
-                      background: isUser ? "linear-gradient(135deg, #7c3aed, #6d28d9)" : "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                      color: "#ffffff",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                      background: isUser ? "#7c3aed" : "#ede9fe",
+                      color: isUser ? "#ffffff" : "#6b21a8",
                     }}
                   >
-                    {isUser ? <User size={18} /> : <Bot size={18} />}
+                    {isUser ? <User size={16} /> : <Bot size={16} />}
                   </div>
 
                   <div
                     style={{
-                      background: isUser ? "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)" : "rgba(30, 41, 59, 0.75)",
-                      border: isUser ? "none" : "1px solid rgba(168, 85, 247, 0.25)",
-                      padding: "16px 20px",
-                      borderRadius: isUser ? "20px 4px 20px 20px" : "4px 20px 20px 20px",
-                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
-                      backdropFilter: "blur(10px)",
-                      color: "#ffffff",
+                      background: isUser ? "#7c3aed" : "#ffffff",
+                      border: isUser ? "none" : "1px solid #ede9fe",
+                      padding: "14px 18px",
+                      borderRadius: isUser ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+                      color: isUser ? "#ffffff" : "#1e1b4b",
                     }}
                   >
-                    <div className={isUser ? "" : "prose-purple"}>
+                    <div style={{ fontSize: "0.92rem", lineHeight: 1.6 }}>
                       <ReactMarkdown>{msg.text}</ReactMarkdown>
                     </div>
 
@@ -612,9 +620,9 @@ export default function KannadaTalkMode({ onBackToHome }) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "flex-end",
-                        gap: "12px",
-                        marginTop: "10px",
-                        fontSize: "0.74rem",
+                        gap: "10px",
+                        marginTop: "8px",
+                        fontSize: "0.72rem",
                         color: isUser ? "rgba(255,255,255,0.7)" : "#94a3b8",
                       }}
                     >
@@ -623,20 +631,21 @@ export default function KannadaTalkMode({ onBackToHome }) {
                       {!isUser && (
                         <button
                           onClick={() => speakAiResponse(msg.text)}
-                          title="Listen to Spoken Kannada"
+                          title="Listen in Kannada"
                           style={{
                             background: "transparent",
                             border: "none",
                             cursor: "pointer",
-                            color: "#c084fc",
+                            color: "#7c3aed",
                             display: "flex",
                             alignItems: "center",
                             gap: "4px",
-                            fontWeight: "600",
+                            fontWeight: 600,
+                            padding: 0,
                           }}
                         >
-                          <Headphones size={14} />
-                          <span>ಧ್ವನಿ ಆಲಿಸಿ</span>
+                          <Headphones size={13} />
+                          <span>ಧ್ವನಿ</span>
                         </button>
                       )}
                     </div>
@@ -647,36 +656,36 @@ export default function KannadaTalkMode({ onBackToHome }) {
           })}
 
           {loading && (
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "4px 0" }}>
               <div
                 style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "12px",
-                  background: "#2563eb",
-                  color: "#ffffff",
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "8px",
+                  background: "#ede9fe",
+                  color: "#6b21a8",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Bot size={18} />
+                <Bot size={16} />
               </div>
               <div
                 style={{
-                  background: "rgba(30, 41, 59, 0.75)",
-                  border: "1px solid rgba(168, 85, 247, 0.25)",
-                  padding: "10px 18px",
-                  borderRadius: "16px",
-                  fontSize: "0.9rem",
-                  color: "#c084fc",
+                  background: "#ffffff",
+                  border: "1px solid #ede9fe",
+                  padding: "10px 16px",
+                  borderRadius: "8px",
+                  fontSize: "0.85rem",
+                  color: "#6b21a8",
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px",
+                  gap: "6px",
                 }}
               >
                 <span>ಕನ್ನಡದಲ್ಲಿ ಯೋಚಿಸುತ್ತಿದೆ...</span>
-                <Sparkles size={16} color="#c084fc" />
+                <Sparkles size={14} color="#7c3aed" />
               </div>
             </div>
           )}
@@ -684,31 +693,30 @@ export default function KannadaTalkMode({ onBackToHome }) {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Fallback Text Input & Hands-Free Status Trigger Bar */}
+        {/* Input Bar */}
         <div
           style={{
-            background: "rgba(30, 41, 59, 0.8)",
-            border: "1.5px solid rgba(168, 85, 247, 0.35)",
-            borderRadius: "28px",
-            padding: "8px 14px",
+            background: "#ffffff",
+            border: "1px solid #ddd6fe",
+            borderRadius: "12px",
+            padding: "8px 12px",
             display: "flex",
             alignItems: "center",
             gap: "10px",
-            boxShadow: "0 6px 20px rgba(0, 0, 0, 0.3)",
+            boxShadow: "0 4px 12px rgba(124, 58, 237, 0.05)",
           }}
         >
           <button
             type="button"
             onClick={toggleHandsFreeSession}
-            title={isLiveSessionActive ? "Stop voice listening" : "Start continuous voice mode"}
-            className={isLiveSessionActive ? "mic-recording" : ""}
+            title={isLiveSessionActive ? "Stop voice listening" : "Start hands-free voice mode"}
             style={{
-              background: isLiveSessionActive ? "#ef4444" : "rgba(147, 51, 234, 0.25)",
-              border: "1px solid rgba(192, 132, 252, 0.4)",
-              color: isLiveSessionActive ? "#ffffff" : "#c084fc",
-              borderRadius: "50%",
-              width: "38px",
-              height: "38px",
+              background: isLiveSessionActive ? "#fee2e2" : "#f5f3ff",
+              border: `1px solid ${isLiveSessionActive ? "#fca5a5" : "#ddd6fe"}`,
+              color: isLiveSessionActive ? "#dc2626" : "#7c3aed",
+              borderRadius: "8px",
+              width: "36px",
+              height: "36px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -716,7 +724,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
               flexShrink: 0,
             }}
           >
-            {isLiveSessionActive ? <MicOff size={18} /> : <Mic size={18} />}
+            {isLiveSessionActive ? <MicOff size={16} /> : <Mic size={16} />}
           </button>
 
           <input
@@ -730,17 +738,17 @@ export default function KannadaTalkMode({ onBackToHome }) {
             }}
             placeholder={
               isLiveSessionActive
-                ? "🎙️ ಮುಕ್ತವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ... (Speak freely in Kannada)..."
-                : "ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ ಅಥವಾ ಮೇಲಿನ ಧ್ವನಿ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ..."
+                ? "ಧ್ವನಿ ಸಕ್ರಿಯವಾಗಿದೆ — ನೇರವಾಗಿ ಮಾತನಾಡಿ..."
+                : "ಕನ್ನಡದಲ್ಲಿ ಸಂದೇಶ ಬರೆಯಿರಿ ಅಥವಾ ಮೇಲಿನ ಧ್ವನಿ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ..."
             }
             style={{
               flex: 1,
               background: "transparent",
               border: "none",
               outline: "none",
-              color: "#ffffff",
-              fontSize: "0.98rem",
-              padding: "8px 4px",
+              color: "#1e1b4b",
+              fontSize: "0.92rem",
+              padding: "6px 4px",
               fontFamily: "inherit",
             }}
           />
@@ -750,14 +758,12 @@ export default function KannadaTalkMode({ onBackToHome }) {
             onClick={handleManualSend}
             disabled={loading || !input.trim()}
             style={{
-              background: !loading && input.trim()
-                ? "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)"
-                : "rgba(255, 255, 255, 0.1)",
-              color: !loading && input.trim() ? "#ffffff" : "rgba(255,255,255,0.4)",
+              background: !loading && input.trim() ? "#7c3aed" : "#f1f5f9",
+              color: !loading && input.trim() ? "#ffffff" : "#94a3b8",
               border: "none",
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
+              borderRadius: "8px",
+              width: "36px",
+              height: "36px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -765,7 +771,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
               flexShrink: 0,
             }}
           >
-            <Send size={18} />
+            <Send size={16} />
           </button>
         </div>
       </div>

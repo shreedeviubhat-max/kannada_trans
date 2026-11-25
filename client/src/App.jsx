@@ -25,7 +25,10 @@ export default function App() {
 
       {/* 2. Main Dashboard with 4 distinct feature cards */}
       {currentView === "dashboard" && (
-        <MainDashboard onNavigate={(mode) => setCurrentView(mode)} />
+        <MainDashboard
+          onNavigate={(mode) => setCurrentView(mode)}
+          onBackToWelcome={() => setCurrentView("welcome")}
+        />
       )}
 
       {/* 3. Translation Page (Soft blue and white theme) */}

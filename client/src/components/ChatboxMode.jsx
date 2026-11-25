@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import {
-  Send,
-  Plus,
+  ArrowLeft,
+  ArrowRight,
   Camera,
   Image as ImageIcon,
   FileText,
@@ -10,30 +10,19 @@ import {
   Copy,
   Check,
   RotateCcw,
-  Sparkles,
-  ArrowLeft,
   X,
   Mic,
   MicOff,
-  Languages,
-  BookOpen
+  Send,
+  Paperclip
 } from "lucide-react";
 
 export default function ChatboxMode({ onBackToHome }) {
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: `**ನಮಸ್ಕಾರ! ಭಾಷಾಂತರ (Bhashantara Workspace) ಗೆ ಸುಸ್ವಾಗತ!** 🌐
-
-ಇಲ್ಲಿ ನೀವು ಯಾವುದೇ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡ ಪಠ್ಯ, ಚಿತ್ರ ಅಥವಾ ಧ್ವನಿಯನ್ನು ಅತ್ಯಂತ ವೇಗವಾಗಿ ಮತ್ತು ಸರಳವಾಗಿ ಭಾಷಾಂತರಿಸಬಹುದು.
-
-**ಉದಾಹರಣೆಗೆ (Format):**
-- **ನೀಡಿದ ಪಠ್ಯ (Given Text):** Good morning, how are you?
-- **ಅನುವಾದ (Translation):** ಶುಭೋದಯ, ನೀವು ಹೇಗಿದ್ದೀರಿ?
-- **ಉಚ್ಚಾರಣೆ (Transliteration):** Śubhōdaya, nīvu hēgiddīri?
-- **ಸರಳ ವಿವರಣೆ (Simple Explanation):** Formal and respectful way to greet someone in Kannada.
-
-*ಟೈಪ್ ಮಾಡಿ, ಧ್ವನಿ ಬಳಸಿ ಅಥವಾ \`(+)\` ಮೂಲಕ ಚಿತ್ರ/ದಾಖಲೆ ಲಗತ್ತಿಸಿ!*`,
+      text: `**ನಮಸ್ಕಾರ.**
+Enter any sentence or phrase in English or Kannada below. You can also upload an image, signboard photo, or document to translate.`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -56,6 +45,7 @@ export default function ChatboxMode({ onBackToHome }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // Voice speech-to-text
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -152,8 +142,8 @@ export default function ChatboxMode({ onBackToHome }) {
         .map((m) => ({ role: m.role, text: m.text }));
 
       const apiBase = import.meta.env.VITE_API_URL || "";
-      
-      // Try streaming endpoint for fastest response
+
+      // Real-time SSE streaming for fast response
       const response = await fetch(`${apiBase}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -165,7 +155,7 @@ export default function ChatboxMode({ onBackToHome }) {
       });
 
       if (!response.ok || !response.body) {
-        // Fallback to standard chat if stream is unsupported
+        // Fallback to standard chat
         const fallbackRes = await fetch(`${apiBase}/api/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -188,7 +178,6 @@ export default function ChatboxMode({ onBackToHome }) {
         return;
       }
 
-      // Stream tokens dynamically into state
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       let streamText = "";
@@ -247,16 +236,15 @@ export default function ChatboxMode({ onBackToHome }) {
       }
 
       if (!streamText) {
-        throw new Error("No response was received from the stream.");
+        throw new Error("No translation response was received.");
       }
-
     } catch (err) {
       setErrorBanner(err.message);
       setMessages((prev) => [
         ...prev,
         {
           role: "model",
-          text: `⚠️ **ದೋಷ (Error):** ${err.message}`,
+          text: `⚠️ **Error:** ${err.message}`,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -269,7 +257,7 @@ export default function ChatboxMode({ onBackToHome }) {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%)",
+        backgroundColor: "#f4f9fd", // Soft blue-tinted canvas
         color: "#0f172a",
         display: "flex",
         flexDirection: "column",
@@ -277,12 +265,12 @@ export default function ChatboxMode({ onBackToHome }) {
         boxSizing: "border-box",
       }}
     >
-      {/* Top Header Bar */}
+      {/* Refined Top Navigation Bar */}
       <header
         style={{
-          background: "rgba(255, 255, 255, 0.85)",
+          background: "rgba(255, 255, 255, 0.9)",
           backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #bae6fd",
+          borderBottom: "1px solid #e0f2fe",
           padding: "16px 24px",
           display: "flex",
           alignItems: "center",
@@ -297,63 +285,55 @@ export default function ChatboxMode({ onBackToHome }) {
             onClick={onBackToHome}
             style={{
               background: "#ffffff",
-              border: "1px solid #bae6fd",
-              color: "#0369a1",
-              padding: "8px 14px",
-              borderRadius: "12px",
+              border: "1px solid #cbd5e1",
+              color: "#334155",
+              padding: "7px 12px",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "0.88rem",
+              fontSize: "0.85rem",
               fontWeight: "600",
-              boxShadow: "0 2px 6px rgba(2, 132, 199, 0.08)",
             }}
           >
             <ArrowLeft size={16} />
-            <span>ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)</span>
+            <span>Dashboard</span>
           </button>
 
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Languages size={20} color="#0284c7" />
-              <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#0c4a6e", margin: 0 }}>
-                ಭಾಷಾಂತರ (Translation Workspace)
-              </h1>
-            </div>
-            <p style={{ fontSize: "0.78rem", color: "#0284c7", margin: "2px 0 0" }}>
-              Soft Blue & White Theme • Fast, Clean & Concise Kannada ⇄ English
-            </p>
+            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0c4a6e", margin: 0 }}>
+              ಭಾಷಾಂತರ <span style={{ fontWeight: "400", color: "#64748b" }}>/ Translation</span>
+            </h1>
           </div>
         </div>
 
         <button
           onClick={() => setMessages([messages[0]])}
-          title="Reset Workspace"
+          title="Clear session"
           style={{
-            background: "#ffffff",
-            border: "1px solid #bae6fd",
-            color: "#0284c7",
+            background: "transparent",
+            border: "none",
+            color: "#64748b",
             padding: "8px",
-            borderRadius: "50%",
             cursor: "pointer",
+            borderRadius: "6px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
           }}
         >
-          <RotateCcw size={17} />
+          <RotateCcw size={16} />
         </button>
       </header>
 
-      {/* Main Translation Conversation Container */}
+      {/* Main Translation Stream Container */}
       <div
         style={{
           flex: 1,
-          maxWidth: "940px",
+          maxWidth: "820px",
           width: "100%",
           margin: "0 auto",
-          padding: "20px 16px",
+          padding: "24px 16px 32px",
           display: "flex",
           flexDirection: "column",
         }}
@@ -365,9 +345,9 @@ export default function ChatboxMode({ onBackToHome }) {
               border: "1px solid #fecaca",
               color: "#b91c1c",
               padding: "10px 14px",
-              borderRadius: "12px",
+              borderRadius: "8px",
               fontSize: "0.86rem",
-              marginBottom: "14px",
+              marginBottom: "16px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -383,7 +363,7 @@ export default function ChatboxMode({ onBackToHome }) {
           </div>
         )}
 
-        {/* Message Stream */}
+        {/* Message Log */}
         <div
           style={{
             flex: 1,
@@ -408,53 +388,33 @@ export default function ChatboxMode({ onBackToHome }) {
               >
                 <div
                   style={{
+                    maxWidth: isUser ? "80%" : "88%",
                     display: "flex",
-                    flexDirection: isUser ? "row-reverse" : "row",
-                    alignItems: "flex-start",
-                    gap: "12px",
-                    maxWidth: isUser ? "85%" : "92%",
+                    flexDirection: "column",
                   }}
                 >
-                  <div
-                    style={{
-                      width: "36px",
-                      height: "36px",
-                      borderRadius: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "13px",
-                      fontWeight: "700",
-                      flexShrink: 0,
-                      marginTop: "2px",
-                      background: isUser ? "#0284c7" : "#e0f2fe",
-                      color: isUser ? "#ffffff" : "#0369a1",
-                      border: isUser ? "none" : "1px solid #bae6fd",
-                    }}
-                  >
-                    {isUser ? "ನೀವು" : "ಅನುವಾದ"}
-                  </div>
-
                   <div
                     style={{
                       background: isUser ? "#0284c7" : "#ffffff",
                       border: isUser ? "none" : "1px solid #e0f2fe",
                       color: isUser ? "#ffffff" : "#0f172a",
                       padding: "16px 20px",
-                      borderRadius: isUser ? "20px 4px 20px 20px" : "4px 20px 20px 20px",
-                      boxShadow: "0 4px 16px rgba(2, 132, 199, 0.08)",
+                      borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                      boxShadow: isUser
+                        ? "0 2px 8px rgba(2, 132, 199, 0.15)"
+                        : "0 2px 10px rgba(12, 74, 110, 0.04)",
                     }}
                   >
                     {msg.attachment?.preview && (
-                      <div style={{ marginBottom: "10px" }}>
+                      <div style={{ marginBottom: "12px" }}>
                         <img
                           src={msg.attachment.preview}
-                          alt="attachment"
+                          alt="Uploaded attachment"
                           style={{
-                            maxHeight: "220px",
+                            maxHeight: "200px",
                             maxWidth: "100%",
-                            borderRadius: "10px",
-                            border: "1px solid #bae6fd",
+                            borderRadius: "8px",
+                            border: "1px solid #e2e8f0",
                             objectFit: "contain",
                           }}
                         />
@@ -470,72 +430,72 @@ export default function ChatboxMode({ onBackToHome }) {
                           background: "#f0f9ff",
                           border: "1px solid #bae6fd",
                           padding: "6px 12px",
-                          borderRadius: "8px",
+                          borderRadius: "6px",
                           fontSize: "0.82rem",
                           marginBottom: "10px",
                           color: "#0369a1",
                         }}
                       >
-                        <FileText size={16} />
+                        <FileText size={15} />
                         <span>{msg.attachment.name}</span>
                       </div>
                     )}
 
-                    <div className={isUser ? "" : "prose-light"}>
+                    <div className="editorial-prose" style={{ color: isUser ? "#ffffff" : "#0f172a" }}>
                       <ReactMarkdown>{msg.text}</ReactMarkdown>
                     </div>
+                  </div>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                        gap: "12px",
-                        marginTop: "10px",
-                        paddingTop: "6px",
-                        borderTop: isUser ? "1px solid rgba(255,255,255,0.2)" : "1px solid #f1f5f9",
-                        fontSize: "0.74rem",
-                        color: isUser ? "#e0f2fe" : "#94a3b8",
-                      }}
-                    >
-                      <span>{msg.timestamp}</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginTop: "4px",
+                      fontSize: "0.72rem",
+                      color: "#94a3b8",
+                      alignSelf: isUser ? "flex-end" : "flex-start",
+                      padding: "0 4px",
+                    }}
+                  >
+                    <span>{msg.timestamp}</span>
 
-                      {!isUser && (
-                        <button
-                          onClick={() => playPronunciation(msg.text)}
-                          title="Listen to pronunciation"
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            cursor: "pointer",
-                            color: "#0284c7",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontWeight: "600",
-                          }}
-                        >
-                          <Volume2 size={14} />
-                          <span>ಆಲಿಸಿ</span>
-                        </button>
-                      )}
-
+                    {!isUser && (
                       <button
-                        onClick={() => copyToClipboard(msg.text, idx)}
-                        title="Copy text"
+                        onClick={() => playPronunciation(msg.text)}
+                        title="Listen to pronunciation"
                         style={{
                           background: "transparent",
                           border: "none",
                           cursor: "pointer",
-                          color: copiedIndex === idx ? "#16a34a" : isUser ? "#e0f2fe" : "#94a3b8",
+                          color: "#0284c7",
                           display: "flex",
                           alignItems: "center",
                           gap: "3px",
+                          fontWeight: "500",
+                          fontSize: "0.72rem",
                         }}
                       >
-                        {copiedIndex === idx ? <Check size={14} /> : <Copy size={14} />}
+                        <Volume2 size={13} />
+                        <span>Listen</span>
                       </button>
-                    </div>
+                    )}
+
+                    <button
+                      onClick={() => copyToClipboard(msg.text, idx)}
+                      title="Copy text"
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        color: copiedIndex === idx ? "#16a34a" : "#94a3b8",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2px",
+                      }}
+                    >
+                      {copiedIndex === idx ? <Check size={13} /> : <Copy size={13} />}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -543,90 +503,41 @@ export default function ChatboxMode({ onBackToHome }) {
           })}
 
           {loading && (
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px" }}>
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "12px",
-                  background: "#e0f2fe",
-                  color: "#0284c7",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "12px",
-                  fontWeight: 700,
-                }}
-              >
-                ಅನುವಾದ
-              </div>
-              <div
-                style={{
-                  background: "#ffffff",
-                  border: "1px solid #bae6fd",
-                  padding: "10px 18px",
-                  borderRadius: "16px",
-                  fontSize: "0.88rem",
-                  color: "#0284c7",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  boxShadow: "0 2px 8px rgba(2, 132, 199, 0.08)",
-                }}
-              >
-                <span>ಭಾಷಾಂತರಿಸಲಾಗುತ್ತಿದೆ (Translating)...</span>
-                <Sparkles size={16} color="#0284c7" />
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 0", color: "#0284c7", fontSize: "0.85rem" }}>
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#0284c7", display: "inline-block" }} />
+              <span>Translating...</span>
             </div>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Selected Attachment Preview Bar */}
+        {/* Selected Attachment preview bar */}
         {selectedAttachment && (
           <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "10px",
+              gap: "8px",
               background: "#ffffff",
               border: "1px solid #bae6fd",
-              borderRadius: "12px",
-              padding: "8px 12px",
-              marginBottom: "10px",
+              borderRadius: "8px",
+              padding: "6px 10px",
+              marginBottom: "8px",
               alignSelf: "flex-start",
-              boxShadow: "0 2px 8px rgba(2, 132, 199, 0.1)",
             }}
           >
-            {selectedAttachment.preview ? (
-              <img
-                src={selectedAttachment.preview}
-                alt="Preview"
-                style={{ width: "36px", height: "36px", borderRadius: "8px", objectFit: "cover" }}
-              />
-            ) : (
-              <FileText size={22} color="#0284c7" />
-            )}
-            <div>
-              <div style={{ fontSize: "0.82rem", color: "#0c4a6e", fontWeight: 700 }}>
-                {selectedAttachment.name}
-              </div>
-              <div style={{ fontSize: "0.72rem", color: "#64748b" }}>Ready for translation & OCR</div>
-            </div>
+            <span style={{ fontSize: "0.8rem", color: "#0369a1", fontWeight: "600" }}>
+              {selectedAttachment.name}
+            </span>
             <button
               onClick={removeAttachment}
               style={{
-                background: "#f1f5f9",
+                background: "transparent",
                 border: "none",
                 color: "#64748b",
-                borderRadius: "50%",
-                width: "22px",
-                height: "22px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 cursor: "pointer",
+                padding: "2px",
               }}
             >
               <X size={14} />
@@ -658,24 +569,24 @@ export default function ChatboxMode({ onBackToHome }) {
           style={{ display: "none" }}
         />
 
-        {/* Translation Input Bar */}
+        {/* Workspace Input Console */}
         <div style={{ position: "relative" }}>
           {showAttachMenu && (
             <div
               style={{
                 position: "absolute",
-                bottom: "68px",
-                left: "6px",
+                bottom: "58px",
+                left: "4px",
                 background: "#ffffff",
-                border: "1px solid #bae6fd",
-                borderRadius: "16px",
-                padding: "8px",
+                border: "1px solid #cbd5e1",
+                borderRadius: "10px",
+                padding: "6px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "4px",
-                boxShadow: "0 10px 25px rgba(2, 132, 199, 0.15)",
+                gap: "2px",
+                boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
                 zIndex: 10,
-                minWidth: "180px",
+                minWidth: "160px",
               }}
             >
               <button
@@ -683,21 +594,21 @@ export default function ChatboxMode({ onBackToHome }) {
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "#0f172a",
-                  padding: "8px 12px",
-                  borderRadius: "10px",
+                  color: "#334155",
+                  padding: "8px 10px",
+                  borderRadius: "6px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "10px",
-                  fontSize: "0.86rem",
+                  gap: "8px",
+                  fontSize: "0.84rem",
                   cursor: "pointer",
                   textAlign: "left",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#f0f9ff")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
-                <Camera size={18} color="#0284c7" />
-                <span>Camera (ಕ್ಯಾಮೆರಾ)</span>
+                <Camera size={16} />
+                <span>Camera</span>
               </button>
 
               <button
@@ -705,21 +616,21 @@ export default function ChatboxMode({ onBackToHome }) {
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "#0f172a",
-                  padding: "8px 12px",
-                  borderRadius: "10px",
+                  color: "#334155",
+                  padding: "8px 10px",
+                  borderRadius: "6px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "10px",
-                  fontSize: "0.86rem",
+                  gap: "8px",
+                  fontSize: "0.84rem",
                   cursor: "pointer",
                   textAlign: "left",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#f0f9ff")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
-                <ImageIcon size={18} color="#0284c7" />
-                <span>Image (ಚಿತ್ರ)</span>
+                <ImageIcon size={16} />
+                <span>Upload Image</span>
               </button>
 
               <button
@@ -727,21 +638,21 @@ export default function ChatboxMode({ onBackToHome }) {
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "#0f172a",
-                  padding: "8px 12px",
-                  borderRadius: "10px",
+                  color: "#334155",
+                  padding: "8px 10px",
+                  borderRadius: "6px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "10px",
-                  fontSize: "0.86rem",
+                  gap: "8px",
+                  fontSize: "0.84rem",
                   cursor: "pointer",
                   textAlign: "left",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#f0f9ff")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
-                <FileText size={18} color="#0284c7" />
-                <span>Document (ದಾಖಲೆ)</span>
+                <FileText size={16} />
+                <span>Document</span>
               </button>
             </div>
           )}
@@ -749,80 +660,67 @@ export default function ChatboxMode({ onBackToHome }) {
           <div
             style={{
               background: "#ffffff",
-              border: "1.5px solid #bae6fd",
-              borderRadius: "28px",
-              padding: "8px 14px",
+              border: "1px solid #cbd5e1",
+              borderRadius: "12px",
+              padding: "8px 12px",
               display: "flex",
               alignItems: "center",
-              gap: "10px",
-              boxShadow: "0 6px 20px rgba(2, 132, 199, 0.08)",
+              gap: "8px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.03)",
             }}
           >
             <button
               type="button"
               onClick={() => setShowAttachMenu((prev) => !prev)}
-              title="Attach Camera, Image, or Document"
+              title="Attach photo or document"
               style={{
-                background: showAttachMenu ? "#e0f2fe" : "#f0f9ff",
-                border: "1px solid #bae6fd",
-                color: "#0284c7",
-                borderRadius: "50%",
-                width: "38px",
-                height: "38px",
+                background: "transparent",
+                border: "none",
+                color: "#64748b",
+                cursor: "pointer",
+                padding: "6px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                flexShrink: 0,
-                transition: "all 0.2s",
               }}
             >
-              <Plus size={20} style={{ transform: showAttachMenu ? "rotate(45deg)" : "none", transition: "0.2s" }} />
+              <Paperclip size={18} />
             </button>
 
             <button
               type="button"
               onClick={toggleVoiceRecording}
-              title={isRecording ? "Stop voice input" : "Speak text"}
-              className={isRecording ? "mic-recording" : ""}
+              title={isRecording ? "Stop voice input" : "Speak to translate"}
               style={{
-                background: isRecording ? "#ef4444" : "#f0f9ff",
-                border: "1px solid #bae6fd",
-                color: isRecording ? "#ffffff" : "#0284c7",
-                borderRadius: "50%",
-                width: "36px",
-                height: "36px",
+                background: isRecording ? "#ef4444" : "transparent",
+                border: "none",
+                color: isRecording ? "#ffffff" : "#64748b",
+                borderRadius: "6px",
+                padding: "6px",
+                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                flexShrink: 0,
               }}
             >
-              {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
+              {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
             </button>
 
-            <textarea
-              rows={1}
+            <input
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
+                if (e.key === "Enter") {
                   handleSendMessage();
                 }
               }}
-              placeholder="ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ (Type text in Kannada or English to translate)..."
+              placeholder="Type English or Kannada to translate..."
               style={{
                 flex: 1,
-                background: "transparent",
                 border: "none",
                 outline: "none",
+                fontSize: "0.95rem",
                 color: "#0f172a",
-                fontSize: "0.98rem",
-                padding: "8px 4px",
-                resize: "none",
-                fontFamily: "inherit",
+                background: "transparent",
               }}
             />
 
@@ -831,23 +729,21 @@ export default function ChatboxMode({ onBackToHome }) {
               onClick={() => handleSendMessage()}
               disabled={loading || (!input.trim() && !selectedAttachment)}
               style={{
-                background: !loading && (input.trim() || selectedAttachment)
-                  ? "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)"
-                  : "#e2e8f0",
+                background: !loading && (input.trim() || selectedAttachment) ? "#0284c7" : "#f1f5f9",
                 color: !loading && (input.trim() || selectedAttachment) ? "#ffffff" : "#94a3b8",
                 border: "none",
-                borderRadius: "50%",
-                width: "40px",
-                height: "40px",
+                borderRadius: "8px",
+                padding: "8px 14px",
+                cursor: !loading && (input.trim() || selectedAttachment) ? "pointer" : "not-allowed",
+                fontWeight: "600",
+                fontSize: "0.85rem",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: !loading && (input.trim() || selectedAttachment) ? "pointer" : "not-allowed",
-                flexShrink: 0,
-                boxShadow: !loading && (input.trim() || selectedAttachment) ? "0 4px 12px rgba(2, 132, 199, 0.3)" : "none",
+                gap: "4px",
               }}
             >
-              <Send size={18} />
+              <span>Translate</span>
+              <ArrowRight size={15} />
             </button>
           </div>
         </div>
