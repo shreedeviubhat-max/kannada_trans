@@ -23,14 +23,16 @@ export default function ChatboxMode({ onBackToHome }) {
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: `**ನಮಸ್ಕಾರ! ಸುಸ್ವಾಗತ!** 🙏 (*Namaskāra! Susvāgata!*)
+      text: `**ನಮಸ್ಕಾರ! ಭಾಷಾಂತರ (Bhashantara) ವಿಭಾಗಕ್ಕೆ ಸುಸ್ವಾಗತ!** 🙏
 
-ನಾನು ನಿಮ್ಮ **"ಕಲಿ ಕನ್ನಡ, ನಲಿ ಕನ್ನಡದಿ"** AI ಸಹಾಯಕ.
-Under the spirit of **"ಸಿರಿಗನ್ನಡಂ ಗೆಲ್ಗೆ, ಸಿರಿಗನ್ನಡಂ ಬಾಳ್ಗೆ"**, I am here to help you learn, translate, and interact with Kannada.
+ಇಲ್ಲಿ ನೀವು ಯಾವುದೇ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡ ಪಠ್ಯ, ಚಿತ್ರ ಅಥವಾ ಧ್ವನಿಯನ್ನು ಸರಳವಾಗಿ ಭಾಷಾಂತರಿಸಬಹುದು.
+ನಾನು ನಿಮಗೆ ನೀಡುವ ಮಾಹಿತಿ:
+- **ನೀಡಿದ ಪಠ್ಯ (Given Text)**
+- **ಅನುವಾದ (Translation)**
+- **ಉಚ್ಚಾರಣೆ (Transliteration)**
+- **ಸರಳ ವಿವರಣೆ (Simple Explanation)**
 
-- ✍️ **ನನ್ನಲ್ಲಿ ಕೇಳು:** Type any sentence or phrase in English or Kannada.
-- ➕ **Attach:** Click \`(+)\` below to capture with your **Camera**, upload an **Image** (signboards, menus, books), or attach a **Document**.
-- 📖 **Grammar & Phonetics:** Every response features authentic Kannada script, Romanized transliteration (IAST), and detailed grammar breakdowns (root words, vibhakti suffixes, verb tenses).`,
+*ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ ಅಥವಾ ಧ್ವನಿ/ಚಿತ್ರವನ್ನು ಲಗತ್ತಿಸಿ!*`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -244,10 +246,10 @@ Under the spirit of **"ಸಿರಿಗನ್ನಡಂ ಗೆಲ್ಗೆ, ಸಿ
 
           <div>
             <h1 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#ffffff", letterSpacing: "0.3px" }}>
-              ಕಲಿ ಕನ್ನಡ, ನಲಿ ಕನ್ನಡದಿ
+              ಭಾಷಾಂತರ (Bhashantara)
             </h1>
             <p style={{ fontSize: "0.76rem", color: "#facc15" }}>
-              "ಸಿರಿಗನ್ನಡಂ ಗೆಲ್ಗೆ, ಸಿರಿಗನ್ನಡಂ ಬಾಳ್ಗೆ" • Chatbox Mode
+              "ಸಿರಿಗನ್ನಡಂ ಗೆಲ್ಗೆ, ಸಿರಿಗನ್ನಡಂ ಬಾಳ್ಗೆ" • ಸರಳ ಭಾಷಾಂತರ ಮತ್ತು ವಿವರಣೆ
             </p>
           </div>
         </div>
