@@ -10,23 +10,18 @@ import {
   BookOpen,
   Award,
   ChevronRight,
-  Flame
+  Flame,
+  GraduationCap
 } from "lucide-react";
 
-// Curated daily lessons covering:
-// 1. ಒಗಟು (Kannada Riddle)
-// 2. ಗಾದೆ ಪೂರ್ಣಗೊಳಿಸಿ (Complete the Proverb)
-// 3. ಸನ್ನಿವೇಶಕ್ಕೆ ತಕ್ಕ ಗಾದೆ (Match Proverb to Situation)
-// 4. ಕಥೆಯ ನೀತಿ (Moral of the Story)
 const DAILY_CHALLENGES = [
   {
     dayNumber: 1,
     title: "ದಿನ ೧: ಕನ್ನಡ ಒಗಟು (Kannada Riddle)",
-    type: "ogatu",
     typeBadge: "ಒಗಟು (Riddle)",
     question: "ಬಾಲ ಮುಟ್ಟಿದರೆ ಬಾಯಿ ತೆರೆಯುತ್ತೆ, ಕಣ್ಣಿಲ್ಲದಿದ್ದರೂ ದಾರಿ ತೋರಿಸುತ್ತೆ. ಇದು ಏನು?",
     transliteration: "Bāla muṭṭidare bāyi tereyutte, kaṇṇilladiddarū dāri tōrisutte. Idu ēnu?",
-    englishHint: "Riddle: If you touch its tail it opens its mouth; it has no eyes yet shows you the way. What is it?",
+    englishHint: "Riddle: If you touch its tail it opens its mouth; it has no eyes yet cuts a path. What is it?",
     options: ["ಕತ್ತರಿ (Scissors)", "ಬೀಗ ಮತ್ತು ಕೀಲಿ (Lock & Key)", "ದೀಪ (Lamp)", "ಕನ್ನಡಿ (Mirror)"],
     correctAnswer: 0,
     explanation: "ಕತ್ತರಿ (Scissors) - ಕೈಹಿಡಿಯನ್ನು (ಬಾಲ) ಒತ್ತಿದಾಗ ಕತ್ತರಿಯ ಬಾಯಿ ತೆರೆಯುತ್ತದೆ, ಬಟ್ಟೆ ಕತ್ತರಿಸಿ ದಾರಿ ಮಾಡಿಕೊಡುತ್ತದೆ.",
@@ -34,11 +29,10 @@ const DAILY_CHALLENGES = [
   {
     dayNumber: 2,
     title: "ದಿನ ೨: ಗಾದೆ ಮಾತು ಪೂರ್ಣಗೊಳಿಸಿ (Complete the Proverb)",
-    type: "gade_fill",
     typeBadge: "ಗಾದೆ ಪೂರ್ಣಗೊಳಿಸಿ (Proverb)",
     question: "ಕೈ ಕೆಸರಾದರೆ, _________ ಗಟ್ಟಿ.",
     transliteration: "Kai kesarādare, _________ gaṭṭi.",
-    englishHint: "If your hands get muddy (with hard work), the ______ will be thick/solid.",
+    englishHint: "If your hands get muddy with hard labor, the ______ will be thick and solid.",
     options: ["ಮೊಸರು (Yogurt/Butter)", "ಹಾಲು (Milk)", "ಬೆಣ್ಣೆ (Butter)", "ಅನ್ನ (Rice)"],
     correctAnswer: 0,
     explanation: "'ಕೈ ಕೆಸರಾದರೆ ಮೊಸರು ಗಟ್ಟಿ' — ಕಷ್ಟಪಟ್ಟು ಹೊಲದಲ್ಲಿ ದುಡಿದರೆ ಮಾತ್ರ ಸುಖದ ಫಲ (ಮೊಸರು/ಊಟ) ಸಿಗುತ್ತದೆ. ಕಾಯಕವೇ ಕೈಲಾಸ.",
@@ -46,16 +40,15 @@ const DAILY_CHALLENGES = [
   {
     dayNumber: 3,
     title: "ದಿನ ೩: ಸನ್ನಿವೇಶಕ್ಕೆ ತಕ್ಕ ಗಾದೆ (Match Proverb to Situation)",
-    type: "situation_gade",
     typeBadge: "ಸನ್ನಿವೇಶ & ಗಾದೆ (Context Match)",
     question: "ಸನ್ನಿವೇಶ: ರಾಜು ಪರೀಕ್ಷೆಗೆ ಒಂದು ದಿನ ಮೊದಲು ಮಾತ್ರ ಓದಲು ಆರಂಭಿಸಿದ. ಮೊದಲಿನಿಂದಲೂ ಓದಿದ್ದರೆ ಸುಲಭವಾಗಿ ಉತ್ತೀರ್ಣನಾಗಬಹುದಿತ್ತು. ಇದಕ್ಕೆ ಸರಿಹೊಂದುವ ಗಾದೆ ಯಾವುದು?",
-    transliteration: "Situation: Raju started studying only one day before exams. Which Kannada proverb fits this situation best?",
-    englishHint: "Raju started studying at the last second when disaster arrived. Which proverb matches?",
+    transliteration: "Situation: Raju started studying only one day before exams when disaster struck. Which proverb fits?",
+    englishHint: "Starting preparation only after the crisis strikes. Which proverb matches?",
     options: [
       "ಮನೆಗೆ ಬೆಂಕಿ ಬಿದ್ದಾಗ ಬಾವಿ ತೋಡಿದರು (Digging a well after the house caught fire)",
       "ಹಾಸಿಗೆ ಇದ್ದಷ್ಟು ಕಾಲು ಚಾಚು (Stretch feet only as long as the mat)",
-      "ಕುಂಬಳಕಾಯಿ ಕಳ್ಳ ಎಂದರೆ ಹೆಗಲು ಮುಟ್ಟಿ ನೋಡಿಕೊಂಡ (Touching shoulder when pumpkin thief is mentioned)",
-      "ಊರಿಗೆ ಉಪಕಾರಿ, ಮನೆಗೆ ಮಾರಿ (Helpful to the village, plague to home)"
+      "ಕುಂಬಳಕಾಯಿ ಕಳ್ಳ ಎಂದರೆ ಹೆಗಲು ಮುಟ್ಟಿ ನೋಡಿಕೊಂಡ (Guilty conscience)",
+      "ಊರಿಗೆ ಉಪಕಾರಿ, ಮನೆಗೆ ಮಾರಿ (Helpful outside, troublemaker at home)"
     ],
     correctAnswer: 0,
     explanation: "'ಮನೆಗೆ ಬೆಂಕಿ ಬಿದ್ದಾಗ ಬಾವಿ ತೋಡಿದರು' — ಕಷ್ಟ ಬಂದಾಗಲೇ ತುರ್ತಾಗಿ ಪರಿಹಾರ ಹುಡುಕಲು ಹೊರಡುವುದು ಮೂರ್ಖತನ, ಮೊದಲೇ ಸಿದ್ಧತೆ ಮಾಡಿಕೊಳ್ಳಬೇಕು.",
@@ -63,28 +56,26 @@ const DAILY_CHALLENGES = [
   {
     dayNumber: 4,
     title: "ದಿನ ೪: ಕಥೆಯ ನೀತಿ ಬರೆಯಿರಿ (Moral of the Story)",
-    type: "neeti",
     typeBadge: "ಕಥೆಯ ನೀತಿ (Moral)",
     question: "ಸಣ್ಣ ಕಥೆ: ಕಾಗೆಯೊಂದು ಮಡಕೆಯಲ್ಲಿದ್ದ ನೀರು ಕುಡಿಯಲು ಕಲ್ಲುಗಳನ್ನು ಒಂದೊಂದಾಗಿ ತಂದು ಹಾಕಿ ನೀರು ಮೇಲಕ್ಕೆ ಬರುವಂತೆ ಮಾಡಿತು. ಈ ಕಥೆಯ ನೀತಿ ಏನು?",
-    transliteration: "Story of the Thirsty Crow dropping pebbles into a pitcher until the water rose. What is the moral?",
-    englishHint: "What is the moral of the thirsty crow fable?",
+    transliteration: "Story of the Thirsty Crow dropping pebbles into a pitcher until water rose. What is the moral?",
+    englishHint: "What is the moral lesson of the thirsty crow fable?",
     options: [
-      "ಉಪಾಯ ಬಲ್ಲವನಿಗೆ ಅಪಾಯವಿಲ್ಲ / ಪ್ರಯತ್ನವೇ ಯಶಸ್ಸಿನ ಮೂಲ (Where there is a will, intelligence finds a way)",
-      "ಅತಿಯಾಸೆ ಗತಿಗೇಡು (Greed leads to downfall)",
+      "ಉಪಾಯ ಬಲ್ಲವನಿಗೆ ಅಪಾಯವಿಲ್ಲ / ಪ್ರಯತ್ನವೇ ಯಶಸ್ಸಿನ ಮೂಲ (Where there is perseverance, intelligence finds a way)",
+      "ಅತಿಯಾಸೆ ಗತಿಗೇಡು (Greed leads to ruin)",
       "ದೂರದ ಬೆಟ್ಟ ಕಣ್ಣಿಗೆ ನುಣ್ಣಗೆ (Distant hills look smooth)",
-      "ಕೋಪದಲ್ಲಿ ಕೊಯ್ದ ಮೂಗು ಮತ್ತೆ ಬರುವುದಿಲ್ಲ (A nose cut in anger never returns)"
+      "ಕೋಪದಲ್ಲಿ ಕೊಯ್ದ ಮೂಗು ಮತ್ತೆ ಬರುವುದಿಲ್ಲ (Decisions made in anger bring regret)"
     ],
     correctAnswer: 0,
-    explanation: "ನೀತಿ: ಬುದ್ಧಿವಂತಿಕೆ ಮತ್ತು ಸತತ ಪ್ರಯತ್ನವಿದ್ದರೆ ಎಂತಹ ಕಠಿಣ ಸಮಸ್ಯೆಯನ್ನೂ ಪರಿಹರಿಸಬಹುದು. (Where there is perseverance and clever thought, obstacles disappear).",
+    explanation: "ನೀತಿ: ಬುದ್ಧಿವಂತಿಕೆ ಮತ್ತು ಸತತ ಪ್ರಯತ್ನವಿದ್ದರೆ ಎಂತಹ ಕಠಿಣ ಸಮಸ್ಯೆಯನ್ನೂ ಪರಿಹರಿಸಬಹುದು.",
   },
   {
     dayNumber: 5,
     title: "ದಿನ ೫: ಕನ್ನಡ ಒಗಟು (Kannada Riddle)",
-    type: "ogatu",
     typeBadge: "ಒಗಟು (Riddle)",
     question: "ಮೇಲೆ ಹಸಿರು ಹೊದಿಕೆ, ಒಳಗೆ ಕೆಂಪು ಹಾಸಿಗೆ, ಕಪ್ಪು ಮುತ್ತುಗಳ ರಾಶಿ. ಇದು ಯಾರು?",
     transliteration: "Mēle hasiru hodike, oḷage kempu hāsige, kappu muttugaḷa rāśi. Idu yāru?",
-    englishHint: "Green blanket on top, red bed inside, heap of black pearls. What fruit is this?",
+    englishHint: "Green blanket on the outside, red bed inside, heap of black pearls. What fruit is this?",
     options: ["ಕಲ್ಲಂಗಡಿ ಹಣ್ಣು (Watermelon)", "ದಾಳಿಂಬೆ (Pomegranate)", "ಸೇಬು (Apple)", "ಪಪ್ಪಾಯಿ (Papaya)"],
     correctAnswer: 0,
     explanation: "ಕಲ್ಲಂಗಡಿ (Watermelon) — ಹೊರಗೆ ಹಸಿರು, ಒಳಗೆ ಕೆಂಪು ತಿರುಳು ಮತ್ತು ಕಪ್ಪು ಬೀಜಗಳು.",
@@ -92,7 +83,6 @@ const DAILY_CHALLENGES = [
   {
     dayNumber: 6,
     title: "ದಿನ ೬: ಗಾದೆ ಪೂರ್ಣಗೊಳಿಸಿ (Complete the Proverb)",
-    type: "gade_fill",
     typeBadge: "ಗಾದೆ ಪೂರ್ಣಗೊಳಿಸಿ (Proverb)",
     question: "ಹಾಸಿಗೆ ಇದ್ದಷ್ಟೇ __________ ಚಾಚು.",
     transliteration: "Hā奥行e iddaṣṭē __________ cācu.",
@@ -104,16 +94,15 @@ const DAILY_CHALLENGES = [
   {
     dayNumber: 7,
     title: "ದಿನ ೭: ಸನ್ನಿವೇಶಕ್ಕೆ ತಕ್ಕ ಗಾದೆ (Match Proverb to Situation)",
-    type: "situation_gade",
     typeBadge: "ಸನ್ನಿವೇಶ & ಗಾದೆ (Context Match)",
-    question: "ಸನ್ನಿವೇಶ: ಒಬ್ಬ ವ್ಯಕ್ತಿಗೆ ಸಂಗೀತ ಕಲಿಯುವ ಇಷ್ಟವಿರಲಿಲ್ಲ. ಆದರೆ 'ಗುರುಗಳು ಸರಿಯಾಗಿ ಹಾಡುತ್ತಿಲ್ಲ, ಕೊಠಡಿ ಸರಿಯಿಲ್ಲ' ಎಂದು ಇತರರ ಮೇಲೆ ದೋಷ ಹೊರಿಸಿದ. ಇದಕ್ಕೆ ಸೂಕ್ತ ಗಾದೆ ಯಾವುದು?",
-    transliteration: "A person blames the room and instruments when they don't know how to perform. Which proverb matches?",
-    englishHint: "A bad workman blames his tools. In Kannada?",
+    question: "ಸನ್ನಿವೇಶ: ಒಬ್ಬ ವ್ಯಕ್ತಿಗೆ ಕೆಲಸ ಮಾಡಲು ಬಾರದಿದ್ದಾಗ 'ಉಪಕರಣಗಳು ಸರಿಯಿಲ್ಲ' ಎಂದು ಬೇರೆಯವರ ಮೇಲೆ ದೋಷ ಹೊರಿಸಿದ. ಇದಕ್ಕೆ ಸೂಕ್ತ ಗಾದೆ ಯಾವುದು?",
+    transliteration: "A bad workman blaming his tools. Which Kannada proverb matches?",
+    englishHint: "Blaming circumstances when one lacks the skill. Which proverb fits?",
     options: [
-      "ಕುಣಿಯಲಾರದವಳು ನೆಲ ಡೊಂಕು ಅಂದಳಂತೆ (She who cannot dance blamed the uneven floor)",
-      "ಆಗಸಕ್ಕೆ ಏಣಿ ಹಾಕಿದ ಹಾಗೆ (Like placing a ladder to the sky)",
-      "ಆನೆ ಸತ್ತರೂ ಸಾವಿರ ಹೊನ್ನು (An elephant is worth a thousand gold coins even dead)",
-      "ಉಪ್ಪು ತಿಂದವನು ನೀರು ಕುಡಿಯಲೇಬೇಕು (One who eats salt must drink water)"
+      "ಕುಣಿಯಲಾರದವಳು ನೆಲ ಡೊಂಕು ಅಂದಳಂತೆ (She who cannot dance blamed the floor)",
+      "ಆಗಸಕ್ಕೆ ಏಣಿ ಹಾಕಿದ ಹಾಗೆ (Aiming for impossible without effort)",
+      "ಆನೆ ಸತ್ತರೂ ಸಾವಿರ ಹೊನ್ನು (Inherent value persists)",
+      "ಉಪ್ಪು ತಿಂದವನು ನೀರು ಕುಡಿಯಲೇಬೇಕು (Consequences are inevitable)"
     ],
     correctAnswer: 0,
     explanation: "'ಕುಣಿಯಲಾರದವಳು ನೆಲ ಡೊಂಕು ಅಂದಳಂತೆ' — ತನಗೆ ಕೆಲಸ ಮಾಡಲು ಬಾರದಿದ್ದಾಗ ಬೇರೆಯವರ ಮೇಲೆ ಅಥವಾ ಸನ್ನಿವೇಶದ ಮೇಲೆ ತಪ್ಪು ಹಾಕುವುದು.",
@@ -121,7 +110,6 @@ const DAILY_CHALLENGES = [
 ];
 
 export default function DailyLearnMode({ onBackToHome }) {
-  // Calendar check-in points stored in localStorage
   const [visitedDays, setVisitedDays] = useState(() => {
     try {
       const saved = localStorage.getItem("kannada_daily_visits");
@@ -145,7 +133,6 @@ export default function DailyLearnMode({ onBackToHome }) {
   const [isAnswered, setIsAnswered] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  // Check in today
   useEffect(() => {
     const today = new Date().getDate() % 7 || 7;
     if (!visitedDays.includes(today)) {
@@ -178,7 +165,7 @@ export default function DailyLearnMode({ onBackToHome }) {
         particleCount: 60,
         spread: 60,
         origin: { y: 0.8 },
-        colors: ["#facc15", "#ef4444", "#22c55e"],
+        colors: ["#16a34a", "#ca8a04", "#059669"],
       });
       const newPts = points + 30;
       setPoints(newPts);
@@ -190,7 +177,7 @@ export default function DailyLearnMode({ onBackToHome }) {
     } else {
       setFeedback({
         isCorrect: false,
-        text: "ತಪ್ಪಾದ ಉತ್ತರ. ವಿವರಣೆಯನ್ನು ಗಮನಿಸಿ ಕಲಿಯಿರಿ!",
+        text: "ತಪ್ಪಾದ ಉತ್ತರ. ಕೆಳಗಿನ ವಿವರಣೆಯನ್ನು ಗಮನಿಸಿ ಕಲಿಯಿರಿ!",
       });
     }
   };
@@ -199,322 +186,341 @@ export default function DailyLearnMode({ onBackToHome }) {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#000000",
-        color: "#ffffff",
+        background: "linear-gradient(135deg, #fefce8 0%, #f0fdf4 50%, #fef9c3 100%)",
+        color: "#1e293b",
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        maxWidth: "960px",
-        margin: "0 auto",
-        padding: "16px",
         boxSizing: "border-box",
       }}
     >
       {/* Top Header */}
       <header
         style={{
+          background: "rgba(255, 255, 255, 0.85)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid #bbf7d0",
+          padding: "16px 24px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingBottom: "14px",
-          borderBottom: "1px solid #1f1f23",
-          marginBottom: "16px",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <button
             onClick={onBackToHome}
             style={{
-              background: "#18181b",
-              border: "1px solid #27272a",
-              color: "#d4d4d8",
-              padding: "8px 12px",
-              borderRadius: "10px",
+              background: "#ffffff",
+              border: "1px solid #bbf7d0",
+              color: "#15803d",
+              padding: "8px 14px",
+              borderRadius: "12px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              fontSize: "0.85rem",
+              fontSize: "0.88rem",
+              fontWeight: "600",
+              boxShadow: "0 2px 6px rgba(22, 163, 74, 0.08)",
             }}
           >
             <ArrowLeft size={16} />
-            <span>ಹಿಂದೆ (Home)</span>
+            <span>ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ (Dashboard)</span>
           </button>
 
           <div>
-            <h1 style={{ fontSize: "1.15rem", fontWeight: "700", color: "#ffffff" }}>
-              ದೈನಂದಿನ ಕನ್ನಡ ಕಲಿಕೆ (Daily Learn Kannada)
-            </h1>
-            <p style={{ fontSize: "0.76rem", color: "#facc15" }}>
-              ಪ್ರತಿದಿನ ಭೇಟಿ ನೀಡಿ • ಒಗಟು, ಗಾದೆ ಮಾತು, ಸನ್ನಿವೇಶ ಮತ್ತು ನೀತಿ ಕಲಿಯಿರಿ
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <BookOpen size={22} color="#15803d" />
+              <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#14532d", margin: 0 }}>
+                ಕನ್ನಡ ಕಲಿಕೆ (Learn Kannada)
+              </h1>
+            </div>
+            <p style={{ fontSize: "0.78rem", color: "#16a34a", margin: "2px 0 0" }}>
+              Warm Cream & Green Theme • Daily Calendar, Riddles & Moral Stories
             </p>
           </div>
         </div>
 
-        {/* Total Points & Streak Badge */}
+        {/* Streak & Points Badge */}
         <div
           style={{
-            background: "linear-gradient(135deg, #18181b, #27272a)",
-            border: "1px solid rgba(250, 204, 21, 0.4)",
-            padding: "8px 16px",
-            borderRadius: "20px",
+            background: "#ffffff",
+            border: "1.5px solid #86efac",
+            padding: "8px 18px",
+            borderRadius: "9999px",
             display: "flex",
             alignItems: "center",
-            gap: "10px",
-            fontSize: "0.88rem",
-            fontWeight: "700",
-            color: "#facc15",
+            gap: "12px",
+            fontSize: "0.92rem",
+            fontWeight: "800",
+            color: "#166534",
+            boxShadow: "0 4px 14px rgba(22, 163, 74, 0.12)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <Flame size={16} color="#ef4444" />
+            <Flame size={18} color="#ea580c" />
             <span>{visitedDays.length} Days Streak</span>
           </div>
-          <div style={{ width: "1px", height: "16px", background: "#3f3f46" }} />
+          <div style={{ width: "1px", height: "16px", background: "#cbd5e1" }} />
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <Trophy size={16} color="#facc15" />
+            <Trophy size={18} color="#ca8a04" />
             <span>{points} pts</span>
           </div>
         </div>
       </header>
 
-      {/* Calendar Strip: 7 Days of the Week */}
+      {/* Main Learning Workspace */}
       <div
         style={{
-          background: "#121215",
-          border: "1px solid #27272a",
-          borderRadius: "16px",
-          padding: "16px 20px",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.92rem", fontWeight: 700, color: "#ffffff" }}>
-            <Calendar size={18} color="#facc15" />
-            <span>ಕಲಿಕಾ ಕ್ಯಾಲೆಂಡರ್ (Daily Check-in & Learning Calendar)</span>
-          </div>
-          <span style={{ fontSize: "0.78rem", color: "#a1a1aa" }}>
-            Visit daily to unlock new challenges & earn reward points!
-          </span>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7, 1fr)",
-            gap: "8px",
-          }}
-        >
-          {[1, 2, 3, 4, 5, 6, 7].map((day) => {
-            const isVisited = visitedDays.includes(day);
-            const isSelected = activeDay === day;
-            return (
-              <button
-                key={day}
-                onClick={() => handleSelectDay(day)}
-                style={{
-                  background: isSelected
-                    ? "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)"
-                    : isVisited
-                    ? "#1e293b"
-                    : "#18181b",
-                  color: isSelected ? "#000000" : isVisited ? "#facc15" : "#71717a",
-                  border: isSelected
-                    ? "2px solid #ffffff"
-                    : isVisited
-                    ? "1px solid #3b82f6"
-                    : "1px solid #27272a",
-                  borderRadius: "12px",
-                  padding: "10px 4px",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  transition: "all 0.2s",
-                }}
-              >
-                <span style={{ fontSize: "0.72rem", textTransform: "uppercase", fontWeight: 600 }}>
-                  ದಿನ {day}
-                </span>
-                <span style={{ fontSize: "1.1rem", fontWeight: 800 }}>
-                  {isVisited ? "✓" : `Day ${day}`}
-                </span>
-                <span style={{ fontSize: "0.68rem", opacity: 0.85 }}>
-                  {isVisited ? "+20 pts" : "Unlock"}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Main Challenge Card for the Active Day */}
-      <div
-        style={{
-          background: "#121215",
-          border: "1px solid #27272a",
-          borderRadius: "16px",
-          padding: "24px",
           flex: 1,
+          maxWidth: "960px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "24px 16px",
           display: "flex",
           flexDirection: "column",
+          gap: "20px",
         }}
       >
-        {/* Challenge Header & Category Badge */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px", flexWrap: "wrap", gap: "8px" }}>
-          <span
-            style={{
-              background: "rgba(234, 179, 8, 0.15)",
-              color: "#facc15",
-              border: "1px solid rgba(234, 179, 8, 0.4)",
-              borderRadius: "20px",
-              padding: "4px 12px",
-              fontSize: "0.8rem",
-              fontWeight: 700,
-            }}
-          >
-            {currentChallenge.typeBadge}
-          </span>
-          <span style={{ fontSize: "0.82rem", color: "#9ca3af" }}>
-            Challenge #{activeDay} of 7
-          </span>
-        </div>
-
-        {/* Question Title */}
-        <h2 style={{ fontSize: "1.22rem", fontWeight: "700", color: "#ffffff", marginBottom: "6px", lineHeight: "1.4" }}>
-          {currentChallenge.title}
-        </h2>
+        {/* Weekly Calendar Strip */}
         <div
           style={{
-            background: "#18181b",
-            border: "1px solid #27272a",
-            borderRadius: "12px",
-            padding: "16px",
-            fontSize: "1.08rem",
-            color: "#fef08a",
-            fontWeight: "600",
-            lineHeight: "1.5",
-            marginBottom: "10px",
+            background: "#ffffff",
+            border: "2px solid #bbf7d0",
+            borderRadius: "20px",
+            padding: "20px 24px",
+            boxShadow: "0 6px 20px rgba(22, 163, 74, 0.06)",
           }}
         >
-          {currentChallenge.question}
-        </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "1rem", fontWeight: 800, color: "#14532d" }}>
+              <Calendar size={20} color="#15803d" />
+              <span>ವಾರದ ಕಲಿಕಾ ಕ್ಯಾಲೆಂಡರ್ (Daily Check-in & Point Rewards)</span>
+            </div>
+            <span style={{ fontSize: "0.82rem", color: "#15803d", fontWeight: 600 }}>
+              Visit daily to earn +20 streak points & unlock new challenges!
+            </span>
+          </div>
 
-        <p style={{ fontSize: "0.85rem", color: "#a1a1aa", fontStyle: "italic", marginBottom: "18px" }}>
-          {currentChallenge.englishHint}
-        </p>
-
-        {/* Multiple Choice Options */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "20px" }}>
-          {currentChallenge.options.map((opt, idx) => {
-            const isSelected = selectedOption === idx;
-            const isCorrect = idx === currentChallenge.correctAnswer;
-
-            let bg = "#18181b";
-            let border = "#27272a";
-            let col = "#ffffff";
-
-            if (isAnswered) {
-              if (isCorrect) {
-                bg = "rgba(34, 197, 94, 0.2)";
-                border = "#22c55e";
-                col = "#86efac";
-              } else if (isSelected && !isCorrect) {
-                bg = "rgba(239, 68, 68, 0.2)";
-                border = "#ef4444";
-                col = "#fca5a5";
-              }
-            } else if (isSelected) {
-              border = "#facc15";
-              bg = "rgba(250, 204, 21, 0.1)";
-            }
-
-            return (
-              <button
-                key={idx}
-                onClick={() => !isAnswered && setSelectedOption(idx)}
-                disabled={isAnswered}
-                style={{
-                  background: bg,
-                  border: `1px solid ${border}`,
-                  color: col,
-                  borderRadius: "10px",
-                  padding: "14px 18px",
-                  textAlign: "left",
-                  fontSize: "0.96rem",
-                  fontWeight: 600,
-                  cursor: isAnswered ? "default" : "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  transition: "all 0.15s",
-                }}
-              >
-                <span>{opt}</span>
-                {isAnswered && isCorrect && <CheckCircle2 size={18} color="#22c55e" />}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Submit Button */}
-        {!isAnswered ? (
-          <button
-            onClick={handleSubmitAnswer}
-            disabled={selectedOption === null}
-            style={{
-              background: "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)",
-              border: "none",
-              color: "#000000",
-              borderRadius: "10px",
-              padding: "12px 24px",
-              fontWeight: "800",
-              fontSize: "0.98rem",
-              cursor: selectedOption === null ? "not-allowed" : "pointer",
-              opacity: selectedOption === null ? 0.5 : 1,
-              alignSelf: "flex-start",
-            }}
-          >
-            ಉತ್ತರ ಸಲ್ಲಿಸಿ (Submit Answer)
-          </button>
-        ) : (
           <div
             style={{
-              padding: "16px",
-              borderRadius: "12px",
-              background: feedback?.isCorrect ? "rgba(34, 197, 94, 0.15)" : "rgba(239, 68, 68, 0.15)",
-              border: feedback?.isCorrect ? "1px solid #22c55e" : "1px solid #ef4444",
-              marginTop: "4px",
+              display: "grid",
+              gridTemplateColumns: "repeat(7, 1fr)",
+              gap: "10px",
             }}
           >
-            <div style={{ fontWeight: 800, color: feedback?.isCorrect ? "#86efac" : "#fca5a5", marginBottom: "8px", fontSize: "1rem" }}>
-              {feedback?.text}
-            </div>
-            <div style={{ color: "#e5e7eb", fontSize: "0.88rem", lineHeight: "1.5" }}>
-              <strong>ವಿವರಣೆ (Explanation & Cultural Meaning):</strong> {currentChallenge.explanation}
-            </div>
-            <button
-              onClick={() => handleSelectDay((activeDay % 7) + 1)}
+            {[1, 2, 3, 4, 5, 6, 7].map((day) => {
+              const isVisited = visitedDays.includes(day);
+              const isSelected = activeDay === day;
+              return (
+                <button
+                  key={day}
+                  onClick={() => handleSelectDay(day)}
+                  style={{
+                    background: isSelected
+                      ? "linear-gradient(135deg, #15803d 0%, #166534 100%)"
+                      : isVisited
+                      ? "#f0fdf4"
+                      : "#ffffff",
+                    color: isSelected ? "#ffffff" : isVisited ? "#15803d" : "#94a3b8",
+                    border: isSelected
+                      ? "2px solid #14532d"
+                      : isVisited
+                      ? "1.5px solid #86efac"
+                      : "1.5px solid #e2e8f0",
+                    borderRadius: "14px",
+                    padding: "12px 6px",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "4px",
+                    transition: "all 0.18s",
+                    boxShadow: isSelected ? "0 4px 12px rgba(22, 163, 74, 0.3)" : "none",
+                  }}
+                >
+                  <span style={{ fontSize: "0.72rem", textTransform: "uppercase", fontWeight: 700 }}>
+                    ದಿನ {day}
+                  </span>
+                  <span style={{ fontSize: "1.2rem", fontWeight: 800 }}>
+                    {isVisited ? "✓" : `Day ${day}`}
+                  </span>
+                  <span style={{ fontSize: "0.7rem", opacity: 0.9, fontWeight: 600 }}>
+                    {isVisited ? "+20 pts" : "Unlock"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Active Challenge Card */}
+        <div
+          style={{
+            background: "#ffffff",
+            border: "2px solid #bbf7d0",
+            borderRadius: "24px",
+            padding: "28px",
+            boxShadow: "0 8px 30px rgba(22, 163, 74, 0.08)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+            <span
               style={{
-                marginTop: "12px",
-                background: "#27272a",
-                border: "none",
-                color: "#ffffff",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                fontSize: "0.85rem",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "4px",
+                background: "#dcfce7",
+                color: "#15803d",
+                border: "1px solid #86efac",
+                borderRadius: "9999px",
+                padding: "4px 14px",
+                fontSize: "0.82rem",
+                fontWeight: 800,
               }}
             >
-              <span>ಮುಂದಿನ ದಿನದ ಸವಾಲು (Next Day)</span>
-              <ChevronRight size={15} />
-            </button>
+              {currentChallenge.typeBadge}
+            </span>
+            <span style={{ fontSize: "0.84rem", color: "#166534", fontWeight: 600 }}>
+              ಸವಾಲು (Challenge) #{activeDay} of 7
+            </span>
           </div>
-        )}
+
+          <h2 style={{ fontSize: "1.3rem", fontWeight: "800", color: "#14532d", marginBottom: "8px" }}>
+            {currentChallenge.title}
+          </h2>
+
+          <div
+            style={{
+              background: "#f0fdf4",
+              border: "1.5px solid #bbf7d0",
+              borderRadius: "16px",
+              padding: "18px 22px",
+              fontSize: "1.12rem",
+              color: "#166534",
+              fontWeight: "700",
+              lineHeight: "1.6",
+              marginBottom: "10px",
+            }}
+          >
+            {currentChallenge.question}
+          </div>
+
+          <p style={{ fontSize: "0.88rem", color: "#475569", fontStyle: "italic", marginBottom: "22px" }}>
+            {currentChallenge.englishHint}
+          </p>
+
+          {/* Options List */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "22px" }}>
+            {currentChallenge.options.map((opt, idx) => {
+              const isSelected = selectedOption === idx;
+              const isCorrect = idx === currentChallenge.correctAnswer;
+
+              let bg = "#ffffff";
+              let border = "#e2e8f0";
+              let col = "#1e293b";
+
+              if (isAnswered) {
+                if (isCorrect) {
+                  bg = "#dcfce7";
+                  border = "#22c55e";
+                  col = "#15803d";
+                } else if (isSelected && !isCorrect) {
+                  bg = "#fef2f2";
+                  border = "#ef4444";
+                  col = "#b91c1c";
+                }
+              } else if (isSelected) {
+                border = "#16a34a";
+                bg = "#f0fdf4";
+              }
+
+              return (
+                <button
+                  key={idx}
+                  onClick={() => !isAnswered && setSelectedOption(idx)}
+                  disabled={isAnswered}
+                  style={{
+                    background: bg,
+                    border: `2px solid ${border}`,
+                    color: col,
+                    borderRadius: "14px",
+                    padding: "16px 20px",
+                    textAlign: "left",
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    cursor: isAnswered ? "default" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <span>{opt}</span>
+                  {isAnswered && isCorrect && <CheckCircle2 size={20} color="#16a34a" />}
+                </button>
+              );
+            })}
+          </div>
+
+          {!isAnswered ? (
+            <button
+              onClick={handleSubmitAnswer}
+              disabled={selectedOption === null}
+              style={{
+                background: "linear-gradient(135deg, #15803d 0%, #166534 100%)",
+                border: "none",
+                color: "#ffffff",
+                borderRadius: "12px",
+                padding: "12px 28px",
+                fontWeight: "800",
+                fontSize: "1rem",
+                cursor: selectedOption === null ? "not-allowed" : "pointer",
+                opacity: selectedOption === null ? 0.5 : 1,
+                boxShadow: "0 4px 14px rgba(22, 163, 74, 0.3)",
+              }}
+            >
+              ಉತ್ತರ ಸಲ್ಲಿಸಿ (Submit Answer)
+            </button>
+          ) : (
+            <div
+              style={{
+                padding: "18px 22px",
+                borderRadius: "16px",
+                background: feedback?.isCorrect ? "#f0fdf4" : "#fef2f2",
+                border: feedback?.isCorrect ? "1.5px solid #86efac" : "1.5px solid #fca5a5",
+              }}
+            >
+              <div style={{ fontWeight: 800, color: feedback?.isCorrect ? "#15803d" : "#b91c1c", marginBottom: "8px", fontSize: "1.05rem" }}>
+                {feedback?.text}
+              </div>
+              <div style={{ color: "#334155", fontSize: "0.92rem", lineHeight: "1.55" }}>
+                <strong>ವಿವರಣೆ ಮತ್ತು ಸಾಂಸ್ಕೃತಿಕ ನೀತಿ:</strong> {currentChallenge.explanation}
+              </div>
+              <button
+                onClick={() => handleSelectDay((activeDay % 7) + 1)}
+                style={{
+                  marginTop: "14px",
+                  background: "#15803d",
+                  border: "none",
+                  color: "#ffffff",
+                  padding: "8px 18px",
+                  borderRadius: "10px",
+                  fontSize: "0.88rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  boxShadow: "0 2px 8px rgba(22, 163, 74, 0.2)",
+                }}
+              >
+                <span>ಮುಂದಿನ ದಿನದ ಸವಾಲು (Next Day)</span>
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

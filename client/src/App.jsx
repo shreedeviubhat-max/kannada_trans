@@ -1,33 +1,45 @@
 import React, { useState } from "react";
 import LandingScreen from "./components/LandingScreen";
+import MainDashboard from "./components/MainDashboard";
 import ChatboxMode from "./components/ChatboxMode";
 import GamesMode from "./components/GamesMode";
 import DailyLearnMode from "./components/DailyLearnMode";
 import KannadaTalkMode from "./components/KannadaTalkMode";
 
 export default function App() {
-  const [currentMode, setCurrentMode] = useState("landing"); // 'landing' | 'bhashantara' | 'games' | 'daily_learn' | 'kannada_talk'
+  // Routes: 'welcome' | 'dashboard' | 'bhashantara' | 'games' | 'daily_learn' | 'kannada_talk'
+  const [currentView, setCurrentView] = useState("welcome");
 
   return (
-    <div style={{ backgroundColor: "#000000", minHeight: "100vh" }}>
-      {currentMode === "landing" && (
-        <LandingScreen onSelectMode={(mode) => setCurrentMode(mode)} />
+    <div style={{ minHeight: "100vh", width: "100%" }}>
+      {/* 1. Welcome Page with Kannada-themed design and ENTER button */}
+      {currentView === "welcome" && (
+        <LandingScreen onEnter={() => setCurrentView("dashboard")} />
       )}
 
-      {currentMode === "bhashantara" && (
-        <ChatboxMode onBackToHome={() => setCurrentMode("landing")} />
+      {/* 2. Main Dashboard with 4 distinct feature cards */}
+      {currentView === "dashboard" && (
+        <MainDashboard onNavigate={(mode) => setCurrentView(mode)} />
       )}
 
-      {currentMode === "games" && (
-        <GamesMode onBackToHome={() => setCurrentMode("landing")} />
+      {/* 3. Translation Page (Soft blue and white theme) */}
+      {currentView === "bhashantara" && (
+        <ChatboxMode onBackToHome={() => setCurrentView("dashboard")} />
       )}
 
-      {currentMode === "daily_learn" && (
-        <DailyLearnMode onBackToHome={() => setCurrentMode("landing")} />
+      {/* 4. Play Games Page (Colourful, playful theme with illustrations) */}
+      {currentView === "games" && (
+        <GamesMode onBackToHome={() => setCurrentView("dashboard")} />
       )}
 
-      {currentMode === "kannada_talk" && (
-        <KannadaTalkMode onBackToHome={() => setCurrentMode("landing")} />
+      {/* 5. Learn Kannada Page (Warm cream and green theme with calendar & books) */}
+      {currentView === "daily_learn" && (
+        <DailyLearnMode onBackToHome={() => setCurrentView("dashboard")} />
+      )}
+
+      {/* 6. Talk with AI Page (Modern purple and blue theme with spoken AI chat) */}
+      {currentView === "kannada_talk" && (
+        <KannadaTalkMode onBackToHome={() => setCurrentView("dashboard")} />
       )}
     </div>
   );
