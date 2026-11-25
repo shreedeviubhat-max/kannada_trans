@@ -5,32 +5,34 @@ import {
   Mic,
   MicOff,
   Volume2,
+  VolumeX,
   RotateCcw,
   Sparkles,
   ArrowLeft,
   MessageCircle,
-  MessageSquare,
   Bot,
   User,
-  Headphones
+  Headphones,
+  Radio,
+  Power
 } from "lucide-react";
 
 const STARTER_TOPICS = [
   {
     label: "ಪರಿಚಯ ಮಾಡಿಕೊಳ್ಳಿ (Introduce Yourself)",
-    prompt: "ನಮಸ್ಕಾರ! ನನ್ನ ಹೆಸರು ನೀವು. ನಾನು ನಿಮ್ಮೊಂದಿಗೆ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಲು ಬಯಸುತ್ತೇನೆ. (Hello! I want to introduce myself in Kannada)",
+    prompt: "ನಮಸ್ಕಾರ! ನನ್ನ ಹೆಸರು ನೀವು. ನಾನು ನಿಮ್ಮೊಂದಿಗೆ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಲು ಬಯಸುತ್ತೇನೆ.",
   },
   {
     label: "ಆಟೋ ಅಥವಾ ಮಾರುಕಟ್ಟೆ (Auto / Market)",
-    prompt: "ಆಟೋ ಚಾಲಕರೊಂದಿಗೆ ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು, ಬಾಡಿಗೆ ಎಷ್ಟು ಎಂದು ಹೇಗೆ ಕೇಳಬೇಕು? ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ. (Start an auto ride dialogue)",
+    prompt: "ಆಟೋ ಚಾಲಕರೊಂದಿಗೆ ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು, ಬಾಡಿಗೆ ಎಷ್ಟು ಎಂದು ಹೇಗೆ ಕೇಳಬೇಕು? ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
   },
   {
     label: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಊಟ (Ordering Food)",
-    prompt: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಮಸಾಲೆ ದೋಸೆ ಮತ್ತು ಫಿಲ್ಟರ್ ಕಾಫಿ ಆರ್ಡರ್ ಮಾಡಲು ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ. (Let's order food in Kannada)",
+    prompt: "ಹೋಟೆಲ್‌ನಲ್ಲಿ ಮಸಾಲೆ ದೋಸೆ ಮತ್ತು ಫಿಲ್ಟರ್ ಕಾಫಿ ಆರ್ಡರ್ ಮಾಡಲು ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ.",
   },
   {
     label: "ಹವಾಮಾನ & ದಿನಚರಿ (Weather & Routine)",
-    prompt: "ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ನಿಮ್ಮ ದಿನಚರಿ ಬಗ್ಗೆ ಕನ್ನಡದಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಮಾತನಾಡಿ. (Chat about weather & day)",
+    prompt: "ಇಂದಿನ ಹವಾಮಾನ ಮತ್ತು ನಿಮ್ಮ ದಿನಚರಿ ಬಗ್ಗೆ ಕನ್ನಡದಲ್ಲಿ ನನ್ನೊಂದಿಗೆ ಮಾತನಾಡಿ.",
   },
 ];
 
@@ -40,92 +42,203 @@ export default function KannadaTalkMode({ onBackToHome }) {
       role: "model",
       text: `**ನಮಸ್ಕಾರ ಗೆಳೆಯರೇ!** 🙏 (*Namaskāra geḷeyarē!* - "Hello my friend!")
 
-ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ ಮಾತುಕತೆ ಸ್ನೇಹಿತ (AI Conversational Partner)**. 
+ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ ಮಾತುಕತೆ ಸ್ನೇಹಿತ (Hands-Free AI Voice Partner)**. 
 
-ಇಲ್ಲಿ ನಾವು ಕನ್ನಡದಲ್ಲೇ ಮುಕ್ತವಾಗಿ, ಸರಳವಾಗಿ ಮಾತನಾಡೋಣ!
-- ನೀವು ಕನ್ನಡದಲ್ಲಿ ಅಥವಾ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಮಾತನಾಡಬಹುದು ಅಥವಾ ಟೈಪ್ ಮಾಡಬಹುದು.
-- ನಾನು ನಿಮಗೆ ಕನ್ನಡದಲ್ಲೇ ಉತ್ತರಿಸಿ, ಜತೆಗೆ ಸರಳ ಉಚ್ಚಾರಣೆ (transliteration) ಮತ್ತು ಅರ್ಥವನ್ನು ಹೇಳಿಕೊಡುತ್ತೇನೆ.
-- ಯಾವುದೇ ತಪ್ಪುಗಳಿದ್ದರೂ ನಾನು ಸ್ನೇಹದಿಂದ ಸರಿಪಡಿಸುತ್ತೇನೆ.
+ಇಲ್ಲಿ ಯಾವುದೇ ಬಟನ್ ಒತ್ತದೇ, ನೈಸರ್ಗಿಕವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಬಹುದು:
+1. ಕೆಳಗಿರುವ **"ಧ್ವನಿ ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ (Start Hands-Free Session)"** ಕ್ಲಿಕ್ ಮಾಡಿ.
+2. ನೀವು ಮಾತನಾಡಿದ ತಕ್ಷಣ ಸಿಸ್ಟಮ್ ತಾನಾಗಿಯೇ ಗುರುತಿಸಿ, ನೀವು ಮಾತು ನಿಲ್ಲಿಸಿದಾಗ (Silence Detection) AI ಕನ್ನಡದಲ್ಲೇ ಮಾತನಾಡುತ್ತದೆ!
+3. AI ಮಾತನಾಡುತ್ತಿರುವಾಗ ನೀವು ಮಧ್ಯದಲ್ಲೇ ಮಾತನಾಡಿದರೆ (Barge-in / Interrupt) AI ಧ್ವನಿ ತಾನಾಗಿಯೇ ನಿಲ್ಲುತ್ತದೆ.
 
-**ಹಾಗಾದರೆ, ಇವತ್ತು ನಿಮ್ಮ ದಿನ ಹೇಗಿತ್ತು? ನೀವು ಏನು ಮಾಡುತ್ತಿದ್ದೀರಿ?**
-*(Hāgādare, ivattu nimma dina hēgittu? Nīvu ēnu māḍuttiddīri?)*`,
+**ಹಾಗಾದರೆ, ಸಂಭಾಷಣೆ ಆರಂಭಿಸೋಣವೇ?**`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
+  const [isLiveSessionActive, setIsLiveSessionActive] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState("idle"); // 'idle' | 'listening' | 'user_speaking' | 'ai_thinking' | 'ai_speaking'
+  const [liveTranscript, setLiveTranscript] = useState("");
 
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
+  const silenceTimerRef = useRef(null);
+  const isAiSpeakingRef = useRef(false);
+  const isSessionActiveRef = useRef(false);
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages, loading, liveTranscript]);
 
-  // Voice speech-to-text configured for Kannada
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = "kn-IN";
-
-      recognition.onstart = () => setIsRecording(true);
-      recognition.onend = () => setIsRecording(false);
-      recognition.onerror = () => setIsRecording(false);
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
-      };
-      recognitionRef.current = recognition;
-    }
-  }, []);
-
-  const toggleRecording = () => {
-    if (!recognitionRef.current) {
-      alert("Speech recognition is not supported in this browser. Please use Chrome/Edge.");
-      return;
-    }
-    if (isRecording) {
-      recognitionRef.current.stop();
-    } else {
-      recognitionRef.current.start();
-    }
+  // Clean markdown symbols to feed SpeechSynthesis smoothly
+  const cleanMarkdownForAudio = (text) => {
+    return text
+      .replace(/[*#_`~>]/g, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/\([^)]*\)/g, "") // remove parenthetical transliteration for audio so it speaks authentic Kannada
+      .trim();
   };
 
-  const playPronunciation = (text) => {
+  // Stop any active AI speech immediately (Barge-in / Interrupt)
+  const interruptAiSpeech = () => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    isAiSpeakingRef.current = false;
+  };
+
+  // Play audio response and resume listening immediately after finishing
+  const speakAiResponse = (text) => {
     if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const cleanText = text.replace(/[*#_`~>]/g, "").trim();
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    interruptAiSpeech();
+    const cleanKannada = cleanMarkdownForAudio(text);
+    if (!cleanKannada) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanKannada);
     utterance.lang = "kn-IN";
-    utterance.rate = 0.88;
+    utterance.rate = 0.92;
+
+    utterance.onstart = () => {
+      isAiSpeakingRef.current = true;
+      setSessionStatus("ai_speaking");
+    };
+
+    utterance.onend = () => {
+      isAiSpeakingRef.current = false;
+      // Resume listening if session is still active
+      if (isSessionActiveRef.current) {
+        setSessionStatus("listening");
+        try {
+          recognitionRef.current?.start();
+        } catch (_) {}
+      } else {
+        setSessionStatus("idle");
+      }
+    };
+
+    utterance.onerror = () => {
+      isAiSpeakingRef.current = false;
+      if (isSessionActiveRef.current) {
+        setSessionStatus("listening");
+        try {
+          recognitionRef.current?.start();
+        } catch (_) {}
+      }
+    };
+
     window.speechSynthesis.speak(utterance);
   };
 
-  const handleSendMessage = async (textToSend = input) => {
-    const trimmed = textToSend.trim();
-    if (!trimmed) return;
+  // Initialize Speech Recognition with continuous VAD & auto silence detection
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "kn-IN";
+
+    recognition.onstart = () => {
+      if (isSessionActiveRef.current && !isAiSpeakingRef.current) {
+        setSessionStatus("listening");
+      }
+    };
+
+    recognition.onresult = (event) => {
+      let interim = "";
+      let final = "";
+
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        const item = event.results[i];
+        if (item.isFinal) {
+          final += item[0].transcript;
+        } else {
+          interim += item[0].transcript;
+        }
+      }
+
+      const activeText = (final || interim).trim();
+
+      if (activeText) {
+        // User interruption: if AI is speaking, user's speech cuts off AI immediately
+        if (isAiSpeakingRef.current) {
+          interruptAiSpeech();
+        }
+
+        setSessionStatus("user_speaking");
+        setLiveTranscript(activeText);
+
+        // Reset silence detection timer (1.3 seconds of silence = user finished speaking)
+        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+
+        silenceTimerRef.current = setTimeout(() => {
+          if (activeText && isSessionActiveRef.current) {
+            handleAutoSendTurn(activeText);
+          }
+        }, 1300);
+      }
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error !== "no-speech" && isSessionActiveRef.current) {
+        console.warn("Speech recognition notice:", e.error);
+      }
+    };
+
+    recognition.onend = () => {
+      // Automatically keep recognition running unless AI is speaking or session paused
+      if (isSessionActiveRef.current && !isAiSpeakingRef.current) {
+        try {
+          recognition.start();
+        } catch (_) {}
+      }
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      interruptAiSpeech();
+      try {
+        recognition.stop();
+      } catch (_) {}
+    };
+  }, []);
+
+  // Hands-Free Auto-Send Turn when silence is detected
+  const handleAutoSendTurn = async (spokenText) => {
+    if (!spokenText.trim()) return;
+
+    // Clear interim transcript
+    setLiveTranscript("");
+    if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+
+    // Pause recognition while AI processes
+    try {
+      recognitionRef.current?.stop();
+    } catch (_) {}
+
+    setSessionStatus("ai_thinking");
+    setLoading(true);
 
     const userMessage = {
       role: "user",
-      text: trimmed,
+      text: spokenText.trim(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setLoading(true);
 
     try {
-      const historyPayload = messages
+      const historyPayload = messagesRef.current
         .filter((_, idx) => idx > 0)
         .map((m) => ({ role: m.role, text: m.text }));
 
-      const conversationPrompt = `[Kannada Talk Mode]: The user is practicing spoken Kannada. Reply naturally in conversational Kannada, provide Romanized transliteration and a brief English meaning, correct any language mistakes gently, and ask an engaging question to keep the chat going. User says: "${trimmed}"`;
+      const conversationPrompt = `[Kannada Talk Hands-Free Mode]: The user is speaking live in Kannada. Reply in natural, friendly conversational Kannada (Kannada script first, followed by Romanized transliteration and short English meaning). Keep it punchy (2-3 sentences max) so it sounds like real spoken dialogue. User said: "${spokenText}"`;
 
       const apiBase = import.meta.env.VITE_API_URL || "";
       const res = await fetch(`${apiBase}/api/chat`, {
@@ -140,14 +253,19 @@ export default function KannadaTalkMode({ onBackToHome }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to receive response.");
 
+      const aiReply = data.reply;
       setMessages((prev) => [
         ...prev,
         {
           role: "model",
-          text: data.reply,
+          text: aiReply,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
+
+      // Automatically speak the response in Kannada audio
+      speakAiResponse(aiReply);
+
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -157,16 +275,55 @@ export default function KannadaTalkMode({ onBackToHome }) {
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
+      setSessionStatus(isSessionActiveRef.current ? "listening" : "idle");
+      if (isSessionActiveRef.current) {
+        try {
+          recognitionRef.current?.start();
+        } catch (_) {}
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  // Toggle Hands-Free Session
+  const toggleHandsFreeSession = () => {
+    const nextState = !isLiveSessionActive;
+    setIsLiveSessionActive(nextState);
+    isSessionActiveRef.current = nextState;
+
+    if (nextState) {
+      interruptAiSpeech();
+      setSessionStatus("listening");
+      try {
+        recognitionRef.current?.start();
+      } catch (err) {
+        console.warn("Recognition already started or error:", err);
+      }
+    } else {
+      interruptAiSpeech();
+      setSessionStatus("idle");
+      setLiveTranscript("");
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      try {
+        recognitionRef.current?.stop();
+      } catch (_) {}
+    }
+  };
+
+  // Fallback manual send via text box
+  const handleManualSend = () => {
+    if (!input.trim()) return;
+    const text = input;
+    setInput("");
+    handleAutoSendTurn(text);
   };
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2e1065 100%)",
+        background: "linear-gradient(135deg, #090d16 0%, #151136 50%, #200d45 100%)",
         color: "#ffffff",
         display: "flex",
         flexDirection: "column",
@@ -177,7 +334,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
       {/* Top Header */}
       <header
         style={{
-          background: "rgba(15, 23, 42, 0.8)",
+          background: "rgba(15, 23, 42, 0.85)",
           backdropFilter: "blur(14px)",
           borderBottom: "1px solid rgba(168, 85, 247, 0.25)",
           padding: "16px 24px",
@@ -191,7 +348,14 @@ export default function KannadaTalkMode({ onBackToHome }) {
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <button
-            onClick={onBackToHome}
+            onClick={() => {
+              isSessionActiveRef.current = false;
+              interruptAiSpeech();
+              try {
+                recognitionRef.current?.stop();
+              } catch (_) {}
+              onBackToHome();
+            }}
             style={{
               background: "rgba(255, 255, 255, 0.08)",
               border: "1px solid rgba(168, 85, 247, 0.3)",
@@ -214,30 +378,111 @@ export default function KannadaTalkMode({ onBackToHome }) {
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Bot size={22} color="#c084fc" />
               <h1 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#f3e8ff", margin: 0 }}>
-                ಕನ್ನಡ ಟಾಕ್ (Talk with AI)
+                ಕನ್ನಡ ಟಾಕ್ (Hands-Free AI Voice Partner)
               </h1>
             </div>
             <p style={{ fontSize: "0.78rem", color: "#c084fc", margin: "2px 0 0" }}>
-              Modern Purple & Blue Theme • Conversational Peer Tutor & Voice Guidance
+              Automatic VAD • End-of-Turn Silence Detection • Interrupt (Barge-in) Support
             </p>
           </div>
         </div>
 
-        <button
-          onClick={() => setMessages([messages[0]])}
-          title="Restart Conversation"
+        {/* Start / Stop Hands-Free Voice Session Button */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <button
+            onClick={toggleHandsFreeSession}
+            style={{
+              background: isLiveSessionActive
+                ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
+                : "linear-gradient(135deg, #9333ea 0%, #7c3aed 100%)",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "9999px",
+              padding: "10px 20px",
+              fontSize: "0.92rem",
+              fontWeight: "800",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: isLiveSessionActive
+                ? "0 0 20px rgba(239, 68, 68, 0.5)"
+                : "0 0 20px rgba(147, 51, 234, 0.4)",
+              transition: "all 0.25s",
+            }}
+          >
+            {isLiveSessionActive ? (
+              <>
+                <Radio size={18} className="float-element" />
+                <span>ಸೆಷನ್ ನಿಲ್ಲಿಸಿ (Stop Session)</span>
+              </>
+            ) : (
+              <>
+                <Mic size={18} />
+                <span>ಧ್ವನಿ ಸಂಭಾಷಣೆ ಆರಂಭಿಸಿ (Start Hands-Free)</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
+              interruptAiSpeech();
+              setMessages([messages[0]]);
+            }}
+            title="Restart Conversation"
+            style={{
+              background: "rgba(255, 255, 255, 0.08)",
+              border: "1px solid rgba(168, 85, 247, 0.3)",
+              color: "#e9d5ff",
+              padding: "8px",
+              borderRadius: "50%",
+              cursor: "pointer",
+            }}
+          >
+            <RotateCcw size={17} />
+          </button>
+        </div>
+      </header>
+
+      {/* Real-Time Live Status Bar */}
+      {isLiveSessionActive && (
+        <div
           style={{
-            background: "rgba(255, 255, 255, 0.08)",
-            border: "1px solid rgba(168, 85, 247, 0.3)",
+            background: "rgba(147, 51, 234, 0.15)",
+            borderBottom: "1px solid rgba(192, 132, 252, 0.3)",
+            padding: "8px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            fontSize: "0.86rem",
             color: "#e9d5ff",
-            padding: "8px",
-            borderRadius: "50%",
-            cursor: "pointer",
           }}
         >
-          <RotateCcw size={17} />
-        </button>
-      </header>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                background: sessionStatus === "user_speaking" ? "#22c55e" : sessionStatus === "ai_speaking" ? "#38bdf8" : "#f59e0b",
+                boxShadow: "0 0 10px currentColor",
+              }}
+            />
+            <span style={{ fontWeight: 700 }}>
+              {sessionStatus === "listening" && "🎧 ನಿರೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ (Listening for your Kannada voice)..."}
+              {sessionStatus === "user_speaking" && "🎙️ ನೀವು ಮಾತನಾಡುತ್ತಿದ್ದೀರಿ (Detecting Speech)..."}
+              {sessionStatus === "ai_thinking" && "✨ AI ಯೋಚಿಸುತ್ತಿದೆ (AI Processing Response)..."}
+              {sessionStatus === "ai_speaking" && "🔊 AI ಮಾತನಾಡುತ್ತಿದೆ (Speaking... You can interrupt anytime!)"}
+            </span>
+          </div>
+
+          {liveTranscript && (
+            <div style={{ fontStyle: "italic", color: "#fef08a" }}>
+              "{liveTranscript}"
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Main Chat Workspace */}
       <div
@@ -251,7 +496,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
           flexDirection: "column",
         }}
       >
-        {/* Starter Topic Badges */}
+        {/* Starter Topics */}
         <div
           style={{
             display: "flex",
@@ -264,7 +509,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
           {STARTER_TOPICS.map((topic, i) => (
             <button
               key={i}
-              onClick={() => handleSendMessage(topic.prompt)}
+              onClick={() => handleAutoSendTurn(topic.prompt)}
               disabled={loading}
               style={{
                 background: "rgba(147, 51, 234, 0.15)",
@@ -295,7 +540,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
           ))}
         </div>
 
-        {/* Messages Stream */}
+        {/* Message Stream */}
         <div
           style={{
             flex: 1,
@@ -377,7 +622,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
 
                       {!isUser && (
                         <button
-                          onClick={() => playPronunciation(msg.text)}
+                          onClick={() => speakAiResponse(msg.text)}
                           title="Listen to Spoken Kannada"
                           style={{
                             background: "transparent",
@@ -430,7 +675,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
                   gap: "8px",
                 }}
               >
-                <span>ಕನ್ನಡದಲ್ಲಿ ಚಿಂತಿಸುತ್ತಿದೆ... (Thinking in Kannada)</span>
+                <span>ಕನ್ನಡದಲ್ಲಿ ಯೋಚಿಸುತ್ತಿದೆ...</span>
                 <Sparkles size={16} color="#c084fc" />
               </div>
             </div>
@@ -439,7 +684,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Bar */}
+        {/* Fallback Text Input & Hands-Free Status Trigger Bar */}
         <div
           style={{
             background: "rgba(30, 41, 59, 0.8)",
@@ -454,13 +699,13 @@ export default function KannadaTalkMode({ onBackToHome }) {
         >
           <button
             type="button"
-            onClick={toggleRecording}
-            title={isRecording ? "Stop voice recording" : "Speak in Kannada"}
-            className={isRecording ? "mic-recording" : ""}
+            onClick={toggleHandsFreeSession}
+            title={isLiveSessionActive ? "Stop voice listening" : "Start continuous voice mode"}
+            className={isLiveSessionActive ? "mic-recording" : ""}
             style={{
-              background: isRecording ? "#ef4444" : "rgba(147, 51, 234, 0.25)",
+              background: isLiveSessionActive ? "#ef4444" : "rgba(147, 51, 234, 0.25)",
               border: "1px solid rgba(192, 132, 252, 0.4)",
-              color: isRecording ? "#ffffff" : "#c084fc",
+              color: isLiveSessionActive ? "#ffffff" : "#c084fc",
               borderRadius: "50%",
               width: "38px",
               height: "38px",
@@ -471,20 +716,23 @@ export default function KannadaTalkMode({ onBackToHome }) {
               flexShrink: 0,
             }}
           >
-            {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
+            {isLiveSessionActive ? <MicOff size={18} /> : <Mic size={18} />}
           </button>
 
-          <textarea
-            rows={1}
+          <input
+            type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage();
+              if (e.key === "Enter") {
+                handleManualSend();
               }
             }}
-            placeholder="ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ ಅಥವಾ ಟೈಪ್ ಮಾಡಿ (Talk with AI in Kannada)..."
+            placeholder={
+              isLiveSessionActive
+                ? "🎙️ ಮುಕ್ತವಾಗಿ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ... (Speak freely in Kannada)..."
+                : "ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ ಅಥವಾ ಮೇಲಿನ ಧ್ವನಿ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ..."
+            }
             style={{
               flex: 1,
               background: "transparent",
@@ -493,14 +741,13 @@ export default function KannadaTalkMode({ onBackToHome }) {
               color: "#ffffff",
               fontSize: "0.98rem",
               padding: "8px 4px",
-              resize: "none",
               fontFamily: "inherit",
             }}
           />
 
           <button
             type="button"
-            onClick={() => handleSendMessage()}
+            onClick={handleManualSend}
             disabled={loading || !input.trim()}
             style={{
               background: !loading && input.trim()
@@ -516,7 +763,6 @@ export default function KannadaTalkMode({ onBackToHome }) {
               justifyContent: "center",
               cursor: !loading && input.trim() ? "pointer" : "not-allowed",
               flexShrink: 0,
-              boxShadow: !loading && input.trim() ? "0 4px 14px rgba(124, 58, 237, 0.4)" : "none",
             }}
           >
             <Send size={18} />

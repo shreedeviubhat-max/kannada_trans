@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LandingScreen from "./components/LandingScreen";
 import MainDashboard from "./components/MainDashboard";
 import ChatboxMode from "./components/ChatboxMode";
@@ -9,6 +9,12 @@ import KannadaTalkMode from "./components/KannadaTalkMode";
 export default function App() {
   // Routes: 'welcome' | 'dashboard' | 'bhashantara' | 'games' | 'daily_learn' | 'kannada_talk'
   const [currentView, setCurrentView] = useState("welcome");
+
+  // Warm up Render backend immediately on app load to eliminate cold-start delay
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_URL || "";
+    fetch(`${apiBase}/api/health`).catch(() => {});
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh", width: "100%" }}>

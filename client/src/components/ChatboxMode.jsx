@@ -152,7 +152,9 @@ export default function ChatboxMode({ onBackToHome }) {
         .map((m) => ({ role: m.role, text: m.text }));
 
       const apiBase = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${apiBase}/api/chat`, {
+      
+      // Try streaming endpoint for fastest response
+      const response = await fetch(`${apiBase}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -162,17 +164,92 @@ export default function ChatboxMode({ onBackToHome }) {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to receive response.");
+      if (!response.ok || !response.body) {
+        // Fallback to standard chat if stream is unsupported
+        const fallbackRes = await fetch(`${apiBase}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: trimmed,
+            history: historyPayload,
+            image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
+          }),
+        });
+        const fallbackData = await fallbackRes.json();
+        if (!fallbackRes.ok) throw new Error(fallbackData.error || "Failed to receive response.");
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "model",
+            text: fallbackData.reply,
+            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
+        return;
+      }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "model",
-          text: data.reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        },
-      ]);
+      // Stream tokens dynamically into state
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let streamText = "";
+      let modelMessageAdded = false;
+
+      const appendChunkToLastMessage = (chunk) => {
+        streamText += chunk;
+        setMessages((prev) => {
+          if (!modelMessageAdded) {
+            modelMessageAdded = true;
+            return [
+              ...prev,
+              {
+                role: "model",
+                text: streamText,
+                timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+              },
+            ];
+          } else {
+            return prev.map((m, i) => (i === prev.length - 1 ? { ...m, text: streamText } : m));
+          }
+        });
+      };
+
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const block of lines) {
+          const linesInBlock = block.split("\n");
+          let eventType = "message";
+          let dataStr = "";
+
+          for (const l of linesInBlock) {
+            if (l.startsWith("event: ")) eventType = l.replace("event: ", "").trim();
+            if (l.startsWith("data: ")) dataStr = l.replace("data: ", "").trim();
+          }
+
+          if (eventType === "chunk" && dataStr) {
+            try {
+              const parsed = JSON.parse(dataStr);
+              if (parsed.text) appendChunkToLastMessage(parsed.text);
+            } catch (_) {}
+          } else if (eventType === "error" && dataStr) {
+            try {
+              const parsed = JSON.parse(dataStr);
+              if (parsed.error && !streamText) throw new Error(parsed.error);
+            } catch (_) {}
+          }
+        }
+      }
+
+      if (!streamText) {
+        throw new Error("No response was received from the stream.");
+      }
+
     } catch (err) {
       setErrorBanner(err.message);
       setMessages((prev) => [

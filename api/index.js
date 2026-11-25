@@ -201,6 +201,128 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
+// Streaming chat endpoint using Server-Sent Events (SSE)
+app.post("/api/chat/stream", async (req, res) => {
+  const { message, history = [], image, audio } = req.body;
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: "Missing GEMINI_API_KEY in environment variables." });
+  }
+
+  if (!message && !image && !audio) {
+    return res.status(400).json({ error: "No message, image, or audio provided." });
+  }
+
+  // Set SSE headers
+  res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
+  res.flushHeaders?.();
+
+  const sendEvent = (event, data) => {
+    res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  };
+
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const candidateModels = [
+      process.env.GEMINI_MODEL,
+      "gemini-3.1-flash-lite",
+      "gemini-3.5-flash",
+      "gemini-3.8-flash",
+      "gemini-flash-latest"
+    ].filter(Boolean);
+
+    const uniqueModels = [...new Set(candidateModels)];
+
+    // Sliding window of most recent 8 messages to prevent bloat and speed up processing
+    const recentHistory = Array.isArray(history) ? history.slice(-8) : [];
+    const formattedHistory = [];
+    for (const item of recentHistory) {
+      if (!item.text) continue;
+      formattedHistory.push({
+        role: item.role === "user" ? "user" : "model",
+        parts: [{ text: item.text }]
+      });
+    }
+
+    const currentParts = [];
+    if (image && image.data) {
+      currentParts.push({
+        inlineData: {
+          data: image.data.replace(/^data:[^;]+;base64,/, ""),
+          mimeType: image.mimeType || "image/jpeg"
+        }
+      });
+    }
+
+    if (audio && audio.data) {
+      currentParts.push({
+        inlineData: {
+          data: audio.data.replace(/^data:[^;]+;base64,/, ""),
+          mimeType: audio.mimeType || "audio/mp3"
+        }
+      });
+    }
+
+    const textPrompt = message || (image ? "Please transcribe and translate this image into Kannada and English concisely." : "Please process this voice audio.");
+    currentParts.push({ text: textPrompt });
+
+    let streamSucceeded = false;
+    let streamModelName = "";
+
+    for (const mName of uniqueModels) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: mName,
+          systemInstruction: SYSTEM_INSTRUCTION,
+          generationConfig: {
+            temperature: 0.6,
+            maxOutputTokens: 1024
+          }
+        });
+
+        let resultStream;
+        if (image || audio || formattedHistory.length === 0) {
+          const contents = [...formattedHistory, { role: "user", parts: currentParts }];
+          resultStream = await model.generateContentStream({ contents });
+        } else {
+          const chat = model.startChat({ history: formattedHistory });
+          resultStream = await chat.sendMessageStream(currentParts);
+        }
+
+        streamModelName = mName;
+        sendEvent("start", { model: mName });
+
+        for await (const chunk of resultStream.stream) {
+          const chunkText = chunk.text();
+          if (chunkText) {
+            sendEvent("chunk", { text: chunkText });
+          }
+        }
+
+        streamSucceeded = true;
+        sendEvent("done", { model: streamModelName, timestamp: new Date().toISOString() });
+        break;
+      } catch (err) {
+        console.warn(`[kali-kannada stream] Model ${mName} stream failed: ${err.message}. Trying next candidate...`);
+      }
+    }
+
+    if (!streamSucceeded) {
+      sendEvent("error", { error: "Temporary delay reaching AI models. Please try again in a moment." });
+    }
+
+  } catch (err) {
+    console.error("Stream route error:", err);
+    sendEvent("error", { error: err.message || "An unexpected streaming error occurred." });
+  } finally {
+    res.end();
+  }
+});
+
 // Start local server if not running in serverless Vercel environment
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
