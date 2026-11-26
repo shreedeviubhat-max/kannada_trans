@@ -158,19 +158,21 @@ export default function ChatboxMode({ onBackToHome }) {
         finalPrompt = `[AI_CHAT_BOOTH]: The user says: "${trimmed}". Respond helpfully, conversationally, and clearly as their Kannada and knowledge AI companion.`;
       }
 
-      // Real-time SSE streaming for fast response
-      const response = await fetch(`${apiBase}/api/chat/stream`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: finalPrompt,
-          history: historyPayload,
-          image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
-        }),
-      });
+      let response = null;
+      try {
+        response = await fetch(`${apiBase}/api/chat/stream`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: finalPrompt,
+            history: historyPayload,
+            image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
+          }),
+        });
+      } catch (_) {}
 
-      if (!response.ok || !response.body) {
-        // Fallback to standard chat
+      // If streaming returns 404, not ok, or fails, directly call the rock-solid standard chat endpoint
+      if (!response || !response.ok || !response.body) {
         const fallbackRes = await fetch(`${apiBase}/api/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

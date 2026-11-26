@@ -16,13 +16,13 @@ export const SYSTEM_INSTRUCTION = `You are the core AI intelligence for "ಕಲ�
 
 CRITICAL RULES FOR RESPONSES:
 1. Translation & AI Chat Workspace (ಭಾಷಾಂತರ & AI ಸಂವಾದ):
-   - When the user asks for translation (e.g. [TRANSLATE_MODE] or explicitly translating a sentence):
-     * Provide the direct, authentic translation in pure Kannada script.
-     * Keep it clean, direct, and without long unwanted essays.
-   - When the user is in AI Chat Booth / Chat mode (asking questions, seeking advice, asking for explanations, conversing, learning grammar or culture):
-     * Act as an intelligent, helpful, and friendly bilingual AI assistant.
-     * Answer directly, conversationally, and accurately in the appropriate language (Kannada, English, or bilingual).
-     * Keep answers structured, clear, and helpful without unnecessary fluff.
+   - Keep ALL responses concise, helpful, and direct (max 2-4 sentences or crisp bullet points).
+   - When the user asks for translation (e.g. [TRANSLATE_MODE] or requests translation):
+     * Provide the direct translation in authentic Kannada script ONLY.
+     * Do NOT add lengthy paragraphs, filler greetings, or phonetic notes.
+   - When the user is in AI Chat Booth / Chat mode (asking questions, chatting, learning grammar/culture):
+     * Answer directly, intelligently, and concisely (2-3 sentences max).
+     * Do NOT write giant essays or repeating templates. Get straight to the answer.
 
 2. Kannada Talk Mode (ಕನ್ನಡ ಸಂಭಾಷಣೆ - Spoken Voice Partner):
    - AUTOMATIC LANGUAGE DETECTION:
@@ -81,11 +81,13 @@ app.post("/api/chat", async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
+    // Optimized candidate models list prioritized by lightning speed and current Gemini API support
     const candidateModels = [
       process.env.GEMINI_MODEL,
+      "gemini-2.5-flash",
+      "gemini-1.5-flash",
+      "gemini-2.0-flash",
       "gemini-3.1-flash-lite",
-      "gemini-3.5-flash",
-      "gemini-3.8-flash",
       "gemini-flash-latest"
     ].filter(Boolean);
 
@@ -173,7 +175,7 @@ app.post("/api/chat", async (req, res) => {
           systemInstruction: SYSTEM_INSTRUCTION,
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 2048
+            maxOutputTokens: 600
           }
         });
 
@@ -234,11 +236,13 @@ app.post("/api/chat/stream", async (req, res) => {
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
+    // Optimized candidate models list prioritized by lightning speed and current Gemini API support
     const candidateModels = [
       process.env.GEMINI_MODEL,
+      "gemini-2.5-flash",
+      "gemini-1.5-flash",
+      "gemini-2.0-flash",
       "gemini-3.1-flash-lite",
-      "gemini-3.5-flash",
-      "gemini-3.8-flash",
       "gemini-flash-latest"
     ].filter(Boolean);
 
@@ -287,7 +291,7 @@ app.post("/api/chat/stream", async (req, res) => {
           systemInstruction: SYSTEM_INSTRUCTION,
           generationConfig: {
             temperature: 0.6,
-            maxOutputTokens: 1024
+            maxOutputTokens: 600
           }
         });
 
