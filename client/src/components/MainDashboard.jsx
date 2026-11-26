@@ -6,14 +6,14 @@ export default function MainDashboard({ onNavigate, onBackToWelcome }) {
     {
       id: "bhashantara",
       number: "01",
-      title: "Translate",
-      kannada: "ಭಾಷಾಂತರ",
-      description: "Direct bilingual translation with phonetic Romanization and contextual word breakdown.",
+      title: "AI Chat & Translate",
+      kannada: "AI ಸಂವಾದ & ಭಾಷಾಂತರ",
+      description: "Interactive AI Chat Booth for questions, conversations, and direct bilingual translation.",
       accent: "#6d8196",
       glassBg: "rgba(255, 255, 255, 0.72)",
       tagBg: "rgba(109, 129, 150, 0.12)",
       borderTone: "rgba(109, 129, 150, 0.25)",
-      tag: "Workspace",
+      tag: "AI Booth",
     },
     {
       id: "games",

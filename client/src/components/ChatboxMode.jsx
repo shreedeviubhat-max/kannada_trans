@@ -14,15 +14,22 @@ import {
   Mic,
   MicOff,
   Send,
-  Paperclip
+  Paperclip,
+  Languages,
+  Bot
 } from "lucide-react";
 
 export default function ChatboxMode({ onBackToHome }) {
+  // Mode toggle: 'translate' (pure translation) vs 'chat' (AI Chat Booth)
+  const [activeMode, setActiveMode] = useState("chat");
+
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: `**ನಮಸ್ಕಾರ.**
-Enter any sentence or phrase in English or Kannada below. You can also upload an image, signboard photo, or document to translate.`,
+      text: `**ನಮಸ್ಕಾರ!** 🙏
+ನಾನು ನಿಮ್ಮ **ಕನ್ನಡ AI Chat Booth & Translation Companion**.
+- 💬 **AI Chat:** ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಯಾವುದೇ ವಿಷಯದ ಬಗ್ಗೆ ಪ್ರಶ್ನೆ ಕೇಳಿ, ಸಂಭಾಷಣೆ ನಡೆಸಿ.
+- 🌐 **Translation:** ನೇರ ಕನ್ನಡ ಭಾಷಾಂತರಕ್ಕಾಗಿ ಮೇಲಿನ "Direct Translate" ಟ್ಯಾಬ್ ಆಯ್ಕೆಮಾಡಿ.`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
@@ -108,7 +115,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
     const cleanText = text.replace(/[*#_`~>]/g, "").trim();
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = "kn-IN";
-    utterance.rate = 0.9;
+    utterance.rate = 0.95;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -143,15 +150,20 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
 
       const apiBase = import.meta.env.VITE_API_URL || "";
 
-      // Ensure the prompt explicitly instructs simple direct Kannada translation only
-      const translationPrompt = `Translate the following text into direct, pure Kannada only. Do NOT include paragraph explanations, phonetic guides, or extra notes. Give only the clean Kannada translation: "${trimmed}"`;
+      // Adapt prompt depending on active mode (Direct Translation vs AI Chat Booth)
+      let finalPrompt = trimmed;
+      if (activeMode === "translate") {
+        finalPrompt = `[TRANSLATE_MODE]: Translate the following into authentic, direct Kannada only. Do NOT add paragraphs or unsolicited notes: "${trimmed}"`;
+      } else {
+        finalPrompt = `[AI_CHAT_BOOTH]: The user says: "${trimmed}". Respond helpfully, conversationally, and clearly as their Kannada and knowledge AI companion.`;
+      }
 
       // Real-time SSE streaming for fast response
       const response = await fetch(`${apiBase}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: translationPrompt,
+          message: finalPrompt,
           history: historyPayload,
           image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
         }),
@@ -163,7 +175,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: translationPrompt,
+            message: finalPrompt,
             history: historyPayload,
             image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
           }),
@@ -239,7 +251,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
       }
 
       if (!streamText) {
-        throw new Error("No translation response was received.");
+        throw new Error("No response was received.");
       }
     } catch (err) {
       setErrorBanner(err.message);
@@ -280,7 +292,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           borderBottom: "1px solid rgba(203, 203, 203, 0.4)",
-          padding: "16px 28px",
+          padding: "14px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -312,34 +324,89 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
 
           <div>
             <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#4a4a4a", margin: 0 }}>
-              ಭಾಷಾಂತರ <span style={{ fontWeight: "400", color: "#6d8196" }}>/ Translation Workspace</span>
+              AI Chat Booth & Bhashantara
             </h1>
           </div>
         </div>
 
-        <button
-          onClick={() => setMessages([messages[0]])}
-          title="Clear session"
-          style={{
-            background: "rgba(255, 255, 255, 0.6)",
-            border: "1px solid #cbcbcb",
-            color: "#4a4a4a",
-            padding: "8px",
-            cursor: "pointer",
-            borderRadius: "6px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <RotateCcw size={16} />
-        </button>
+        {/* Mode Selector: AI Chat vs Direct Translate */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div
+            style={{
+              display: "flex",
+              background: "rgba(255, 255, 255, 0.85)",
+              border: "1px solid #cbcbcb",
+              borderRadius: "10px",
+              padding: "3px",
+            }}
+          >
+            <button
+              onClick={() => setActiveMode("chat")}
+              style={{
+                background: activeMode === "chat" ? "#6d8196" : "transparent",
+                color: activeMode === "chat" ? "#ffffe3" : "#4a4a4a",
+                border: "none",
+                borderRadius: "8px",
+                padding: "6px 14px",
+                fontSize: "0.82rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <Bot size={15} />
+              <span>AI Chat Booth</span>
+            </button>
+
+            <button
+              onClick={() => setActiveMode("translate")}
+              style={{
+                background: activeMode === "translate" ? "#6d8196" : "transparent",
+                color: activeMode === "translate" ? "#ffffe3" : "#4a4a4a",
+                border: "none",
+                borderRadius: "8px",
+                padding: "6px 14px",
+                fontSize: "0.82rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <Languages size={15} />
+              <span>Direct Translate</span>
+            </button>
+          </div>
+
+          <button
+            onClick={() => setMessages([messages[0]])}
+            title="Clear session"
+            style={{
+              background: "rgba(255, 255, 255, 0.6)",
+              border: "1px solid #cbcbcb",
+              color: "#4a4a4a",
+              padding: "8px",
+              cursor: "pointer",
+              borderRadius: "6px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <RotateCcw size={16} />
+          </button>
+        </div>
       </header>
 
       {/* Main Translation Stream Container */}
       <div
         style={{
           flex: 1,
-          maxWidth: "820px",
+          maxWidth: "840px",
           width: "100%",
           margin: "0 auto",
           padding: "24px 16px 32px",
@@ -514,9 +581,9 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           })}
 
           {loading && (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 0", color: "#0284c7", fontSize: "0.85rem" }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#0284c7", display: "inline-block" }} />
-              <span>Translating...</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "6px 0", color: "#6d8196", fontSize: "0.85rem" }}>
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#6d8196", display: "inline-block" }} />
+              <span>{activeMode === "chat" ? "AI is typing..." : "Translating..."}</span>
             </div>
           )}
 
@@ -702,7 +769,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
             <button
               type="button"
               onClick={toggleVoiceRecording}
-              title={isRecording ? "Stop voice input" : "Speak to translate"}
+              title={isRecording ? "Stop voice input" : "Speak into chat"}
               style={{
                 background: isRecording ? "#ef4444" : "rgba(109, 129, 150, 0.12)",
                 border: "1px solid rgba(109, 129, 150, 0.2)",
@@ -726,7 +793,11 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                   handleSendMessage();
                 }
               }}
-              placeholder="Type English or Kannada to translate..."
+              placeholder={
+                activeMode === "chat"
+                  ? "Ask AI anything in Kannada or English..."
+                  : "Type English or Kannada for instant translation..."
+              }
               style={{
                 flex: 1,
                 border: "none",
@@ -756,7 +827,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                 boxShadow: !loading && (input.trim() || selectedAttachment) ? "0 4px 12px rgba(109, 129, 150, 0.3)" : "none",
               }}
             >
-              <span>Translate</span>
+              <span>{activeMode === "chat" ? "Send" : "Translate"}</span>
               <ArrowRight size={15} />
             </button>
           </div>
