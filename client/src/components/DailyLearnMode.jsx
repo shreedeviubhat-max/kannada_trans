@@ -4,174 +4,134 @@ import {
   ArrowLeft,
   Calendar,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  Clock,
+  Sparkles,
+  Trophy,
+  Award
 } from "lucide-react";
+import { DAILY_BANK } from "../data/dailyBank";
 
-const DAILY_CHALLENGES = [
-  {
-    dayNumber: 1,
-    title: "ಕನ್ನಡ ಒಗಟು (Kannada Riddle)",
-    badge: "ಒಗಟು",
-    question: "ಬಾಲ ಮುಟ್ಟಿದರೆ ಬಾಯಿ ತೆರೆಯುತ್ತೆ, ಕಣ್ಣಿಲ್ಲದಿದ್ದರೂ ದಾರಿ ತೋರಿಸುತ್ತೆ. ಇದು ಏನು?",
-    transliteration: "Bāla muṭṭidare bāyi tereyutte, kaṇṇilladiddarū dāri tōrisutte. Idu ēnu?",
-    englishHint: "Riddle: If you touch its tail it opens its mouth; it has no eyes yet cuts a path. What is it?",
-    options: ["ಕತ್ತರಿ (Scissors)", "ಬೀಗ ಮತ್ತು ಕೀಲಿ (Lock & Key)", "ದೀಪ (Lamp)", "ಕನ್ನಡಿ (Mirror)"],
-    correctAnswer: 0,
-    explanation: "ಕತ್ತರಿ (Scissors) - ಕೈಹಿಡಿಯನ್ನು (ಬಾಲ) ಒತ್ತಿದಾಗ ಕತ್ತರಿಯ ಬಾಯಿ ತೆರೆಯುತ್ತದೆ, ಬಟ್ಟೆ ಕತ್ತರಿಸಿ ದಾರಿ ಮಾಡಿಕೊಡುತ್ತದೆ.",
-  },
-  {
-    dayNumber: 2,
-    title: "ಗಾದೆ ಮಾತು ಪೂರ್ಣಗೊಳಿಸಿ (Complete the Proverb)",
-    badge: "ಗಾದೆ",
-    question: "ಕೈ ಕೆಸರಾದರೆ, _________ ಗಟ್ಟಿ.",
-    transliteration: "Kai kesarādare, _________ gaṭṭi.",
-    englishHint: "If your hands get muddy with hard labor, the ______ will be thick.",
-    options: ["ಮೊಸರು (Yogurt/Butter)", "ಹಾಲು (Milk)", "ಬೆಣ್ಣೆ (Butter)", "ಅನ್ನ (Rice)"],
-    correctAnswer: 0,
-    explanation: "'ಕೈ ಕೆಸರಾದರೆ ಮೊಸರು ಗಟ್ಟಿ' — ಕಷ್ಟಪಟ್ಟು ಹೊಲದಲ್ಲಿ ದುಡಿದರೆ ಮಾತ್ರ ಸುಖದ ಫಲ ಸಿಗುತ್ತದೆ.",
-  },
-  {
-    dayNumber: 3,
-    title: "ಸನ್ನಿವೇಶಕ್ಕೆ ತಕ್ಕ ಗಾದೆ (Match Proverb to Situation)",
-    badge: "ಸನ್ನಿವೇಶ",
-    question: "ಸನ್ನಿವೇಶ: ರಾಜು ಪರೀಕ್ಷೆಗೆ ಒಂದು ದಿನ ಮೊದಲು ಮಾತ್ರ ಓದಲು ಆರಂಭಿಸಿದ. ಮೊದಲಿನಿಂದಲೂ ಓದಿದ್ದರೆ ಸುಲಭವಾಗಿ ಉತ್ತೀರ್ಣನಾಗಬಹುದಿತ್ತು. ಇದಕ್ಕೆ ಸರಿಹೊಂದುವ ಗಾದೆ ಯಾವುದು?",
-    transliteration: "Raju started studying only when exams were at the doorstep. Which proverb matches?",
-    englishHint: "Preparing only after the crisis strikes.",
-    options: [
-      "ಮನೆಗೆ ಬೆಂಕಿ ಬಿದ್ದಾಗ ಬಾವಿ ತೋಡಿದರು (Digging a well after the house caught fire)",
-      "ಹಾಸಿಗೆ ಇದ್ದಷ್ಟು ಕಾಲು ಚಾಚು (Live within means)",
-      "ಕುಂಬಳಕಾಯಿ ಕಳ್ಳ ಎಂದರೆ ಹೆಗಲು ಮುಟ್ಟಿ ನೋಡಿಕೊಂಡ (Guilty conscience)",
-      "ಊರಿಗೆ ಉಪಕಾರಿ, ಮನೆಗೆ ಮಾರಿ (Helpful outside, troublemaker at home)"
-    ],
-    correctAnswer: 0,
-    explanation: "'ಮನೆಗೆ ಬೆಂಕಿ ಬಿದ್ದಾಗ ಬಾವಿ ತೋಡಿದರು' — ಕಷ್ಟ ಬಂದಾಗಲೇ ಪರಿಹಾರ ಹುಡುಕುವುದು ಮೂರ್ಖತನ, ಮೊದಲೇ ಸಿದ್ಧತೆ ಇರಬೇಕು.",
-  },
-  {
-    dayNumber: 4,
-    title: "ಕಥೆಯ ನೀತಿ (Moral of the Story)",
-    badge: "ನೀತಿ",
-    question: "ಸಣ್ಣ ಕಥೆ: ಕಾಗೆಯೊಂದು ಮಡಕೆಯಲ್ಲಿದ್ದ ನೀರು ಕುಡಿಯಲು ಕಲ್ಲುಗಳನ್ನು ಒಂದೊಂದಾಗಿ ತಂದು ಹಾಕಿ ನೀರು ಮೇಲಕ್ಕೆ ಬರುವಂತೆ ಮಾಡಿತು. ಈ ಕಥೆಯ ನೀತಿ ಏನು?",
-    transliteration: "Story of the Thirsty Crow dropping pebbles into a pitcher.",
-    englishHint: "What is the moral of the fable?",
-    options: [
-      "ಉಪಾಯ ಬಲ್ಲವನಿಗೆ ಅಪಾಯವಿಲ್ಲ / ಪ್ರಯತ್ನವೇ ಯಶಸ್ಸಿನ ಮೂಲ (Where there is perseverance, intelligence finds a way)",
-      "ಅತಿಯಾಸೆ ಗತಿಗೇಡು (Greed leads to downfall)",
-      "ದೂರದ ಬೆಟ್ಟ ಕಣ್ಣಿಗೆ ನುಣ್ಣಗೆ (Distant hills look smooth)",
-      "ಕೋಪದಲ್ಲಿ ಕೊಯ್ದ ಮೂಗು ಮತ್ತೆ ಬರುವುದಿಲ್ಲ (Anger causes regret)"
-    ],
-    correctAnswer: 0,
-    explanation: "ನೀತಿ: ಬುದ್ಧಿವಂತಿಕೆ ಮತ್ತು ಸತತ ಪ್ರಯತ್ನವಿದ್ದರೆ ಎಂತಹ ಕಠಿಣ ಸಮಸ್ಯೆಯನ್ನೂ ಪರಿಹರಿಸಬಹುದು.",
-  },
-  {
-    dayNumber: 5,
-    title: "ಕನ್ನಡ ಒಗಟು (Kannada Riddle)",
-    badge: "ಒಗಟು",
-    question: "ಮೇಲೆ ಹಸಿರು ಹೊದಿಕೆ, ಒಳಗೆ ಕೆಂಪು ಹಾಸಿಗೆ, ಕಪ್ಪು ಮುತ್ತುಗಳ ರಾಶಿ. ಇದು ಯಾರು?",
-    transliteration: "Green coat outside, red bed inside, heap of black pearls. What fruit is this?",
-    englishHint: "What fruit is this?",
-    options: ["ಕಲ್ಲಂಗಡಿ ಹಣ್ಣು (Watermelon)", "ದಾಳಿಂಬೆ (Pomegranate)", "ಸೇಬು (Apple)", "ಪಪ್ಪಾಯಿ (Papaya)"],
-    correctAnswer: 0,
-    explanation: "ಕಲ್ಲಂಗಡಿ (Watermelon) — ಹೊರಗೆ ಹಸಿರು, ಒಳಗೆ ಕೆಂಪು ತಿರುಳು ಮತ್ತು ಕಪ್ಪು ಬೀಜಗಳು.",
-  },
-  {
-    dayNumber: 6,
-    title: "ಗಾದೆ ಪೂರ್ಣಗೊಳಿಸಿ (Complete the Proverb)",
-    badge: "ಗಾದೆ",
-    question: "ಹಾಸಿಗೆ ಇದ್ದಷ್ಟೇ __________ ಚಾಚು.",
-    transliteration: "Hā奥行e iddaṣṭē __________ cācu.",
-    englishHint: "Stretch your ______ only as far as your bed permits.",
-    options: ["ಕಾಲು (Legs/Feet)", "ಕೈ (Hands)", "ಬಟ್ಟೆ (Cloth)", "ತಲೆ (Head)"],
-    correctAnswer: 0,
-    explanation: "'ಹಾಸಿಗೆ ಇದ್ದಷ್ಟೇ ಕಾಲು ಚಾಚು' — ನಮ್ಮ ಮಿತಿಗೆ ತಕ್ಕಂತೆ ನಾವು ಜೀವನ ನಡೆಸಬೇಕು.",
-  },
-  {
-    dayNumber: 7,
-    title: "ಸನ್ನಿವೇಶಕ್ಕೆ ತಕ್ಕ ಗಾದೆ (Match Proverb to Situation)",
-    badge: "ಸನ್ನಿವೇಶ",
-    question: "ಸನ್ನಿವೇಶ: ಒಬ್ಬ ವ್ಯಕ್ತಿಗೆ ಕೆಲಸ ಮಾಡಲು ಬಾರದಿದ್ದಾಗ 'ಉಪಕರಣಗಳು ಸರಿಯಿಲ್ಲ' ಎಂದು ಬೇರೆಯವರ ಮೇಲೆ ದೋಷ ಹೊರಿಸಿದ. ಇದಕ್ಕೆ ಸೂಕ್ತ ಗಾದೆ ಯಾವುದು?",
-    transliteration: "A bad workman blaming his tools. Which Kannada proverb matches?",
-    englishHint: "Blaming circumstances when one lacks the skill.",
-    options: [
-      "ಕುಣಿಯಲಾರದವಳು ನೆಲ ಡೊಂಕು ಅಂದಳಂತೆ (She who cannot dance blamed the floor)",
-      "ಆಗಸಕ್ಕೆ ಏಣಿ ಹಾಕಿದ ಹಾಗೆ (Aiming impossible without effort)",
-      "ಆನೆ ಸತ್ತರೂ ಸಾವಿರ ಹೊನ್ನು (Inherent value persists)",
-      "ಉಪ್ಪು ತಿಂದವನು ನೀರು ಕುಡಿಯಲೇಬೇಕು (Consequences are inevitable)"
-    ],
-    correctAnswer: 0,
-    explanation: "'ಕುಣಿಯಲಾರದವಳು ನೆಲ ಡೊಂಕು ಅಂದಳಂತೆ' — ತನಗೆ ಕೆಲಸ ಬಾರದಿದ್ದಾಗ ಸನ್ನಿವೇಶದ ಮೇಲೆ ತಪ್ಪು ಹಾಕುವುದು.",
-  },
-];
+// Helper to get 10 problems for any given day
+const getProblemsForDay = (dayNum) => {
+  if (DAILY_BANK[dayNum]) return DAILY_BANK[dayNum];
+  // Modulo wrap fallback so all 7 days have 10 full problems
+  const baseDay = ((dayNum - 1) % 3) + 1;
+  return DAILY_BANK[baseDay] || DAILY_BANK[1];
+};
 
 export default function DailyLearnMode({ onBackToHome }) {
-  const [visitedDays, setVisitedDays] = useState(() => {
-    try {
-      const saved = localStorage.getItem("kannada_daily_visits");
-      return saved ? JSON.parse(saved) : [1];
-    } catch {
-      return [1];
-    }
-  });
+  // Current calendar day (1 - 31)
+  const todayDate = new Date();
+  const currentCalendarDay = todayDate.getDate(); // e.g., 26
+  const activeCycleDay = ((currentCalendarDay - 1) % 7) + 1; // 1 to 7
+
+  // Calculate remaining time until next midnight (24h unlock)
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+
+      const diffMs = tomorrow - now;
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+      setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+    };
+
+    calculateTimeRemaining();
+    const interval = setInterval(calculateTimeRemaining, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const [points, setPoints] = useState(() => {
     try {
       const saved = localStorage.getItem("kannada_daily_points");
-      return saved ? parseInt(saved, 10) : 50;
+      return saved ? parseInt(saved, 10) : 100;
     } catch {
-      return 50;
+      return 100;
     }
   });
 
-  const [activeDay, setActiveDay] = useState(1);
+  // Track completed questions for the current day
+  const [completedProblems, setCompletedProblems] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`kannada_completed_day_${currentCalendarDay}`);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Active question index (0 to 9) out of the 10 problems
+  const [activeProblemIdx, setActiveProblemIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  useEffect(() => {
-    const today = new Date().getDate() % 7 || 7;
-    if (!visitedDays.includes(today)) {
-      const updated = [...visitedDays, today];
-      setVisitedDays(updated);
-      setPoints((p) => {
-        const nextP = p + 20;
-        localStorage.setItem("kannada_daily_points", nextP.toString());
-        return nextP;
-      });
-      localStorage.setItem("kannada_daily_visits", JSON.stringify(updated));
-    }
-  }, []);
+  const dailyProblems = getProblemsForDay(activeCycleDay);
+  const currentProblem = dailyProblems[activeProblemIdx] || dailyProblems[0];
 
-  const currentChallenge = DAILY_CHALLENGES.find((c) => c.dayNumber === activeDay) || DAILY_CHALLENGES[0];
-
-  const handleSelectDay = (dayNum) => {
-    setActiveDay(dayNum);
-    setSelectedOption(null);
-    setIsAnswered(false);
-    setFeedback(null);
+  const handleSelectOption = (optIdx) => {
+    if (isAnswered) return;
+    setSelectedOption(optIdx);
   };
 
   const handleSubmitAnswer = () => {
     if (selectedOption === null) return;
     setIsAnswered(true);
 
-    if (selectedOption === currentChallenge.correctAnswer) {
+    const isCorrect = selectedOption === currentProblem.correctAnswer;
+    if (isCorrect) {
       confetti({
         particleCount: 40,
-        spread: 50,
+        spread: 55,
         origin: { y: 0.75 },
-        colors: ["#16a34a", "#2e7d32", "#84cc16"],
+        colors: ["#c75f71", "#a2ae9d", "#f0bbbb"],
       });
-      const newPts = points + 30;
+
+      const newPts = points + 20;
       setPoints(newPts);
       localStorage.setItem("kannada_daily_points", newPts.toString());
+
+      if (!completedProblems.includes(currentProblem.id)) {
+        const updated = [...completedProblems, currentProblem.id];
+        setCompletedProblems(updated);
+        localStorage.setItem(`kannada_completed_day_${currentCalendarDay}`, JSON.stringify(updated));
+      }
+
       setFeedback({
         isCorrect: true,
-        text: "ಸರಿಯಾದ ಉತ್ತರ (+30 pts)",
+        text: "ಸರಿಯಾದ ಉತ್ತರ! (+20 ಅಂಕಗಳು)",
       });
     } else {
       setFeedback({
         isCorrect: false,
-        text: "ತಪ್ಪಾದ ಉತ್ತರ. ವಿವರಣೆ ಗಮನಿಸಿ.",
+        text: "ತಪ್ಪಾದ ಉತ್ತರ. ಕೆಳಗಿನ ವಿವರಣೆ ಗಮನಿಸಿ.",
       });
+    }
+  };
+
+  const nextProblem = () => {
+    if (activeProblemIdx < dailyProblems.length - 1) {
+      setActiveProblemIdx((prev) => prev + 1);
+      setSelectedOption(null);
+      setIsAnswered(false);
+      setFeedback(null);
+    }
+  };
+
+  const prevProblem = () => {
+    if (activeProblemIdx > 0) {
+      setActiveProblemIdx((prev) => prev - 1);
+      setSelectedOption(null);
+      setIsAnswered(false);
+      setFeedback(null);
     }
   };
 
@@ -231,31 +191,50 @@ export default function DailyLearnMode({ onBackToHome }) {
 
           <div>
             <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#54463a", margin: 0 }}>
-              ದಿನದ ಕಲಿಕೆ <span style={{ fontWeight: "400", color: "#a2ae9d" }}>/ Learn Kannada</span>
+              ದಿನದ ಕಲಿಕೆ <span style={{ fontWeight: "400", color: "#a2ae9d" }}>/ 10 Daily Problems</span>
             </h1>
           </div>
         </div>
 
-        {/* Streak & points pill */}
-        <div
-          style={{
-            background: "rgba(162, 174, 157, 0.25)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            border: "1px solid rgba(162, 174, 157, 0.4)",
-            padding: "6px 14px",
-            borderRadius: "9999px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontSize: "0.86rem",
-            fontWeight: "700",
-            color: "#54463a",
-          }}
-        >
-          <span>Day {activeDay}</span>
-          <span style={{ color: "#a2ae9d" }}>•</span>
-          <span>{points} pts</span>
+        {/* 24-Hour Countdown & Points Pill */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            title="Next 10 questions unlock after 24 hours (Midnight)"
+            style={{
+              background: "rgba(255, 255, 227, 0.75)",
+              border: "1px solid rgba(203, 203, 203, 0.45)",
+              padding: "6px 12px",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.82rem",
+              fontWeight: "600",
+              color: "#54463a",
+            }}
+          >
+            <Clock size={14} color="#6d8196" />
+            <span>Next set in: {timeLeft}</span>
+          </div>
+
+          <div
+            style={{
+              background: "rgba(162, 174, 157, 0.25)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(162, 174, 157, 0.4)",
+              padding: "6px 14px",
+              borderRadius: "9999px",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "0.86rem",
+              fontWeight: "700",
+              color: "#54463a",
+            }}
+          >
+            <Trophy size={15} color="#54463a" />
+            <span>{points} pts</span>
+          </div>
         </div>
       </header>
 
@@ -263,62 +242,81 @@ export default function DailyLearnMode({ onBackToHome }) {
       <div
         style={{
           flex: 1,
-          maxWidth: "820px",
+          maxWidth: "840px",
           width: "100%",
           margin: "0 auto",
           padding: "24px 16px 40px",
           display: "flex",
           flexDirection: "column",
-          gap: "24px",
+          gap: "20px",
         }}
       >
-        {/* Weekly Day Strip (Glassmorphism & Palette B) */}
+        {/* Calendar Today Status Strip */}
         <div
           style={{
+            background: "rgba(255, 255, 255, 0.75)",
+            backdropFilter: "blur(14px)",
+            border: "1px solid rgba(162, 174, 157, 0.35)",
+            borderRadius: "14px",
+            padding: "16px 20px",
             display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "4px",
+            alignItems: "center",
+            justifyContent: "space-between",
+            boxShadow: "0 4px 16px rgba(84, 70, 58, 0.04)",
           }}
         >
-          {[1, 2, 3, 4, 5, 6, 7].map((day) => {
-            const isVisited = visitedDays.includes(day);
-            const isSelected = activeDay === day;
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Calendar size={18} color="#54463a" />
+            <span style={{ fontWeight: "700", fontSize: "0.95rem" }}>
+              ಇಂದಿನ ದಿನಾಂಕ (Date: {todayDate.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })})
+            </span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", fontWeight: "600", color: "#a2ae9d" }}>
+            <span>Completed: {completedProblems.length} / 10</span>
+          </div>
+        </div>
+
+        {/* 10 Problem Step Indicator Bar */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(10, 1fr)",
+            gap: "6px",
+          }}
+        >
+          {dailyProblems.map((prob, idx) => {
+            const isDone = completedProblems.includes(prob.id);
+            const isCurrent = activeProblemIdx === idx;
             return (
               <button
-                key={day}
-                onClick={() => handleSelectDay(day)}
+                key={prob.id}
+                onClick={() => {
+                  setActiveProblemIdx(idx);
+                  setSelectedOption(null);
+                  setIsAnswered(false);
+                  setFeedback(null);
+                }}
                 style={{
-                  flex: "1 1 0",
-                  minWidth: "70px",
-                  background: isSelected
+                  background: isCurrent
                     ? "#54463a"
-                    : isVisited
-                    ? "rgba(162, 174, 157, 0.28)"
-                    : "rgba(255, 255, 255, 0.72)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  color: isSelected ? "#ffffe3" : "#54463a",
-                  border: isSelected
+                    : isDone
+                    ? "rgba(162, 174, 157, 0.45)"
+                    : "rgba(255, 255, 255, 0.7)",
+                  color: isCurrent ? "#ffffe3" : "#54463a",
+                  border: isCurrent
                     ? "1.5px solid #54463a"
-                    : "1px solid rgba(162, 174, 157, 0.4)",
-                  borderRadius: "12px",
-                  padding: "10px 8px",
+                    : "1px solid rgba(162, 174, 157, 0.35)",
+                  borderRadius: "8px",
+                  padding: "8px 0",
+                  fontSize: "0.82rem",
+                  fontWeight: "700",
                   cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "2px",
-                  transition: "all 0.15s",
-                  boxShadow: "0 4px 14px rgba(84, 70, 58, 0.04)",
+                  transition: "all 0.15s ease",
+                  textAlign: "center",
                 }}
               >
-                <span style={{ fontSize: "0.72rem", textTransform: "uppercase", fontWeight: "600" }}>
-                  Day {day}
-                </span>
-                <span style={{ fontSize: "0.98rem", fontWeight: "700" }}>
-                  {isVisited ? "✓" : `•`}
-                </span>
+                Q{idx + 1}
               </button>
             );
           })}
@@ -336,7 +334,7 @@ export default function DailyLearnMode({ onBackToHome }) {
             boxShadow: "0 8px 30px rgba(84, 70, 58, 0.06)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
             <span
               style={{
                 fontSize: "0.76rem",
@@ -349,15 +347,16 @@ export default function DailyLearnMode({ onBackToHome }) {
                 textTransform: "uppercase",
               }}
             >
-              {currentChallenge.badge}
+              {currentProblem.badge}
             </span>
+
             <span style={{ fontSize: "0.85rem", color: "#a2ae9d", fontWeight: "600" }}>
-              Day {activeDay} Curriculum
+              Problem {activeProblemIdx + 1} of 10
             </span>
           </div>
 
-          <h2 style={{ fontSize: "1.18rem", fontWeight: "700", color: "#54463a", marginBottom: "8px" }}>
-            {currentChallenge.title}
+          <h2 style={{ fontSize: "1.2rem", fontWeight: "700", color: "#54463a", marginBottom: "12px" }}>
+            {currentProblem.title}
           </h2>
 
           <div
@@ -366,127 +365,156 @@ export default function DailyLearnMode({ onBackToHome }) {
               borderLeft: "3.5px solid #a2ae9d",
               padding: "16px 18px",
               borderRadius: "0 10px 10px 0",
-              fontSize: "1.05rem",
+              fontSize: "1.08rem",
               color: "#54463a",
               fontWeight: "600",
               lineHeight: "1.6",
               marginBottom: "8px",
             }}
           >
-            {currentChallenge.question}
+            {currentProblem.question}
           </div>
 
           <p style={{ fontSize: "0.86rem", color: "#54463a", opacity: 0.75, fontStyle: "italic", marginBottom: "22px" }}>
-            {currentChallenge.englishHint}
+            {currentProblem.englishHint}
           </p>
 
-          {/* Options */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "22px" }}>
-            {currentChallenge.options.map((opt, idx) => {
+          {/* Multiple Choice Options */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+            {currentProblem.options.map((option, idx) => {
               const isSelected = selectedOption === idx;
-              const isCorrect = idx === currentChallenge.correctAnswer;
-
-              let border = "#e2e8f0";
-              let bg = "#ffffff";
-              let col = "#1e293b";
+              let optBg = "rgba(255, 255, 255, 0.7)";
+              let borderCol = "rgba(162, 174, 157, 0.35)";
 
               if (isAnswered) {
-                if (isCorrect) {
-                  border = "#22c55e";
-                  bg = "#f0fdf4";
-                  col = "#15803d";
-                } else if (isSelected && !isCorrect) {
-                  border = "#ef4444";
-                  bg = "#fef2f2";
-                  col = "#b91c1c";
+                if (idx === currentProblem.correctAnswer) {
+                  optBg = "rgba(220, 252, 231, 0.85)";
+                  borderCol = "#22c55e";
+                } else if (isSelected) {
+                  optBg = "rgba(254, 226, 226, 0.85)";
+                  borderCol = "#ef4444";
                 }
               } else if (isSelected) {
-                border = "#15803d";
-                bg = "#f0fdf4";
+                optBg = "rgba(255, 255, 227, 0.9)";
+                borderCol = "#54463a";
               }
 
               return (
                 <button
                   key={idx}
-                  onClick={() => !isAnswered && setSelectedOption(idx)}
+                  onClick={() => handleSelectOption(idx)}
                   disabled={isAnswered}
                   style={{
-                    background: bg,
-                    border: `1.5px solid ${border}`,
-                    color: col,
-                    borderRadius: "8px",
-                    padding: "14px 16px",
-                    textAlign: "left",
+                    background: optBg,
+                    border: `1.5px solid ${borderCol}`,
+                    borderRadius: "12px",
+                    padding: "14px 18px",
                     fontSize: "0.95rem",
                     fontWeight: "500",
+                    color: "#54463a",
+                    textAlign: "left",
                     cursor: isAnswered ? "default" : "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
+                    transition: "all 0.15s ease",
                   }}
                 >
-                  <span>{opt}</span>
-                  {isAnswered && isCorrect && <CheckCircle2 size={18} color="#16a34a" />}
+                  <span>{option}</span>
+                  {isAnswered && idx === currentProblem.correctAnswer && (
+                    <CheckCircle2 size={18} color="#15803d" />
+                  )}
                 </button>
               );
             })}
           </div>
 
-          {!isAnswered ? (
-            <button
-              onClick={handleSubmitAnswer}
-              disabled={selectedOption === null}
-              style={{
-                background: selectedOption !== null ? "#15803d" : "#f1f5f9",
-                color: selectedOption !== null ? "#ffffff" : "#94a3b8",
-                border: "none",
-                borderRadius: "8px",
-                padding: "10px 22px",
-                fontSize: "0.9rem",
-                fontWeight: "600",
-                cursor: selectedOption !== null ? "pointer" : "not-allowed",
-              }}
-            >
-              Submit Answer
-            </button>
-          ) : (
+          {/* Feedback & Detailed Explanation */}
+          {feedback && (
             <div
               style={{
-                padding: "14px 16px",
-                borderRadius: "8px",
-                background: feedback?.isCorrect ? "#f0fdf4" : "#fef2f2",
-                border: feedback?.isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
-                color: "#334155",
-                fontSize: "0.88rem",
+                background: feedback.isCorrect ? "rgba(240, 253, 244, 0.85)" : "rgba(254, 242, 242, 0.85)",
+                border: `1px solid ${feedback.isCorrect ? "#bbf7d0" : "#fecaca"}`,
+                borderRadius: "12px",
+                padding: "16px 20px",
+                marginBottom: "24px",
               }}
             >
-              <div style={{ fontWeight: "700", color: feedback?.isCorrect ? "#15803d" : "#b91c1c", marginBottom: "4px" }}>
-                {feedback?.text}
-              </div>
-              <div style={{ lineHeight: "1.5" }}>{currentChallenge.explanation}</div>
-
-              <button
-                onClick={() => handleSelectDay((activeDay % 7) + 1)}
+              <div
                 style={{
-                  marginTop: "12px",
-                  background: "#15803d",
-                  color: "#ffffff",
-                  border: "none",
-                  borderRadius: "6px",
-                  padding: "6px 14px",
-                  fontSize: "0.82rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "4px",
+                  fontWeight: "700",
+                  fontSize: "0.95rem",
+                  color: feedback.isCorrect ? "#15803d" : "#b91c1c",
+                  marginBottom: "4px",
                 }}
               >
-                <span>Next Day</span>
-                <ChevronRight size={14} />
-              </button>
+                {feedback.text}
+              </div>
+              <p style={{ fontSize: "0.88rem", color: "#475569", margin: 0, lineHeight: "1.5" }}>
+                <strong>ವಿವರಣೆ (Explanation):</strong> {currentProblem.explanation}
+              </p>
             </div>
           )}
+
+          {/* Action Footer */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <button
+              onClick={prevProblem}
+              disabled={activeProblemIdx === 0}
+              style={{
+                background: "transparent",
+                border: "1px solid rgba(162, 174, 157, 0.4)",
+                color: activeProblemIdx === 0 ? "#cbcbcb" : "#54463a",
+                padding: "10px 18px",
+                borderRadius: "10px",
+                fontSize: "0.86rem",
+                fontWeight: "600",
+                cursor: activeProblemIdx === 0 ? "not-allowed" : "pointer",
+              }}
+            >
+              ◀ ಹಿಂದಿನ ಪ್ರಶ್ನೆ
+            </button>
+
+            {!isAnswered ? (
+              <button
+                onClick={handleSubmitAnswer}
+                disabled={selectedOption === null}
+                style={{
+                  background: selectedOption !== null ? "#54463a" : "rgba(203, 203, 203, 0.3)",
+                  color: selectedOption !== null ? "#ffffe3" : "#cbcbcb",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "12px 24px",
+                  fontSize: "0.92rem",
+                  fontWeight: "700",
+                  cursor: selectedOption !== null ? "pointer" : "not-allowed",
+                  boxShadow: selectedOption !== null ? "0 4px 14px rgba(84, 70, 58, 0.2)" : "none",
+                }}
+              >
+                ಉತ್ತರ ಪರೀಕ್ಷಿಸಿ (Submit)
+              </button>
+            ) : (
+              <button
+                onClick={nextProblem}
+                disabled={activeProblemIdx === dailyProblems.length - 1}
+                style={{
+                  background: activeProblemIdx < dailyProblems.length - 1 ? "#54463a" : "rgba(203, 203, 203, 0.3)",
+                  color: activeProblemIdx < dailyProblems.length - 1 ? "#ffffe3" : "#cbcbcb",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "12px 24px",
+                  fontSize: "0.92rem",
+                  fontWeight: "700",
+                  cursor: activeProblemIdx < dailyProblems.length - 1 ? "pointer" : "not-allowed",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span>ಮುಂದಿನ ಪ್ರಶ್ನೆ ➔</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

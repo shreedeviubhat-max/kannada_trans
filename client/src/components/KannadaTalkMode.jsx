@@ -128,7 +128,7 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
         setSessionStatus("listening");
         try {
           recognitionRef.current?.start();
-        } catch (_) {}
+        } catch (_) { }
       } else {
         setSessionStatus("idle");
       }
@@ -140,7 +140,7 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
         setSessionStatus("listening");
         try {
           recognitionRef.current?.start();
-        } catch (_) {}
+        } catch (_) { }
       }
     };
 
@@ -205,7 +205,7 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
       if (isSessionActiveRef.current && !isAiSpeakingRef.current) {
         try {
           recognition.start();
-        } catch (_) {}
+        } catch (_) { }
       }
     };
 
@@ -216,7 +216,7 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
       interruptAiSpeech();
       try {
         recognition.stop();
-      } catch (_) {}
+      } catch (_) { }
     };
   }, [activeSpeechLang]);
 
@@ -226,13 +226,13 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
       const wasActive = isSessionActiveRef.current;
       try {
         recognitionRef.current.stop();
-      } catch (_) {}
+      } catch (_) { }
       recognitionRef.current.lang = langCode;
       if (wasActive) {
         setTimeout(() => {
           try {
             recognitionRef.current.start();
-          } catch (_) {}
+          } catch (_) { }
         }, 150);
       }
     }
@@ -246,7 +246,7 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
 
     try {
       recognitionRef.current?.stop();
-    } catch (_) {}
+    } catch (_) { }
 
     setSessionStatus("ai_thinking");
     setLoading(true);
@@ -314,7 +314,7 @@ CRITICAL INSTRUCTIONS:
       if (isSessionActiveRef.current) {
         try {
           recognitionRef.current?.start();
-        } catch (_) {}
+        } catch (_) { }
       }
     } finally {
       setLoading(false);
@@ -341,7 +341,7 @@ CRITICAL INSTRUCTIONS:
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
       try {
         recognitionRef.current?.stop();
-      } catch (_) {}
+      } catch (_) { }
     }
   };
 
@@ -392,7 +392,7 @@ CRITICAL INSTRUCTIONS:
               interruptAiSpeech();
               try {
                 recognitionRef.current?.stop();
-              } catch (_) {}
+              } catch (_) { }
               onBackToHome();
             }}
             style={{
@@ -557,8 +557,8 @@ CRITICAL INSTRUCTIONS:
                   sessionStatus === "user_speaking"
                     ? "#16a34a"
                     : sessionStatus === "ai_speaking"
-                    ? "#6d8196"
-                    : "#d97706",
+                      ? "#6d8196"
+                      : "#d97706",
               }}
             />
             <span style={{ fontWeight: 600 }}>

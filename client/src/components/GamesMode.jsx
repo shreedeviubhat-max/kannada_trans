@@ -10,92 +10,11 @@ import {
   XCircle,
   RotateCcw
 } from "lucide-react";
-
-// 1. Sentence Formation Game Data
-const SENTENCE_GAMES = [
-  {
-    id: 1,
-    jumbledWords: ["ಹೋಗುತ್ತೇನೆ", "ಶಾಲೆಗೆ", "ನಾನು", "ದಿನವೂ"],
-    correctOrder: ["ನಾನು", "ದಿನವೂ", "ಶಾಲೆಗೆ", "ಹೋಗುತ್ತೇನೆ"],
-    transliteration: "Nānu dinavū śālege hōguttēne.",
-    english: "I go to school every day.",
-    grammarNote: "Subject (ನಾನು) + Adverb (ದಿನವೂ) + Indirect Object (ಶಾಲೆಗೆ) + Verb (ಹೋಗುತ್ತೇನೆ). Standard Kannada SOV structure.",
-  },
-  {
-    id: 2,
-    jumbledWords: ["ಕುಡಿಯುತ್ತಾನೆ", "ಬೆಳಿಗ್ಗೆ", "ಹಾಲು", "ಅವನು"],
-    correctOrder: ["ಅವನು", "ಬೆಳಿಗ್ಗೆ", "ಹಾಲು", "ಕುಡಿಯುತ್ತಾನೆ"],
-    transliteration: "Avanu beḷigge hālu kuḍiyuttāne.",
-    english: "He drinks milk in the morning.",
-    grammarNote: "Subject (ಅವನು) + Time adverb (ಬೆಳಿಗ್ಗೆ) + Direct object (ಹಾಲು) + Verb (ಕುಡಿಯುತ್ತಾನೆ).",
-  },
-  {
-    id: 3,
-    jumbledWords: ["ಬರೆಯುತ್ತಾಳೆ", "ಪುಸ್ತಕವನ್ನು", "ರೇಖಾ", "ಚೆನ್ನಾಗಿ"],
-    correctOrder: ["ರೇಖಾ", "ಪುಸ್ತಕವನ್ನು", "ಚೆನ್ನಾಗಿ", "ಬರೆಯುತ್ತಾಳೆ"],
-    transliteration: "Rēkhā pustakavannu cennāgi bareyuttāḷe.",
-    english: "Rekha writes the book well.",
-    grammarNote: "Subject (ರೇಖಾ) + Accusative object with -ಅನ್ನು (ಪುಸ್ತಕವನ್ನು) + Adverb (ಚೆನ್ನಾಗಿ) + Verb (ಬರೆಯುತ್ತಾಳೆ).",
-  },
-];
-
-// 2. Word Finding Puzzle Data
-const WORD_PUZZLES = [
-  {
-    id: 1,
-    letters: ["ಕ", "ಮ", "ಲ", "ನ", "ಗ", "ರ", "ಮ", "ನೆ"],
-    hiddenWords: [
-      { word: "ಕಮಲ", transliteration: "Kamala", meaning: "Lotus" },
-      { word: "ನಗರ", transliteration: "Nagara", meaning: "City / Town" },
-      { word: "ಮನೆ", transliteration: "Mane", meaning: "House / Home" },
-    ],
-  },
-  {
-    id: 2,
-    letters: ["ಪು", "ಸ್ತ", "ಕ", "ಶಾ", "ಲೆ", "ಗು", "ರು"],
-    hiddenWords: [
-      { word: "ಪುಸ್ತಕ", transliteration: "Pustaka", meaning: "Book" },
-      { word: "ಶಾಲೆ", transliteration: "Shāle", meaning: "School" },
-      { word: "ಗುರು", transliteration: "Guru", meaning: "Teacher / Mentor" },
-    ],
-  },
-];
-
-// 3. Karnataka GK Quiz Data
-const GK_QUIZ = [
-  {
-    id: 1,
-    question: "ಕನ್ನಡ ಸಾಹಿತ್ಯಕ್ಕೆ ಮೊದಲ ಜ್ಞಾನಪೀಠ ಪ್ರಶಸ್ತಿ ತಂದುಕೊಟ್ಟ ಮಹಾನ್ ಕವಿ ಯಾರು?",
-    transliteration: "Kannaḍa sāhityakke modala jñānapīṭha praśasti tandukoṭṭa mahān kavi yāru?",
-    options: ["ಕುವೆಂಪು (Kuvempu)", "ದ.ರಾ. ಬೇಂದ್ರೆ (Bendre)", "ಶಿವರಾಮ ಕಾರಂತ (Karanth)", "ಮಾಸ್ತಿ ವೆಂಕಟೇಶ ಅಯ್ಯಂಗಾರ್ (Masti)"],
-    correctAnswer: 0,
-    explanation: "ಕುವೆಂಪು (K. V. Puttappa) received the first Jnanpith award for Kannada in 1967 for 'ಶ್ರೀ ರಾಮಾಯಣ ದರ್ಶನಂ'.",
-  },
-  {
-    id: 2,
-    question: "ಕರ್ನಾಟಕದ ನಾಡಗೀತೆ 'ಜಯ ಭಾರತ ಜನನಿಯ ತನುಜಾತೆ' ರಚಿಸಿದವರು ಯಾರು?",
-    transliteration: "Karnāṭakada nāḍagīte 'Jaya Bhārata Jananiya Tanujāte' racisidavaru yāru?",
-    options: ["ಕುವೆಂಪು (Kuvempu)", "ಬಿ. ಎಂ. ಶ್ರೀಕಂಠಯ್ಯ (BM Sri)", "ಚನ್ನವೀರ ಕಣವಿ (Kanavi)", "ಜಿ. ಎಸ್. ಶಿವರುದ್ರಪ್ಪ (GSS)"],
-    correctAnswer: 0,
-    explanation: "Rashtrakavi Kuvempu penned Karnataka's official state anthem.",
-  },
-  {
-    id: 3,
-    question: "ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯದ ರಾಜಧಾನಿಯಾಗಿದ್ದ ಐತಿಹಾಸಿಕ ತಾಣ ಯಾವುದು?",
-    transliteration: "Vijayanagara sāmrājyada rājadhāniyāgiddha aitihāsika tāṇa yāvudu?",
-    options: ["ಹಂಪಿ (Hampi)", "ಬಾದಾಮಿ (Badami)", "ಬೇಲೂರು (Belur)", "ಪಟ್ಟದಕಲ್ಲು (Pattadakal)"],
-    correctAnswer: 0,
-    explanation: "ಹಂಪಿ (Hampi), situated along the Tungabhadra, was the historic capital of the Vijayanagara Empire.",
-  },
-  {
-    id: 4,
-    question: "ಕನ್ನಡದ ಅತ್ಯಂತ ಪ್ರಾಚೀನ ಶಾಸನ ಯಾವುದು?",
-    transliteration: "Kannaḍada atyanta prācīna śāsana yāvudu?",
-    options: ["ಹಲ್ಮಿಡಿ ಶಾಸನ (Halmidi Inscription)", "ಬಾದಾಮಿ ಶಾಸನ (Badami)", "ಶ್ರವಣಬೆಳಗೊಳ ಶಾಸನ (Shravanabelagola)", "ಐಹೊಳೆ ಶಾಸನ (Aihole)"],
-    correctAnswer: 0,
-    explanation: "The Halmidi stone inscription (c. 450 CE) during the Kadamba era is the earliest known Kannada inscription.",
-  },
-];
+import {
+  SENTENCE_GAMES,
+  WORD_PUZZLES,
+  GK_QUIZ
+} from "../data/gamesQuestions";
 
 export default function GamesMode({ onBackToHome }) {
   const [activeTab, setActiveTab] = useState("sentence"); // 'sentence' | 'word' | 'quiz'

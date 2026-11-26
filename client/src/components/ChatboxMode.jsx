@@ -143,12 +143,15 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
 
       const apiBase = import.meta.env.VITE_API_URL || "";
 
+      // Ensure the prompt explicitly instructs simple direct Kannada translation only
+      const translationPrompt = `Translate the following text into direct, pure Kannada only. Do NOT include paragraph explanations, phonetic guides, or extra notes. Give only the clean Kannada translation: "${trimmed}"`;
+
       // Real-time SSE streaming for fast response
       const response = await fetch(`${apiBase}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: trimmed,
+          message: translationPrompt,
           history: historyPayload,
           image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
         }),
@@ -160,7 +163,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            message: trimmed,
+            message: translationPrompt,
             history: historyPayload,
             image: currentAttach?.data ? { data: currentAttach.data, mimeType: currentAttach.mimeType } : null,
           }),
