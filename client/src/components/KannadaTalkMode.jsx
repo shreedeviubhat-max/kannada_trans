@@ -11,8 +11,7 @@ import {
   Bot,
   User,
   Headphones,
-  Radio,
-  Globe
+  Radio
 } from "lucide-react";
 
 const STARTER_TOPICS = [
@@ -41,9 +40,7 @@ const STARTER_TOPICS = [
 // Helper to determine language family from text
 const detectLanguageFromText = (text) => {
   if (!text) return "kn-IN";
-  // Kannada Unicode range: 0C80 - 0CFF
   const hasKannada = /[\u0C80-\u0CFF]/.test(text);
-  // Devanagari (Hindi) Unicode range: 0900 - 097F
   const hasDevanagari = /[\u0900-\u097F]/.test(text);
 
   if (hasKannada) return "kn-IN";
@@ -60,7 +57,7 @@ export default function KannadaTalkMode({ onBackToHome }) {
 ನಾನು ನಿಮ್ಮ **Multilingual Voice Partner**. 
 
 Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
-- 🎙️ Click **"Start Hands-Free Session"** to talk without pressing any buttons.
+- 🎙️ Click **"Start Hands-Free Session"** to talk without pressing buttons.
 - 🌐 The AI will automatically detect your language and reply in the same language!
 - 🎧 Audio speech synthesis plays automatically in the matched accent.`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
@@ -70,9 +67,9 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isLiveSessionActive, setIsLiveSessionActive] = useState(false);
-  const [sessionStatus, setSessionStatus] = useState("idle"); // 'idle' | 'listening' | 'user_speaking' | 'ai_thinking' | 'ai_speaking'
+  const [sessionStatus, setSessionStatus] = useState("idle");
   const [liveTranscript, setLiveTranscript] = useState("");
-  const [activeSpeechLang, setActiveSpeechLang] = useState("kn-IN"); // 'kn-IN' | 'en-IN' | 'hi-IN'
+  const [activeSpeechLang, setActiveSpeechLang] = useState("kn-IN");
 
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -88,7 +85,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading, liveTranscript]);
 
-  // Clean markdown symbols to feed SpeechSynthesis smoothly
   const cleanMarkdownForAudio = (text) => {
     return text
       .replace(/[*#_`~>]/g, "")
@@ -96,7 +92,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
       .trim();
   };
 
-  // Stop any active AI speech immediately (Barge-in / Interrupt)
   const interruptAiSpeech = () => {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -104,7 +99,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     isAiSpeakingRef.current = false;
   };
 
-  // Dynamic voice synthesizer that matches the detected language
   const speakAiResponse = (text) => {
     if (!window.speechSynthesis) return;
 
@@ -117,7 +111,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     utterance.lang = detectedLang;
     utterance.rate = detectedLang === "kn-IN" ? 0.95 : 1.0;
 
-    // Pick best available matching voice if present
     const voices = window.speechSynthesis.getVoices();
     const matchingVoice = voices.find((v) => v.lang.startsWith(detectedLang.slice(0, 2)));
     if (matchingVoice) {
@@ -154,7 +147,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     window.speechSynthesis.speak(utterance);
   };
 
-  // Initialize Speech Recognition with continuous VAD & auto silence detection
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -162,7 +154,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    // Set to user's selected primary listening language (defaults to kn-IN, can toggle to en-IN or hi-IN)
     recognition.lang = activeSpeechLang;
 
     recognition.onstart = () => {
@@ -187,7 +178,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
       const activeText = (final || interim).trim();
 
       if (activeText) {
-        // User interruption: if AI is speaking, user's speech cuts off AI immediately
         if (isAiSpeakingRef.current) {
           interruptAiSpeech();
         }
@@ -195,7 +185,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
         setSessionStatus("user_speaking");
         setLiveTranscript(activeText);
 
-        // Reset silence detection timer (1.3 seconds of silence = user finished speaking)
         if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
 
         silenceTimerRef.current = setTimeout(() => {
@@ -231,7 +220,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     };
   }, [activeSpeechLang]);
 
-  // Update recognition language when user switches preference
   const handleLanguageSwitch = (langCode) => {
     setActiveSpeechLang(langCode);
     if (recognitionRef.current) {
@@ -250,7 +238,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
     }
   };
 
-  // Hands-Free Auto-Send Turn when silence is detected
   const handleAutoSendTurn = async (spokenText) => {
     if (!spokenText.trim()) return;
 
@@ -277,7 +264,6 @@ Speak freely in **Kannada, English, Hindi**, or mix them naturally (Kanglish):
         .filter((_, idx) => idx > 0)
         .map((m) => ({ role: m.role, text: m.text }));
 
-      // Prompt enforcing automatic language detection without forced Kannada translation
       const conversationPrompt = `[Talk with AI Voice Session - Automatic Language Detection]:
 The user said: "${spokenText}"
 
@@ -335,7 +321,6 @@ CRITICAL INSTRUCTIONS:
     }
   };
 
-  // Toggle Hands-Free Session
   const toggleHandsFreeSession = () => {
     const nextState = !isLiveSessionActive;
     setIsLiveSessionActive(nextState);
@@ -360,7 +345,6 @@ CRITICAL INSTRUCTIONS:
     }
   };
 
-  // Fallback manual send via text box
   const handleManualSend = () => {
     if (!input.trim()) return;
     const text = input;
@@ -372,19 +356,26 @@ CRITICAL INSTRUCTIONS:
     <div
       style={{
         minHeight: "100vh",
-        background: "#faf7fd",
-        color: "#1e1b4b",
+        backgroundColor: "#f4f6f8",
+        backgroundImage: `
+          radial-gradient(at 15% 20%, rgba(109, 129, 150, 0.2) 0px, transparent 55%),
+          radial-gradient(at 85% 80%, rgba(255, 255, 227, 0.7) 0px, transparent 50%),
+          radial-gradient(at 50% 50%, rgba(203, 203, 203, 0.25) 0px, transparent 60%)
+        `,
+        color: "#4a4a4a",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      {/* Top Navigation */}
+      {/* Top Glass Navigation */}
       <header
         style={{
-          background: "#ffffff",
-          borderBottom: "1px solid #ede9fe",
+          background: "rgba(255, 255, 255, 0.75)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(203, 203, 203, 0.4)",
           padding: "16px 28px",
           display: "flex",
           alignItems: "center",
@@ -405,9 +396,9 @@ CRITICAL INSTRUCTIONS:
               onBackToHome();
             }}
             style={{
-              background: "#ffffff",
-              border: "1px solid #e2e8f0",
-              color: "#64748b",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid #cbcbcb",
+              color: "#4a4a4a",
               padding: "8px 14px",
               borderRadius: "8px",
               cursor: "pointer",
@@ -424,23 +415,24 @@ CRITICAL INSTRUCTIONS:
 
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <h1 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#1e1b4b", margin: 0 }}>
+              <h1 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#4a4a4a", margin: 0 }}>
                 Talk with AI (ಕನ್ನಡ • English • हिंदी)
               </h1>
               <span
                 style={{
                   fontSize: "0.72rem",
-                  color: "#6b21a8",
-                  background: "#f3e8ff",
+                  color: "#6d8196",
+                  background: "rgba(255, 255, 227, 0.8)",
+                  border: "1px solid rgba(203, 203, 203, 0.4)",
                   padding: "2px 8px",
                   borderRadius: "4px",
                   fontWeight: 600,
                 }}
               >
-                Auto Language Detection
+                Auto Detect
               </span>
             </div>
-            <p style={{ fontSize: "0.76rem", color: "#64748b", margin: 0 }}>
+            <p style={{ fontSize: "0.76rem", color: "#6d8196", margin: 0 }}>
               Hands-free voice with continuous language detection and natural spoken reply
             </p>
           </div>
@@ -448,13 +440,12 @@ CRITICAL INSTRUCTIONS:
 
         {/* Action Controls & Language Selector */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {/* Speech Mic Listening Priority Selector */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              background: "#f5f3ff",
-              border: "1px solid #ede9fe",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid #cbcbcb",
               borderRadius: "8px",
               padding: "2px",
               fontSize: "0.78rem",
@@ -469,8 +460,8 @@ CRITICAL INSTRUCTIONS:
                 key={lang.code}
                 onClick={() => handleLanguageSwitch(lang.code)}
                 style={{
-                  background: activeSpeechLang === lang.code ? "#7c3aed" : "transparent",
-                  color: activeSpeechLang === lang.code ? "#ffffff" : "#6b21a8",
+                  background: activeSpeechLang === lang.code ? "#6d8196" : "transparent",
+                  color: activeSpeechLang === lang.code ? "#ffffe3" : "#4a4a4a",
                   border: "none",
                   borderRadius: "6px",
                   padding: "6px 10px",
@@ -488,8 +479,8 @@ CRITICAL INSTRUCTIONS:
           <button
             onClick={toggleHandsFreeSession}
             style={{
-              background: isLiveSessionActive ? "#ef4444" : "#7c3aed",
-              color: "#ffffff",
+              background: isLiveSessionActive ? "#ef4444" : "#6d8196",
+              color: "#ffffe3",
               border: "none",
               borderRadius: "8px",
               padding: "9px 18px",
@@ -501,7 +492,7 @@ CRITICAL INSTRUCTIONS:
               gap: "8px",
               boxShadow: isLiveSessionActive
                 ? "0 4px 12px rgba(239, 68, 68, 0.25)"
-                : "0 4px 12px rgba(124, 58, 237, 0.2)",
+                : "0 4px 12px rgba(109, 129, 150, 0.25)",
               transition: "all 0.15s ease",
             }}
           >
@@ -525,9 +516,9 @@ CRITICAL INSTRUCTIONS:
             }}
             title="Clear & Restart"
             style={{
-              background: "#ffffff",
-              border: "1px solid #e2e8f0",
-              color: "#64748b",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid #cbcbcb",
+              color: "#4a4a4a",
               padding: "9px 12px",
               borderRadius: "8px",
               cursor: "pointer",
@@ -544,14 +535,16 @@ CRITICAL INSTRUCTIONS:
       {isLiveSessionActive && (
         <div
           style={{
-            background: "#f5f3ff",
-            borderBottom: "1px solid #ddd6fe",
+            background: "rgba(255, 255, 227, 0.75)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderBottom: "1px solid rgba(203, 203, 203, 0.4)",
             padding: "9px 28px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             fontSize: "0.82rem",
-            color: "#5b21b6",
+            color: "#4a4a4a",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -564,7 +557,7 @@ CRITICAL INSTRUCTIONS:
                   sessionStatus === "user_speaking"
                     ? "#16a34a"
                     : sessionStatus === "ai_speaking"
-                    ? "#7c3aed"
+                    ? "#6d8196"
                     : "#d97706",
               }}
             />
@@ -577,7 +570,7 @@ CRITICAL INSTRUCTIONS:
           </div>
 
           {liveTranscript && (
-            <div style={{ fontStyle: "italic", color: "#6b21a8" }}>
+            <div style={{ fontStyle: "italic", color: "#6d8196" }}>
               "{liveTranscript}"
             </div>
           )}
@@ -613,12 +606,14 @@ CRITICAL INSTRUCTIONS:
               onClick={() => handleAutoSendTurn(topic.prompt)}
               disabled={loading}
               style={{
-                background: "#ffffff",
-                border: "1px solid #ede9fe",
+                background: "rgba(255, 255, 255, 0.72)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid rgba(203, 203, 203, 0.45)",
                 borderRadius: "8px",
                 padding: "7px 14px",
                 fontSize: "0.82rem",
-                color: "#5b21b6",
+                color: "#4a4a4a",
                 whiteSpace: "nowrap",
                 cursor: "pointer",
                 display: "inline-flex",
@@ -627,17 +622,17 @@ CRITICAL INSTRUCTIONS:
                 transition: "all 0.15s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#c4b5fd";
-                e.currentTarget.style.background = "#f5f3ff";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#ede9fe";
+                e.currentTarget.style.borderColor = "#6d8196";
                 e.currentTarget.style.background = "#ffffff";
               }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(203, 203, 203, 0.45)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.72)";
+              }}
             >
-              <MessageCircle size={14} color="#7c3aed" />
+              <MessageCircle size={14} color="#6d8196" />
               <span>{topic.label}</span>
-              <span style={{ fontSize: "0.72rem", color: "#8b5cf6" }}>({topic.en})</span>
+              <span style={{ fontSize: "0.72rem", color: "#6d8196" }}>({topic.en})</span>
             </button>
           ))}
         </div>
@@ -684,8 +679,9 @@ CRITICAL INSTRUCTIONS:
                       justifyContent: "center",
                       flexShrink: 0,
                       marginTop: "2px",
-                      background: isUser ? "#7c3aed" : "#ede9fe",
-                      color: isUser ? "#ffffff" : "#6b21a8",
+                      background: isUser ? "#6d8196" : "rgba(255, 255, 227, 0.8)",
+                      color: isUser ? "#ffffe3" : "#4a4a4a",
+                      border: "1px solid rgba(203, 203, 203, 0.45)",
                     }}
                   >
                     {isUser ? <User size={16} /> : <Bot size={16} />}
@@ -693,12 +689,14 @@ CRITICAL INSTRUCTIONS:
 
                   <div
                     style={{
-                      background: isUser ? "#7c3aed" : "#ffffff",
-                      border: isUser ? "none" : "1px solid #ede9fe",
+                      background: isUser ? "#6d8196" : "rgba(255, 255, 255, 0.78)",
+                      backdropFilter: isUser ? "none" : "blur(16px)",
+                      WebkitBackdropFilter: isUser ? "none" : "blur(16px)",
+                      border: isUser ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid rgba(203, 203, 203, 0.45)",
                       padding: "14px 18px",
                       borderRadius: isUser ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
-                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
-                      color: isUser ? "#ffffff" : "#1e1b4b",
+                      boxShadow: "0 8px 24px rgba(74, 74, 74, 0.05)",
+                      color: isUser ? "#ffffe3" : "#4a4a4a",
                     }}
                   >
                     <div style={{ fontSize: "0.92rem", lineHeight: 1.6 }}>
@@ -713,7 +711,7 @@ CRITICAL INSTRUCTIONS:
                         gap: "10px",
                         marginTop: "8px",
                         fontSize: "0.72rem",
-                        color: isUser ? "rgba(255,255,255,0.7)" : "#94a3b8",
+                        color: isUser ? "rgba(255, 255, 227, 0.75)" : "#6d8196",
                       }}
                     >
                       <span>{msg.timestamp}</span>
@@ -726,7 +724,7 @@ CRITICAL INSTRUCTIONS:
                             background: "transparent",
                             border: "none",
                             cursor: "pointer",
-                            color: "#7c3aed",
+                            color: "#6d8196",
                             display: "flex",
                             alignItems: "center",
                             gap: "4px",
@@ -752,8 +750,9 @@ CRITICAL INSTRUCTIONS:
                   width: "32px",
                   height: "32px",
                   borderRadius: "8px",
-                  background: "#ede9fe",
-                  color: "#6b21a8",
+                  background: "rgba(255, 255, 227, 0.8)",
+                  color: "#4a4a4a",
+                  border: "1px solid rgba(203, 203, 203, 0.4)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -763,19 +762,21 @@ CRITICAL INSTRUCTIONS:
               </div>
               <div
                 style={{
-                  background: "#ffffff",
-                  border: "1px solid #ede9fe",
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  border: "1px solid rgba(203, 203, 203, 0.4)",
                   padding: "10px 16px",
                   borderRadius: "8px",
                   fontSize: "0.85rem",
-                  color: "#6b21a8",
+                  color: "#6d8196",
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
                 }}
               >
                 <span>Understanding & formulating response...</span>
-                <Sparkles size={14} color="#7c3aed" />
+                <Sparkles size={14} color="#6d8196" />
               </div>
             </div>
           )}
@@ -786,14 +787,16 @@ CRITICAL INSTRUCTIONS:
         {/* Input Bar */}
         <div
           style={{
-            background: "#ffffff",
-            border: "1px solid #ddd6fe",
-            borderRadius: "12px",
+            background: "rgba(255, 255, 255, 0.78)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(203, 203, 203, 0.5)",
+            borderRadius: "14px",
             padding: "8px 12px",
             display: "flex",
             alignItems: "center",
             gap: "10px",
-            boxShadow: "0 4px 12px rgba(124, 58, 237, 0.05)",
+            boxShadow: "0 8px 24px rgba(74, 74, 74, 0.05)",
           }}
         >
           <button
@@ -801,9 +804,9 @@ CRITICAL INSTRUCTIONS:
             onClick={toggleHandsFreeSession}
             title={isLiveSessionActive ? "Stop voice listening" : "Start hands-free voice mode"}
             style={{
-              background: isLiveSessionActive ? "#fee2e2" : "#f5f3ff",
-              border: `1px solid ${isLiveSessionActive ? "#fca5a5" : "#ddd6fe"}`,
-              color: isLiveSessionActive ? "#dc2626" : "#7c3aed",
+              background: isLiveSessionActive ? "#fee2e2" : "rgba(109, 129, 150, 0.12)",
+              border: `1px solid ${isLiveSessionActive ? "#fca5a5" : "rgba(109, 129, 150, 0.25)"}`,
+              color: isLiveSessionActive ? "#dc2626" : "#6d8196",
               borderRadius: "8px",
               width: "36px",
               height: "36px",
@@ -836,7 +839,7 @@ CRITICAL INSTRUCTIONS:
               background: "transparent",
               border: "none",
               outline: "none",
-              color: "#1e1b4b",
+              color: "#4a4a4a",
               fontSize: "0.92rem",
               padding: "6px 4px",
               fontFamily: "inherit",
@@ -848,8 +851,8 @@ CRITICAL INSTRUCTIONS:
             onClick={handleManualSend}
             disabled={loading || !input.trim()}
             style={{
-              background: !loading && input.trim() ? "#7c3aed" : "#f1f5f9",
-              color: !loading && input.trim() ? "#ffffff" : "#94a3b8",
+              background: !loading && input.trim() ? "#6d8196" : "rgba(203, 203, 203, 0.3)",
+              color: !loading && input.trim() ? "#ffffe3" : "#cbcbcb",
               border: "none",
               borderRadius: "8px",
               width: "36px",

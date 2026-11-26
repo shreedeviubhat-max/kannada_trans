@@ -179,21 +179,27 @@ export default function DailyLearnMode({ onBackToHome }) {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#fbfaf7", // Warm cream canvas
-        color: "#1e293b",
+        backgroundColor: "#f7f8f6",
+        backgroundImage: `
+          radial-gradient(at 15% 15%, rgba(162, 174, 157, 0.28) 0px, transparent 55%),
+          radial-gradient(at 85% 85%, rgba(255, 255, 227, 0.75) 0px, transparent 50%),
+          radial-gradient(at 50% 50%, rgba(84, 70, 58, 0.08) 0px, transparent 60%)
+        `,
+        color: "#54463a",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      {/* Top Header */}
+      {/* Top Glass Header */}
       <header
         style={{
-          background: "rgba(255, 255, 255, 0.9)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #e7e5e4",
-          padding: "16px 24px",
+          background: "rgba(255, 255, 255, 0.78)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(162, 174, 157, 0.35)",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -206,9 +212,9 @@ export default function DailyLearnMode({ onBackToHome }) {
           <button
             onClick={onBackToHome}
             style={{
-              background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              color: "#334155",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid rgba(162, 174, 157, 0.4)",
+              color: "#54463a",
               padding: "7px 12px",
               borderRadius: "8px",
               cursor: "pointer",
@@ -224,8 +230,8 @@ export default function DailyLearnMode({ onBackToHome }) {
           </button>
 
           <div>
-            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#14532d", margin: 0 }}>
-              ದಿನದ ಕಲಿಕೆ <span style={{ fontWeight: "400", color: "#64748b" }}>/ Learn Kannada</span>
+            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#54463a", margin: 0 }}>
+              ದಿನದ ಕಲಿಕೆ <span style={{ fontWeight: "400", color: "#a2ae9d" }}>/ Learn Kannada</span>
             </h1>
           </div>
         </div>
@@ -233,8 +239,10 @@ export default function DailyLearnMode({ onBackToHome }) {
         {/* Streak & points pill */}
         <div
           style={{
-            background: "#f0fdf4",
-            border: "1px solid #bbf7d0",
+            background: "rgba(162, 174, 157, 0.25)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            border: "1px solid rgba(162, 174, 157, 0.4)",
             padding: "6px 14px",
             borderRadius: "9999px",
             display: "flex",
@@ -242,11 +250,11 @@ export default function DailyLearnMode({ onBackToHome }) {
             gap: "10px",
             fontSize: "0.86rem",
             fontWeight: "700",
-            color: "#15803d",
+            color: "#54463a",
           }}
         >
           <span>Day {activeDay}</span>
-          <span style={{ color: "#cbd5e1" }}>•</span>
+          <span style={{ color: "#a2ae9d" }}>•</span>
           <span>{points} pts</span>
         </div>
       </header>
@@ -264,7 +272,7 @@ export default function DailyLearnMode({ onBackToHome }) {
           gap: "24px",
         }}
       >
-        {/* Weekly Day Strip (Minimal & Clean) */}
+        {/* Weekly Day Strip (Glassmorphism & Palette B) */}
         <div
           style={{
             display: "flex",
@@ -283,10 +291,18 @@ export default function DailyLearnMode({ onBackToHome }) {
                 style={{
                   flex: "1 1 0",
                   minWidth: "70px",
-                  background: isSelected ? "#15803d" : "#ffffff",
-                  color: isSelected ? "#ffffff" : isVisited ? "#15803d" : "#64748b",
-                  border: isSelected ? "1.5px solid #15803d" : "1px solid #e7e5e4",
-                  borderRadius: "10px",
+                  background: isSelected
+                    ? "#54463a"
+                    : isVisited
+                    ? "rgba(162, 174, 157, 0.28)"
+                    : "rgba(255, 255, 255, 0.72)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  color: isSelected ? "#ffffe3" : "#54463a",
+                  border: isSelected
+                    ? "1.5px solid #54463a"
+                    : "1px solid rgba(162, 174, 157, 0.4)",
+                  borderRadius: "12px",
                   padding: "10px 8px",
                   cursor: "pointer",
                   display: "flex",
@@ -294,6 +310,7 @@ export default function DailyLearnMode({ onBackToHome }) {
                   alignItems: "center",
                   gap: "2px",
                   transition: "all 0.15s",
+                  boxShadow: "0 4px 14px rgba(84, 70, 58, 0.04)",
                 }}
               >
                 <span style={{ fontSize: "0.72rem", textTransform: "uppercase", fontWeight: "600" }}>
@@ -307,14 +324,16 @@ export default function DailyLearnMode({ onBackToHome }) {
           })}
         </div>
 
-        {/* Active Challenge Card */}
+        {/* Active Challenge Card (Frosted Glass Panel) */}
         <div
           style={{
-            background: "#ffffff",
-            border: "1px solid #e7e5e4",
-            borderRadius: "14px",
-            padding: "28px",
-            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.03)",
+            background: "rgba(255, 255, 255, 0.78)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(162, 174, 157, 0.35)",
+            borderRadius: "18px",
+            padding: "30px",
+            boxShadow: "0 8px 30px rgba(84, 70, 58, 0.06)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
@@ -322,42 +341,42 @@ export default function DailyLearnMode({ onBackToHome }) {
               style={{
                 fontSize: "0.76rem",
                 fontWeight: "700",
-                color: "#15803d",
-                background: "#f0fdf4",
-                border: "1px solid #bbf7d0",
-                padding: "2px 8px",
-                borderRadius: "4px",
+                color: "#54463a",
+                background: "rgba(162, 174, 157, 0.3)",
+                border: "1px solid rgba(162, 174, 157, 0.45)",
+                padding: "3px 10px",
+                borderRadius: "6px",
                 textTransform: "uppercase",
               }}
             >
               {currentChallenge.badge}
             </span>
-            <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
+            <span style={{ fontSize: "0.85rem", color: "#a2ae9d", fontWeight: "600" }}>
               Day {activeDay} Curriculum
             </span>
           </div>
 
-          <h2 style={{ fontSize: "1.18rem", fontWeight: "700", color: "#0f172a", marginBottom: "8px" }}>
+          <h2 style={{ fontSize: "1.18rem", fontWeight: "700", color: "#54463a", marginBottom: "8px" }}>
             {currentChallenge.title}
           </h2>
 
           <div
             style={{
-              background: "#f8fdf9",
-              borderLeft: "3px solid #15803d",
-              padding: "14px 16px",
-              borderRadius: "0 8px 8px 0",
+              background: "rgba(255, 255, 227, 0.65)",
+              borderLeft: "3.5px solid #a2ae9d",
+              padding: "16px 18px",
+              borderRadius: "0 10px 10px 0",
               fontSize: "1.05rem",
-              color: "#14532d",
+              color: "#54463a",
               fontWeight: "600",
-              lineHeight: "1.55",
+              lineHeight: "1.6",
               marginBottom: "8px",
             }}
           >
             {currentChallenge.question}
           </div>
 
-          <p style={{ fontSize: "0.86rem", color: "#64748b", fontStyle: "italic", marginBottom: "22px" }}>
+          <p style={{ fontSize: "0.86rem", color: "#54463a", opacity: 0.75, fontStyle: "italic", marginBottom: "22px" }}>
             {currentChallenge.englishHint}
           </p>
 

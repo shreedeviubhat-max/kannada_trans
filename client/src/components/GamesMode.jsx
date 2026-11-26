@@ -224,21 +224,27 @@ export default function GamesMode({ onBackToHome }) {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#fffdf9", // Pastel peach canvas
-        color: "#0f172a",
+        backgroundColor: "#fdf8f6",
+        backgroundImage: `
+          radial-gradient(at 15% 15%, rgba(240, 187, 187, 0.28) 0px, transparent 50%),
+          radial-gradient(at 85% 85%, rgba(199, 95, 113, 0.15) 0px, transparent 50%),
+          radial-gradient(at 50% 50%, rgba(255, 255, 227, 0.6) 0px, transparent 55%)
+        `,
+        color: "#54463a",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      {/* Top Header */}
+      {/* Top Glass Header */}
       <header
         style={{
-          background: "rgba(255, 255, 255, 0.9)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #fed7aa",
-          padding: "16px 24px",
+          background: "rgba(255, 255, 255, 0.78)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(199, 95, 113, 0.25)",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -251,9 +257,9 @@ export default function GamesMode({ onBackToHome }) {
           <button
             onClick={onBackToHome}
             style={{
-              background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              color: "#334155",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid rgba(199, 95, 113, 0.3)",
+              color: "#54463a",
               padding: "7px 12px",
               borderRadius: "8px",
               cursor: "pointer",
@@ -269,8 +275,8 @@ export default function GamesMode({ onBackToHome }) {
           </button>
 
           <div>
-            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#9a3412", margin: 0 }}>
-              ಭಾಷಾ ಆಟಗಳು <span style={{ fontWeight: "400", color: "#64748b" }}>/ Play Games</span>
+            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#c75f71", margin: 0 }}>
+              ಭಾಷಾ ಆಟಗಳು <span style={{ fontWeight: "400", color: "#54463a" }}>/ Play Games</span>
             </h1>
           </div>
         </div>
@@ -278,8 +284,10 @@ export default function GamesMode({ onBackToHome }) {
         {/* Score pill */}
         <div
           style={{
-            background: "#fff7ed",
-            border: "1px solid #fed7aa",
+            background: "rgba(240, 187, 187, 0.35)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            border: "1px solid rgba(199, 95, 113, 0.35)",
             padding: "6px 14px",
             borderRadius: "9999px",
             display: "flex",
@@ -287,10 +295,10 @@ export default function GamesMode({ onBackToHome }) {
             gap: "6px",
             fontSize: "0.86rem",
             fontWeight: "700",
-            color: "#c2410c",
+            color: "#c75f71",
           }}
         >
-          <Trophy size={15} color="#ea580c" />
+          <Trophy size={15} color="#c75f71" />
           <span>{totalScore} pts</span>
         </div>
       </header>
@@ -312,7 +320,7 @@ export default function GamesMode({ onBackToHome }) {
           style={{
             display: "flex",
             gap: "8px",
-            borderBottom: "1px solid #fed7aa",
+            borderBottom: "1px solid rgba(199, 95, 113, 0.25)",
             paddingBottom: "12px",
             marginBottom: "24px",
           }}
@@ -320,9 +328,9 @@ export default function GamesMode({ onBackToHome }) {
           <button
             onClick={() => setActiveTab("sentence")}
             style={{
-              background: activeTab === "sentence" ? "#ffedd5" : "transparent",
-              color: activeTab === "sentence" ? "#9a3412" : "#64748b",
-              border: "none",
+              background: activeTab === "sentence" ? "rgba(240, 187, 187, 0.45)" : "transparent",
+              color: activeTab === "sentence" ? "#c75f71" : "#54463a",
+              border: activeTab === "sentence" ? "1px solid rgba(199, 95, 113, 0.3)" : "none",
               borderRadius: "8px",
               padding: "8px 16px",
               fontSize: "0.9rem",
@@ -336,9 +344,9 @@ export default function GamesMode({ onBackToHome }) {
           <button
             onClick={() => setActiveTab("word")}
             style={{
-              background: activeTab === "word" ? "#ffedd5" : "transparent",
-              color: activeTab === "word" ? "#9a3412" : "#64748b",
-              border: "none",
+              background: activeTab === "word" ? "rgba(240, 187, 187, 0.45)" : "transparent",
+              color: activeTab === "word" ? "#c75f71" : "#54463a",
+              border: activeTab === "word" ? "1px solid rgba(199, 95, 113, 0.3)" : "none",
               borderRadius: "8px",
               padding: "8px 16px",
               fontSize: "0.9rem",
@@ -352,9 +360,9 @@ export default function GamesMode({ onBackToHome }) {
           <button
             onClick={() => setActiveTab("quiz")}
             style={{
-              background: activeTab === "quiz" ? "#ffedd5" : "transparent",
-              color: activeTab === "quiz" ? "#9a3412" : "#64748b",
-              border: "none",
+              background: activeTab === "quiz" ? "rgba(240, 187, 187, 0.45)" : "transparent",
+              color: activeTab === "quiz" ? "#c75f71" : "#54463a",
+              border: activeTab === "quiz" ? "1px solid rgba(199, 95, 113, 0.3)" : "none",
               borderRadius: "8px",
               padding: "8px 16px",
               fontSize: "0.9rem",
@@ -371,15 +379,17 @@ export default function GamesMode({ onBackToHome }) {
         {activeTab === "sentence" && (
           <div
             style={{
-              background: "#ffffff",
-              border: "1px solid #fed7aa",
-              borderRadius: "14px",
+              background: "rgba(255, 255, 255, 0.78)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(199, 95, 113, 0.25)",
+              borderRadius: "18px",
               padding: "28px",
-              boxShadow: "0 2px 10px rgba(234, 88, 12, 0.04)",
+              boxShadow: "0 8px 30px rgba(199, 95, 113, 0.08)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <span style={{ fontSize: "0.8rem", color: "#9a3412", fontWeight: "600", textTransform: "uppercase" }}>
+              <span style={{ fontSize: "0.8rem", color: "#c75f71", fontWeight: "700", textTransform: "uppercase" }}>
                 Exercise {currentSentenceIdx + 1} of {SENTENCE_GAMES.length}
               </span>
               <button
@@ -387,7 +397,7 @@ export default function GamesMode({ onBackToHome }) {
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "#ea580c",
+                  color: "#c75f71",
                   fontSize: "0.85rem",
                   fontWeight: "600",
                   cursor: "pointer",
@@ -397,17 +407,17 @@ export default function GamesMode({ onBackToHome }) {
               </button>
             </div>
 
-            <p style={{ fontSize: "1.05rem", color: "#334155", marginBottom: "20px" }}>
-              Arrange the words to say: <strong style={{ color: "#0f172a" }}>"{SENTENCE_GAMES[currentSentenceIdx].english}"</strong>
+            <p style={{ fontSize: "1.05rem", color: "#54463a", marginBottom: "20px" }}>
+              Arrange the words to say: <strong style={{ color: "#c75f71" }}>"{SENTENCE_GAMES[currentSentenceIdx].english}"</strong>
             </p>
 
             {/* Placed Words Slot */}
             <div
               style={{
                 minHeight: "68px",
-                background: "#fffaf5",
-                border: "1.5px dashed #fed7aa",
-                borderRadius: "10px",
+                background: "rgba(255, 255, 227, 0.55)",
+                border: "1.5px dashed rgba(199, 95, 113, 0.4)",
+                borderRadius: "12px",
                 padding: "12px",
                 display: "flex",
                 flexWrap: "wrap",
@@ -417,7 +427,7 @@ export default function GamesMode({ onBackToHome }) {
               }}
             >
               {placedWords.length === 0 ? (
-                <span style={{ color: "#94a3b8", fontSize: "0.9rem" }}>
+                <span style={{ color: "#a2ae9d", fontSize: "0.9rem" }}>
                   Select words below in correct sequence...
                 </span>
               ) : (
@@ -426,14 +436,15 @@ export default function GamesMode({ onBackToHome }) {
                     key={idx}
                     onClick={() => handleRemovePlacedWord(word, idx)}
                     style={{
-                      background: "#ea580c",
+                      background: "#c75f71",
                       border: "none",
-                      color: "#ffffff",
-                      borderRadius: "6px",
-                      padding: "7px 14px",
+                      color: "#ffffe3",
+                      borderRadius: "8px",
+                      padding: "8px 14px",
                       fontSize: "0.98rem",
                       fontWeight: "600",
                       cursor: "pointer",
+                      boxShadow: "0 2px 8px rgba(199, 95, 113, 0.25)",
                     }}
                     title="Click to remove"
                   >

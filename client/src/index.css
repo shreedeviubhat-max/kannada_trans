@@ -1,43 +1,47 @@
 @charset "UTF-8";
 
 /* ==========================================================================
-   Kali Kannada AI - Modern Editorial & Human Design Tokens
+   Kali Kannada AI - Glassmorphism & Custom Palette Design System
+   Palettes:
+   Option A (Cool Slate, Mist & Steel Blue):
+     --charcoal: #4a4a4a;
+     --mist:     #cbcbcb;
+     --ivory:    #ffffe3;
+     --steel:    #6d8196;
+
+   Option B (Rose, Blush, Sage & Earth):
+     --rose:     #c75f71;
+     --blush:    #f0bbbb;
+     --sage:     #a2ae9d;
+     --earth:    #54463a;
    ========================================================================== */
+
 :root {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-kannada: 'Noto Sans Kannada', 'Plus Jakarta Sans', sans-serif;
 
-  /* Global neutrals */
-  --ink-primary: #0f172a;
-  --ink-secondary: #475569;
-  --ink-muted: #94a3b8;
-  --border-subtle: #e2e8f0;
-  --surface-white: #ffffff;
+  /* Palette A */
+  --c-charcoal: #4a4a4a;
+  --c-mist: #cbcbcb;
+  --c-ivory: #ffffe3;
+  --c-steel: #6d8196;
 
-  /* Dedicated palettes */
-  /* Translate: Soft blue & crisp white */
-  --trans-bg: #f8fafc;
-  --trans-surface: #ffffff;
-  --trans-accent: #0284c7;
-  --trans-border: #e0f2fe;
+  /* Palette B */
+  --c-rose: #c75f71;
+  --c-blush: #f0bbbb;
+  --c-sage: #a2ae9d;
+  --c-earth: #54463a;
 
-  /* Games: Pastel peach & warm yellow */
-  --game-bg: #fffbf5;
-  --game-surface: #ffffff;
-  --game-accent: #f97316;
-  --game-border: #fed7aa;
-
-  /* Learn: Warm cream & sage green */
-  --learn-bg: #fbfaf6;
-  --learn-surface: #ffffff;
-  --learn-accent: #2e7d32;
-  --learn-border: #dcfce7;
-
-  /* Talk AI: Muted lavender & white */
-  --talk-bg: #faf7fd;
-  --talk-surface: #ffffff;
-  --talk-accent: #7e22ce;
-  --talk-border: #f3e8ff;
+  /* Glassmorphism tokens */
+  --glass-bg-light: rgba(255, 255, 255, 0.72);
+  --glass-bg-ivory: rgba(255, 255, 227, 0.65);
+  --glass-bg-steel: rgba(109, 129, 150, 0.12);
+  --glass-bg-rose: rgba(199, 95, 113, 0.08);
+  --glass-bg-sage: rgba(162, 174, 157, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-border-subtle: rgba(203, 203, 203, 0.35);
+  --glass-shadow: 0 8px 32px 0 rgba(74, 74, 74, 0.08);
+  --glass-blur: blur(16px);
 }
 
 * {
@@ -48,8 +52,8 @@
 
 body {
   font-family: var(--font-sans);
-  color: var(--ink-primary);
-  background-color: #ffffff;
+  color: var(--c-charcoal);
+  background-color: #f7f8f9;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -57,6 +61,39 @@ body {
 
 .kannada-text {
   font-family: var(--font-kannada);
+}
+
+/* Glassmorphism utility classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(74, 74, 74, 0.06);
+}
+
+.glass-panel-steel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(109, 129, 150, 0.25);
+  box-shadow: 0 8px 28px rgba(109, 129, 150, 0.12);
+}
+
+.glass-panel-rose {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(199, 95, 113, 0.25);
+  box-shadow: 0 8px 28px rgba(199, 95, 113, 0.1);
+}
+
+.glass-panel-sage {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(162, 174, 157, 0.35);
+  box-shadow: 0 8px 28px rgba(84, 70, 58, 0.08);
 }
 
 /* Subtle, refined scrollbar */
@@ -68,14 +105,14 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #cbcbcb;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #6d8196;
 }
 
-/* Tasteful, subtle animations */
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -91,53 +128,18 @@ body {
   animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Voice indicator ring */
-@keyframes subtlePulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: scale(1.06);
-    opacity: 1;
-  }
-}
-
-.voice-pulsing {
-  animation: subtlePulse 1.8s ease-in-out infinite;
-}
-
-/* Editorial prose styling for clean content cards */
-.editorial-prose {
-  line-height: 1.68;
+/* Markdown typography inside glassy cards */
+.prose-editorial {
   font-size: 0.95rem;
-  color: #1e293b;
+  line-height: 1.65;
+  color: var(--c-charcoal);
 }
 
-.editorial-prose p {
-  margin-bottom: 0.55rem;
+.prose-editorial p {
+  margin-bottom: 0.5rem;
 }
 
-.editorial-prose p:last-child {
-  margin-bottom: 0;
-}
-
-.editorial-prose strong {
+.prose-editorial strong {
+  color: #2b333a;
   font-weight: 700;
-  color: #0f172a;
-}
-
-.editorial-prose code {
-  background: #f1f5f9;
-  color: #0f172a;
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
-  font-size: 0.88em;
-}
-
-.editorial-prose blockquote {
-  border-left: 3px solid #cbd5e1;
-  padding-left: 0.75rem;
-  margin: 0.5rem 0;
-  color: #475569;
 }

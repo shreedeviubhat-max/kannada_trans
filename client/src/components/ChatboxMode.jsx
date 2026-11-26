@@ -257,21 +257,27 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#f4f9fd", // Soft blue-tinted canvas
-        color: "#0f172a",
+        backgroundColor: "#f4f6f8",
+        backgroundImage: `
+          radial-gradient(at 10% 15%, rgba(109, 129, 150, 0.22) 0px, transparent 55%),
+          radial-gradient(at 85% 85%, rgba(255, 255, 227, 0.7) 0px, transparent 50%),
+          radial-gradient(at 50% 50%, rgba(203, 203, 203, 0.2) 0px, transparent 60%)
+        `,
+        color: "#4a4a4a",
         display: "flex",
         flexDirection: "column",
         width: "100%",
         boxSizing: "border-box",
       }}
     >
-      {/* Refined Top Navigation Bar */}
+      {/* Refined Glass Top Navigation Bar */}
       <header
         style={{
-          background: "rgba(255, 255, 255, 0.9)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #e0f2fe",
-          padding: "16px 24px",
+          background: "rgba(255, 255, 255, 0.75)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(203, 203, 203, 0.4)",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -284,9 +290,9 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           <button
             onClick={onBackToHome}
             style={{
-              background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              color: "#334155",
+              background: "rgba(255, 255, 255, 0.8)",
+              border: "1px solid #cbcbcb",
+              color: "#4a4a4a",
               padding: "7px 12px",
               borderRadius: "8px",
               cursor: "pointer",
@@ -302,8 +308,8 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           </button>
 
           <div>
-            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#0c4a6e", margin: 0 }}>
-              ಭಾಷಾಂತರ <span style={{ fontWeight: "400", color: "#64748b" }}>/ Translation</span>
+            <h1 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#4a4a4a", margin: 0 }}>
+              ಭಾಷಾಂತರ <span style={{ fontWeight: "400", color: "#6d8196" }}>/ Translation Workspace</span>
             </h1>
           </div>
         </div>
@@ -312,9 +318,9 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
           onClick={() => setMessages([messages[0]])}
           title="Clear session"
           style={{
-            background: "transparent",
-            border: "none",
-            color: "#64748b",
+            background: "rgba(255, 255, 255, 0.6)",
+            border: "1px solid #cbcbcb",
+            color: "#4a4a4a",
             padding: "8px",
             cursor: "pointer",
             borderRadius: "6px",
@@ -395,14 +401,16 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                 >
                   <div
                     style={{
-                      background: isUser ? "#0284c7" : "#ffffff",
-                      border: isUser ? "none" : "1px solid #e0f2fe",
-                      color: isUser ? "#ffffff" : "#0f172a",
+                      background: isUser ? "#6d8196" : "rgba(255, 255, 255, 0.78)",
+                      backdropFilter: isUser ? "none" : "blur(16px)",
+                      WebkitBackdropFilter: isUser ? "none" : "blur(16px)",
+                      border: isUser ? "1px solid rgba(255, 255, 255, 0.2)" : "1px solid rgba(203, 203, 203, 0.45)",
+                      color: isUser ? "#ffffe3" : "#4a4a4a",
                       padding: "16px 20px",
                       borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
                       boxShadow: isUser
-                        ? "0 2px 8px rgba(2, 132, 199, 0.15)"
-                        : "0 2px 10px rgba(12, 74, 110, 0.04)",
+                        ? "0 4px 16px rgba(109, 129, 150, 0.25)"
+                        : "0 8px 24px rgba(74, 74, 74, 0.05)",
                     }}
                   >
                     {msg.attachment?.preview && (
@@ -441,7 +449,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                       </div>
                     )}
 
-                    <div className="editorial-prose" style={{ color: isUser ? "#ffffff" : "#0f172a" }}>
+                    <div className="editorial-prose" style={{ color: isUser ? "#ffffe3" : "#4a4a4a" }}>
                       <ReactMarkdown>{msg.text}</ReactMarkdown>
                     </div>
                   </div>
@@ -453,7 +461,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                       gap: "10px",
                       marginTop: "4px",
                       fontSize: "0.72rem",
-                      color: "#94a3b8",
+                      color: "#6d8196",
                       alignSelf: isUser ? "flex-end" : "flex-start",
                       padding: "0 4px",
                     }}
@@ -468,11 +476,11 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                           background: "transparent",
                           border: "none",
                           cursor: "pointer",
-                          color: "#0284c7",
+                          color: "#6d8196",
                           display: "flex",
                           alignItems: "center",
                           gap: "3px",
-                          fontWeight: "500",
+                          fontWeight: "600",
                           fontSize: "0.72rem",
                         }}
                       >
@@ -488,7 +496,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                         background: "transparent",
                         border: "none",
                         cursor: "pointer",
-                        color: copiedIndex === idx ? "#16a34a" : "#94a3b8",
+                        color: copiedIndex === idx ? "#16a34a" : "#6d8196",
                         display: "flex",
                         alignItems: "center",
                         gap: "2px",
@@ -659,14 +667,16 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
 
           <div
             style={{
-              background: "#ffffff",
-              border: "1px solid #cbd5e1",
-              borderRadius: "12px",
-              padding: "8px 12px",
+              background: "rgba(255, 255, 255, 0.78)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(203, 203, 203, 0.5)",
+              borderRadius: "14px",
+              padding: "10px 14px",
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.03)",
+              boxShadow: "0 8px 24px rgba(74, 74, 74, 0.05)",
             }}
           >
             <button
@@ -676,7 +686,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
               style={{
                 background: "transparent",
                 border: "none",
-                color: "#64748b",
+                color: "#6d8196",
                 cursor: "pointer",
                 padding: "6px",
                 display: "flex",
@@ -691,10 +701,10 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
               onClick={toggleVoiceRecording}
               title={isRecording ? "Stop voice input" : "Speak to translate"}
               style={{
-                background: isRecording ? "#ef4444" : "transparent",
-                border: "none",
-                color: isRecording ? "#ffffff" : "#64748b",
-                borderRadius: "6px",
+                background: isRecording ? "#ef4444" : "rgba(109, 129, 150, 0.12)",
+                border: "1px solid rgba(109, 129, 150, 0.2)",
+                color: isRecording ? "#ffffff" : "#6d8196",
+                borderRadius: "8px",
                 padding: "6px",
                 cursor: "pointer",
                 display: "flex",
@@ -719,7 +729,7 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
                 border: "none",
                 outline: "none",
                 fontSize: "0.95rem",
-                color: "#0f172a",
+                color: "#4a4a4a",
                 background: "transparent",
               }}
             />
@@ -729,17 +739,18 @@ Enter any sentence or phrase in English or Kannada below. You can also upload an
               onClick={() => handleSendMessage()}
               disabled={loading || (!input.trim() && !selectedAttachment)}
               style={{
-                background: !loading && (input.trim() || selectedAttachment) ? "#0284c7" : "#f1f5f9",
-                color: !loading && (input.trim() || selectedAttachment) ? "#ffffff" : "#94a3b8",
+                background: !loading && (input.trim() || selectedAttachment) ? "#6d8196" : "rgba(203, 203, 203, 0.3)",
+                color: !loading && (input.trim() || selectedAttachment) ? "#ffffe3" : "#cbcbcb",
                 border: "none",
-                borderRadius: "8px",
-                padding: "8px 14px",
+                borderRadius: "10px",
+                padding: "9px 18px",
                 cursor: !loading && (input.trim() || selectedAttachment) ? "pointer" : "not-allowed",
                 fontWeight: "600",
                 fontSize: "0.85rem",
                 display: "flex",
                 alignItems: "center",
-                gap: "4px",
+                gap: "6px",
+                boxShadow: !loading && (input.trim() || selectedAttachment) ? "0 4px 12px rgba(109, 129, 150, 0.3)" : "none",
               }}
             >
               <span>Translate</span>
